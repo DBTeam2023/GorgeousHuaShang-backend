@@ -1,19 +1,34 @@
-﻿using UserIdentification.entity;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserIdentification.entity;
+using UserIdentification.utils;
 
 namespace UserIdentification.service.impl
 {
     public class LoginServiceImpl : LoginService
     {
-        UserDB userDB = new UserDB();
+        static UserDB userDB = new UserDB();
+        JwtHelper jwt;
 
-        public bool Login(string username, string password)
+        public LoginServiceImpl(JwtHelper _jwt)
         {
-            return userDB.login(username, password);
+            jwt = _jwt;
         }
 
-        public bool registerUser(string username, string password)
+        public string Login(string username, string password)
         {
-            return userDB.registerUser(username,password);
+            //@TODO: exception handling
+            if(userDB.login(username, password) == false)
+            {
+                return "test";
+            }
+
+            return jwt.CreateToken(username);
+        }
+
+        public string registerUser(string username, string password)
+        {
+            userDB.registerUser(username, password);
+            return jwt.CreateToken(username);
         }
     }
 }

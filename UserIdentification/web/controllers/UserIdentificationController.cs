@@ -3,25 +3,35 @@ using System.Runtime.CompilerServices;
 using UserIdentification.service;
 using UserIdentification.service.impl;
 
+/**
+ * @author sty
+ * 
+ */
 namespace UserIdentification.web.controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class UserIdentificationController : ControllerBase
     {
-        public static LoginService loginService = new LoginServiceImpl();
+        public static LoginService loginService;
 
-        [HttpGet(Name = "login")]
-        public ComResponse<bool> login(string username,string password)
+        public UserIdentificationController(LoginService _loginService)
         {
-            Console.WriteLine(loginService.Login(username, password));
-            return ComResponse<bool>.success(loginService.Login(username, password));
+            loginService = _loginService;
         }
 
-        [HttpPost(Name = "register")]
-        public ComResponse<bool> register(string username, string password)
+        [Route("user")]
+        [HttpPost]
+        public ComResponse<string> login(string username,string password)
         {
-            return ComResponse<bool>.success(loginService.registerUser(username, password));
+            return ComResponse<string>.success(loginService.Login(username, password));
+        }
+
+        [Route("newuser")]
+        [HttpPost]
+        public ComResponse<string> register(string username, string password)
+        {
+            return ComResponse<string>.success(loginService.registerUser(username, password));
         }
     }
 }

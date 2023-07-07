@@ -14,7 +14,7 @@
             _configuration = configuration;
         }
 
-        public string CreateToken()
+        public string CreateToken(string username)
         {
             // 1. 定义需要使用到的Claims
             var claims = new[]
@@ -22,7 +22,7 @@
             new Claim(ClaimTypes.Name, "admin"), //HttpContext.User.Identity.Name
             new Claim(ClaimTypes.Role, "admin"), //HttpContext.User.IsInRole("r\_admin")
             new Claim(JwtRegisteredClaimNames.Jti, "admin"),
-            new Claim("Username", "Admin"),
+            new Claim("Username", username),
             new Claim("Name", "超级管理员")
         };
 
@@ -49,6 +49,16 @@
             var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
             return token;
+        }
+
+        public string resolveToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var username = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Username")?.Value;
+
+            return username;
         }
     }
 }

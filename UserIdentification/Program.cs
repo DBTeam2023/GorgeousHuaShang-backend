@@ -1,8 +1,20 @@
+//#define TEST
+
 using UserIdentification.entity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserIdentification.utils;
+using UserIdentification.service.impl;
+using UserIdentification.service;
+
+#if TEST
+
+UserDB testDB = new UserDB();
+testDB.registerUser("sty", "123");
+testDB.login("sty", "123");
+
+#else
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -49,14 +61,17 @@ options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     };
 });
 builder.Services.AddSingleton(new JwtHelper(configuration));
+builder.Services.AddScoped<LoginService, LoginServiceImpl>();
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseCors("myCors");
@@ -69,3 +84,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+#endif

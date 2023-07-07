@@ -2,8 +2,8 @@
 {
     public interface LoginService
     {
-        public bool Login(string username, string password);
+        public string Login(string username, string password);
 
-        public bool registerUser(string username, string password);
+        public string registerUser(string username, string password);
     }
 }
