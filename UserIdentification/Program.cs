@@ -1,18 +1,23 @@
 //#define TEST
 
-using UserIdentification.entity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserIdentification.utils;
 using UserIdentification.service.impl;
 using UserIdentification.service;
+using UserIdentification.mapper;
 
 #if TEST
 
-UserDB testDB = new UserDB();
-testDB.registerUser("sty", "123");
-testDB.login("sty", "123");
+var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+JwtHelper testJWT = new JwtHelper(configuration);
+ModelContext testContext = new ModelContext();
+LoginService testService = new LoginServiceImpl(testJWT, testContext);
+
+testService.registerUser("zjk", "sexybaby");
+
 
 #else
 
@@ -40,7 +45,6 @@ builder.Services.AddCors(options =>
         );
 });
 
-// ×¢²á·þÎñ
 builder.Services.AddAuthentication(options =>
 {
 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,7 +64,9 @@ options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             RequireExpirationTime = true,
     };
 });
+
 builder.Services.AddSingleton(new JwtHelper(configuration));
+builder.Services.AddSingleton(new ModelContext());
 builder.Services.AddScoped<LoginService, LoginServiceImpl>();
 
 var app = builder.Build();
@@ -80,6 +86,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
 

@@ -2,6 +2,6 @@
 {
     public class MyException : Exception
     {
-        MyException(string message) : base(message) { }
+        public MyException(string message) : base(message) { }
     }
 }

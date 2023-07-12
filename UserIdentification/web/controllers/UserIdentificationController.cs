@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityFramework.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using UserIdentification.core.dto;
+using UserIdentification.core.vo;
 using UserIdentification.service;
 using UserIdentification.service.impl;
 
@@ -20,18 +23,22 @@ namespace UserIdentification.web.controllers
             loginService = _loginService;
         }
 
-        [Route("user")]
-        [HttpPost]
-        public ComResponse<string> login(string username,string password)
+        [HttpPost("user")]
+        public ComResponse<string> login([FromBody] UserDto user)
         {
-            return ComResponse<string>.success(loginService.Login(username, password));
+            return ComResponse<string>.success(loginService.Login(user.Username, user.Password));
         }
 
-        [Route("newuser")]
-        [HttpPost]
-        public ComResponse<string> register(string username, string password)
+        [HttpPost("newuser")]
+        public ComResponse<string> register([FromBody] UserDto user)
         {
-            return ComResponse<string>.success(loginService.registerUser(username, password));
+            return ComResponse<string>.success(loginService.registerUser(user.Username, user.Password));
+        }
+
+        [HttpGet("user")]
+        public ComResponse<UserInfoVo> getUserInfo([FromBody] string token)
+        {
+            return ComResponse<UserInfoVo>.success(new UserInfoVo(loginService.getUserInfo(token)));
         }
     }
 }

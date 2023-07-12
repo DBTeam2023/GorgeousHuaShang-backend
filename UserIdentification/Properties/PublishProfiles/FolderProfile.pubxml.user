@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\admin\Desktop\DBPrinciple\FinalProject\back-end\UserIdentification\bin\Release\net6.0\publish\</_PublishTargetUrl>
-    <History>True|2023-07-06T08:49:51.1395076Z;</History>
+    <History>True|2023-07-12T06:47:12.2846751Z;True|2023-07-07T17:49:09.0588726+08:00;True|2023-07-07T14:46:07.9014768+08:00;True|2023-07-06T16:49:51.1395076+08:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
