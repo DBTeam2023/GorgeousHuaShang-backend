@@ -50,7 +50,21 @@ namespace UserIdentification.utils
                     errorResponse.msg = ex.Message;
                     break;
                 case DuplicateException ex:
+                    response.StatusCode = (int)HttpStatusCode.Conflict;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case NotFoundException ex:
                     response.StatusCode = (int)HttpStatusCode.NotFound;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case LoginException ex:
+                    if(ex.UserNotFound == true)
+                    {
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        errorResponse.msg = ex.Message;
+                        break;
+                    }
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
                 default:

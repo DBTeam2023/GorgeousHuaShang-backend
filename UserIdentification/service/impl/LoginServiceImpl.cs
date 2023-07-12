@@ -19,13 +19,20 @@ namespace UserIdentification.service.impl
 
         public string Login(string username, string password)
         {
-            // @TODO: exception handling
-
-            //var loginUser = modelContext.Find<User>(username);
             var loginUser = modelContext.Users.Where(x  => x.NickName == username).FirstOrDefault();
+
             if(loginUser==null)
             {
-                return "test";
+                LoginException exception = new LoginException("user not found");
+                exception.UserNotFound = true;
+                throw exception;
+            }
+
+            if(loginUser.Password != password)
+            {
+                LoginException exception = new LoginException("password error");
+                exception.PasswordError = true;
+                throw exception;
             }
 
             return jwt.CreateToken(username);
@@ -33,7 +40,6 @@ namespace UserIdentification.service.impl
 
         public string registerUser(string username, string password)
         {
-            // TODO: exception handling
             var existUser = modelContext.Users.Where(x => x.NickName == username).FirstOrDefault();
             if(existUser!=null)
             {
@@ -59,7 +65,10 @@ namespace UserIdentification.service.impl
             var username = jwt.resolveToken(token);
             var user = modelContext.Users.Where(x => x.NickName == username).FirstOrDefault();
 
-            // TODO: exception handling
+            if(user==null)
+            {
+                throw new NotFoundException("user not found");
+            }
 
             return user;
         }
