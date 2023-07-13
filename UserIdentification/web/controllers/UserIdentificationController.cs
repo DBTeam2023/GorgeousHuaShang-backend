@@ -24,21 +24,21 @@ namespace UserIdentification.web.controllers
         }
 
         [HttpPost("user")]
-        public ComResponse<string> login([FromBody] UserDto user)
+        public ComResponse<TokenDto> login([FromBody] UserDto user)
         {
-            return ComResponse<string>.success(loginService.Login(user.Username, user.Password));
+            return ComResponse<TokenDto>.success(new TokenDto(loginService.Login(user.Username, user.Password)));
         }
 
         [HttpPost("newuser")]
-        public ComResponse<string> register([FromBody] UserDto user)
+        public ComResponse<TokenDto> register([FromBody] UserDto user)
         {
-            return ComResponse<string>.success(loginService.registerUser(user.Username, user.Password));
+            return ComResponse<TokenDto>.success(new TokenDto(loginService.registerUser(user.Username, user.Password)));
         }
 
-        [HttpGet("user")]
-        public ComResponse<UserInfoVo> getUserInfo([FromBody] string token)
+        [HttpPost("userInfo")]
+        public ComResponse<UserInfoVo> getUserInfo([FromBody] TokenDto token)
         {
-            return ComResponse<UserInfoVo>.success(new UserInfoVo(loginService.getUserInfo(token)));
+            return ComResponse<UserInfoVo>.success(new UserInfoVo(loginService.getUserInfo(token.Token)));
         }
     }
 }
