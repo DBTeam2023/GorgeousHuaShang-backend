@@ -1,4 +1,5 @@
 ﻿using EntityFramework.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using UserIdentification.core.dto;
@@ -13,7 +14,7 @@ using UserIdentification.service.impl;
 namespace UserIdentification.web.controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class UserIdentificationController : ControllerBase
     {
         public static LoginService loginService;
@@ -23,22 +24,24 @@ namespace UserIdentification.web.controllers
             loginService = _loginService;
         }
 
-        [HttpPost("user")]
+        [HttpPost]
         public ComResponse<TokenDto> login([FromBody] UserDto user)
         {
             return ComResponse<TokenDto>.success(new TokenDto(loginService.Login(user.Username, user.Password)));
         }
 
-        [HttpPost("newuser")]
+        [HttpPost]
         public ComResponse<TokenDto> register([FromBody] UserDto user)
         {
             return ComResponse<TokenDto>.success(new TokenDto(loginService.registerUser(user.Username, user.Password)));
         }
 
-        [HttpPost("userInfo")]
-        public ComResponse<UserInfoVo> getUserInfo([FromBody] TokenDto token)
+        [HttpGet]
+        public async Task<ComResponse<UserInfoVo>> getUserInfo()
         {
-            return ComResponse<UserInfoVo>.success(new UserInfoVo(loginService.getUserInfo(token.Token)));
+            string token = Request.Headers["Authorization"];
+            var newToken = token.Replace("Bearer ", "");
+            return ComResponse<UserInfoVo>.success(new UserInfoVo(loginService.getUserInfo(newToken)));
         }
     }
 }

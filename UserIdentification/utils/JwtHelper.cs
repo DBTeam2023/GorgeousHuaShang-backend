@@ -19,12 +19,12 @@
             // 1. 定义需要使用到的Claims
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, "admin"), //HttpContext.User.Identity.Name
-            new Claim(ClaimTypes.Role, "admin"), //HttpContext.User.IsInRole("r\_admin")
-            new Claim(JwtRegisteredClaimNames.Jti, "admin"),
-            new Claim("Username", username),
-            new Claim("Name", "超级管理员")
-        };
+                new Claim(ClaimTypes.Name, "admin"), //HttpContext.User.Identity.Name
+                new Claim(ClaimTypes.Role, "admin"), //HttpContext.User.IsInRole("r\_admin")
+                new Claim(JwtRegisteredClaimNames.Jti, "admin"),
+                new Claim("Username", username),
+                new Claim("Name", "超级管理员")
+            };
 
             // 2. 从 appsettings.json 中读取SecretKey
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));

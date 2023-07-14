@@ -1,5 +1,6 @@
 ﻿using EntityFramework.Models;
 using Microsoft.AspNetCore.Mvc;
+using UserIdentification.common;
 using UserIdentification.exception;
 using UserIdentification.mapper;
 using UserIdentification.utils;
@@ -52,7 +53,7 @@ namespace UserIdentification.service.impl
                 UserId = id.ToString(),
                 NickName = username,
                 Password = password,
-                Type = "buyer"
+                Type = UserType.Buyer
             };
             modelContext.Add(newUser);
             modelContext.SaveChanges();

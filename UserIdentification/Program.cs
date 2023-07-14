@@ -16,7 +16,7 @@ JwtHelper testJWT = new JwtHelper(configuration);
 ModelContext testContext = new ModelContext();
 LoginService testService = new LoginServiceImpl(testJWT, testContext);
 
-testService.registerUser("zjk", "sexybaby");
+testService.registerUser("sty", "123");
 
 
 #else
