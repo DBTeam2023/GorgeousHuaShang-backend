@@ -9,7 +9,7 @@ using UserIdentification.service.impl;
 
 /**
  * @author sty
- * 
+ * @implnote use "[action]" in URL for allowing asynchronous http request
  */
 namespace UserIdentification.web.controllers
 {
@@ -27,13 +27,13 @@ namespace UserIdentification.web.controllers
         [HttpPost]
         public ComResponse<TokenDto> login([FromBody] UserDto user)
         {
-            return ComResponse<TokenDto>.success(new TokenDto(loginService.Login(user.Username, user.Password)));
+            return ComResponse<TokenDto>.success(new TokenDto(loginService.login(user.Username, user.Password)));
         }
 
         [HttpPost]
         public ComResponse<TokenDto> register([FromBody] UserDto user)
         {
-            return ComResponse<TokenDto>.success(new TokenDto(loginService.registerUser(user.Username, user.Password)));
+            return ComResponse<TokenDto>.success(new TokenDto(loginService.registerUser(user.Username, user.Password, user.Type)));
         }
 
         [HttpGet]

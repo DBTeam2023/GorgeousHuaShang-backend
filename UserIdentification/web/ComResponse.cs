@@ -2,6 +2,12 @@
 
 namespace UserIdentification.web
 {
+    /**
+     * @author sty
+     * @implnote encapsulate error code and messages in the com response body.
+     *          Constructors for different error types are designed for internal server information.
+     *          User can specify the type of response instead of directly modify http response type.
+     */
     public class ComResponse<T>
     {
         public int code { get; set; }

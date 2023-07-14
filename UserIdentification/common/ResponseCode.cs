@@ -1,5 +1,8 @@
 ﻿namespace UserIdentification.common
 {
+    /**
+     * @implnote enumeration for com response codes
+     */
     public class ResponseCode
     {
         public static readonly ResponseCode SUCCESS = new ResponseCode(200,"success");

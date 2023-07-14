@@ -7,6 +7,15 @@ using UserIdentification.exception;
 
 namespace UserIdentification.utils
 {
+    /**
+     * @author sty
+     * @brief exception middleware for global exception handling
+     *        http return code will be modified according to the exception catched
+     * 
+     * @param exceptions catched
+     * @return error code and messages
+     * @throws nothrow exception specification
+     */
     public class GlobalExceptionHandler
     {
         private readonly RequestDelegate _requestDelegate;
@@ -65,6 +74,10 @@ namespace UserIdentification.utils
                         break;
                     }
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case InvalidTypeException ex:
+                    response.StatusCode = (int)HttpStatusCode.Forbidden;
                     errorResponse.msg = ex.Message;
                     break;
                 default:

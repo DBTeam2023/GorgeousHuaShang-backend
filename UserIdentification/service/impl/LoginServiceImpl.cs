@@ -18,7 +18,7 @@ namespace UserIdentification.service.impl
             modelContext = dbcontext;
         }
 
-        public string Login(string username, string password)
+        public string login(string username, string password)
         {
             var loginUser = modelContext.Users.Where(x  => x.NickName == username).FirstOrDefault();
 
@@ -39,21 +39,24 @@ namespace UserIdentification.service.impl
             return jwt.CreateToken(username);
         }
 
-        public string registerUser(string username, string password)
+        public string registerUser(string username, string password, string type)
         {
+            //security checks
+            UserType.TypeCheck(type);
             var existUser = modelContext.Users.Where(x => x.NickName == username).FirstOrDefault();
             if(existUser!=null)
             {
                 throw new DuplicateException("username already exists");
             }
 
+            //register ner user
             Guid id = Guid.NewGuid();
             var newUser = new User()
             {
                 UserId = id.ToString(),
                 NickName = username,
                 Password = password,
-                Type = UserType.Buyer
+                Type = type
             };
             modelContext.Add(newUser);
             modelContext.SaveChanges();
