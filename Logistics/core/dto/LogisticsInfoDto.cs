@@ -6,6 +6,6 @@
 
         public string ArrivePlace { get; set; } = null!;
 
-        public DateTime ArriveTime { get; set; }
+        //public DateTime ArriveTime { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Logistics.service
        
 
         //物流商品于某时到达某地（添加信息）
-        public Task<Logisticsinfo> addLogisticsInfo(string id, string place, DateTime time);
+        public Task<Logisticsinfo> addLogisticsInfo(string id, string place);
 
         
         
@@ -23,13 +23,13 @@ namespace Logistics.service
         public bool arriveDestination(string id);
 
         //下面与logistics有关
-        public Task<Logistic> addLogistics(DateTime start, string company, string address_beg, string address_end);
+        public Task<Logistic> addLogistics(string company, string address_beg, string address_end);
        
         public Task deleteLogistics();
 
         public Logistic getLogistics(string id);
 
-        public Task<Logistic> addArrivalTime(string id, DateTime end);
+        public Task<Logistic> addArrivalTime(string id);
 
         public Task openRegularClear();
 

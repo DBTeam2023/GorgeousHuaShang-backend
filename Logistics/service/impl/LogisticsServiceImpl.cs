@@ -14,7 +14,7 @@ namespace Logistics.service.impl
 
        
         //定期删除的时间
-        static private TimeSpan timespan = TimeSpan.FromHours(0.0015);
+        static private TimeSpan timespan = TimeSpan.FromHours(1);
 
         public void setTimespan(double value)
         {
@@ -34,7 +34,7 @@ namespace Logistics.service.impl
             }
             set
             {                                  
-                    if (value < TimeSpan.Zero)
+                    if (value <= TimeSpan.Zero)
                         throw new TimeSpanException("time span input error");
                     timespan = value;               
             }
@@ -45,13 +45,13 @@ namespace Logistics.service.impl
             _context = context;
         }
 
-        public async Task<Logisticsinfo> addLogisticsInfo(string id, string place, DateTime time)
+        public async Task<Logisticsinfo> addLogisticsInfo(string id, string place)
         {       
             var info = new Logisticsinfo()
             {
                 LogisticsId = id,
                 ArrivePlace = place,
-                ArriveTime = time
+                ArriveTime = DateTime.Now
             };
 
             if(_context.Logisticsinfos.Where(e=> e==info).FirstOrDefault()!=null)
@@ -92,7 +92,7 @@ namespace Logistics.service.impl
         }
 
 
-        public async Task<Logistic> addLogistics(DateTime start, string company, string address_beg, string address_end)
+        public async Task<Logistic> addLogistics(string company, string address_beg, string address_end)
         {
             string id = Guid.NewGuid().ToString();
             var existLogistic = _context.Logistics.Where(e => e.LogisticsId == id).FirstOrDefault();
@@ -102,7 +102,7 @@ namespace Logistics.service.impl
             var info = new Logistic()
             {
                 LogisticsId = id,
-                StartTime=start,
+                StartTime=DateTime.Now,
                 Company=company,
                 ShipAddress=address_beg,
                 PickAddress=address_end
@@ -117,8 +117,8 @@ namespace Logistics.service.impl
         {
             var now = DateTime.Now;
 
-            //换算成utc时间
-            var end = now - Timespan- TimeSpan.FromHours(8);
+            
+            var end = now - Timespan;
 
             var info = _context.Logistics
                 .Where(e => e.EndTime != null && e.EndTime <= end)
@@ -139,12 +139,12 @@ namespace Logistics.service.impl
             return info;
         }
 
-        public async Task<Logistic> addArrivalTime(string id, DateTime end)
+        public async Task<Logistic> addArrivalTime(string id)
         {
             var info = _context.Logistics.Where(e => e.LogisticsId == id).FirstOrDefault();
             if(info==null)
                 throw new NotFoundException("no logistic find");
-            info.EndTime = end;
+            info.EndTime = DateTime.Now;
             await _context.SaveChangesAsync();
             return info;          
         }

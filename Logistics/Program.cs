@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
 //        };
 //    });
 
-builder.Services.AddSingleton<ModelContext>();
+builder.Services.AddScoped<ModelContext>();
 builder.Services.AddScoped<LogisticsService,LogisticsServiceImpl>();
 
 var app = builder.Build();
