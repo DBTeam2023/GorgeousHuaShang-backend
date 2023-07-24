@@ -25,13 +25,13 @@ namespace UserIdentification.web.controllers
         }
 
         [HttpPost]
-        public ComResponse<TokenDto> login([FromBody] UserDto user)
+        public ComResponse<TokenDto> login([FromBody] LoginDto user)
         {
             return ComResponse<TokenDto>.success(new TokenDto(loginService.login(user.Username, user.Password)));
         }
 
         [HttpPost]
-        public ComResponse<TokenDto> register([FromBody] UserDto user)
+        public ComResponse<TokenDto> register([FromBody] RegisterDto user)
         {
             return ComResponse<TokenDto>.success(new TokenDto(loginService.registerUser(user.Username, user.Password, user.Type)));
         }
