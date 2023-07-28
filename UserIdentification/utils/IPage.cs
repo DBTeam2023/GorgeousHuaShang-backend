@@ -83,7 +83,7 @@ namespace UserIdentification.utils
                 builder.RecordNum = builder.Records.Count;
 
                 //calculate pages
-                builder.Pages = builder.Total / builder.Size;
+                builder.Pages = builder.Total / builder.Size + 1;
 
                 return builder;
             }
