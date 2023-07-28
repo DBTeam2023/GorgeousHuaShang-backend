@@ -1,4 +1,4 @@
-//#define TEST
+#define TEST
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -10,13 +10,18 @@ using UserIdentification.mapper;
 
 #if TEST
 
-var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
-JwtHelper testJWT = new JwtHelper(configuration);
-ModelContext testContext = new ModelContext();
-LoginService testService = new LoginServiceImpl(testJWT, testContext);
+List<int> testList = new List<int>();
+testList.Add(1);
+testList.Add(2);
+testList.Add(3);
 
-testService.registerUser("sty", "123");
+IPage<int> testPage = IPage<int>.builder()
+                                .records(testList)
+                                .size(3)
+                                .total(3)
+                                .current(0)
+                                .build();
+
 
 
 #else

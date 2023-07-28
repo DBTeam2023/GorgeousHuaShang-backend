@@ -1,30 +1,66 @@
 {
   "Routes": [
-    {
-      "DownstreamHeaderTransform": {
-        "Access-Control-Allow-Origin" : "*",
-        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild",
-        "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS"
-      },
-
-      //"UpstreamPathTemplate": "/System/{url}",
-
-      // {params} matching verb
+    { //UserIdentification
       "UpstreamPathTemplate": "/api/UserSystem/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
 
-      "UseServiceDiscovery": false,
-
-      //"DownstreamPathTemplate": "/{url}"
+      "DownstreamHeaderTransform": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild",
+        "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS"
+      },
       "DownstreamPathTemplate": "/UserIdentification/{url}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          //"Host": "47.115.231.142",
           "Host": "localhost",
           "Port": 1025
         }
-      ]
+      ],
+
+      "UseServiceDiscovery": false
+    },
+
+    { //Logistics
+      "UpstreamPathTemplate": "/api/Logistics/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+
+      "DownstreamHeaderTransform": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild",
+        "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS"
+      },
+      "DownstreamPathTemplate": "/Logistics/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 1026
+        }
+      ],
+
+      "UseServiceDiscovery": false
+    },
+
+    { //Payment
+      "UpstreamPathTemplate": "/api/Payment/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+
+      "DownstreamHeaderTransform": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild",
+        "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS"
+      },
+      "DownstreamPathTemplate": "/Payment/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 1027
+        }
+      ],
+
+      "UseServiceDiscovery": false
     }
   ],
   "GlobalConfiguration": {
