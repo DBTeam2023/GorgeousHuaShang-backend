@@ -1,6 +1,6 @@
 ﻿using UserIdentification.common;
 
-namespace UserIdentification.web
+namespace UserIdentification.utils
 {
     /**
      * @author sty
@@ -12,7 +12,7 @@ namespace UserIdentification.web
     {
         public int code { get; set; }
 
-        public String msg { get; set; }
+        public string msg { get; set; }
 
         public T data { get; set; }
 
@@ -40,7 +40,7 @@ namespace UserIdentification.web
                     .build();
         }
 
-        public static ComResponse<T> error(String code, String msg)
+        public static ComResponse<T> error(string code, string msg)
         {
             return ComResponse<T>.builder()
                     .code(int.Parse(code))
@@ -48,7 +48,7 @@ namespace UserIdentification.web
                     .build();
         }
 
-        public static ComResponse<T> error(String msg)
+        public static ComResponse<T> error(string msg)
         {
             return ComResponse<T>.builder()
                     .code(ResponseCode.SYSTEM_ERROR.getCode())
@@ -56,7 +56,7 @@ namespace UserIdentification.web
                     .build();
         }
 
-        public static ComResponse<T> invalid(String message)
+        public static ComResponse<T> invalid(string message)
         {
             return ComResponse<T>.builder()
                     .code(ResponseCode.BAD_REQUEST.getCode())
@@ -64,7 +64,7 @@ namespace UserIdentification.web
                     .build();
         }
 
-        public static ComResponse<T> authFaild(String message)
+        public static ComResponse<T> authFaild(string message)
         {
             return ComResponse<T>.builder()
                     .code(ResponseCode.NOT_LOGIN.getCode())
@@ -85,7 +85,7 @@ namespace UserIdentification.web
             return invalid(ResponseCode.BAD_REQUEST.getMessage());
         }
 
-        public ComResponse(int code, String msg, T data)
+        public ComResponse(int code, string msg, T data)
         {
             this.code = code;
             this.msg = msg;
@@ -108,7 +108,7 @@ namespace UserIdentification.web
                 return this;
             }
 
-            public ComResponseBuilder<T> msg(String msg)
+            public ComResponseBuilder<T> msg(string msg)
             {
                 builder.msg = msg;
                 return this;

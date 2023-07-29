@@ -1,6 +1,7 @@
-﻿using UserIdentification.mapper;
+﻿using UserIdentification.application;
+using UserIdentification.dataaccess.mapper;
 
-namespace UserIdentification.service.impl
+namespace UserIdentification.application.impl
 {
     public class AuthorizationServiceImpl : AuthorizationService
     {

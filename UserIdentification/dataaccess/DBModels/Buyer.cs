@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EntityFramework.Models;
+namespace UserIdentification.dataaccess.DBModels;
 
 public partial class Buyer
 {
     public string UserId { get; set; } = null!;
 
-    public string ReceiveAddress { get; set; } = null!;
+    public string? ReceiveAddress { get; set; }
 
     public byte? Age { get; set; }
 

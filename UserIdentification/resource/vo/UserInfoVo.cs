@@ -1,6 +1,6 @@
-﻿using EntityFramework.Models;
+﻿using UserIdentification.dataaccess.DBModels;
 
-namespace UserIdentification.core.vo
+namespace UserIdentification.resource.vo
 {
     public class UserInfoVo
     {

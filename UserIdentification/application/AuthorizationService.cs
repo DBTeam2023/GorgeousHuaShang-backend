@@ -1,4 +1,4 @@
-﻿namespace UserIdentification.service
+﻿namespace UserIdentification.application
 {
     public interface AuthorizationService
     {

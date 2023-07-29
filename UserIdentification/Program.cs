@@ -1,12 +1,17 @@
-#define TEST
+//#define TEST
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserIdentification.utils;
-using UserIdentification.service.impl;
-using UserIdentification.service;
-using UserIdentification.mapper;
+using UserIdentification.domain.model.repository;
+using UserIdentification.domain.model.repository.impl;
+using UserIdentification.application;
+using UserIdentification.application.impl;
+using UserIdentification.domain.service;
+using UserIdentification.domain.service.impl;
+using UserIdentification.dataaccess.mapper;
+using UserIdentification.domain.model;
 
 #if TEST
 
@@ -22,14 +27,31 @@ IPage<int> testPage = IPage<int>.builder()
                                 .current(0)
                                 .build();
 
+ModelContext context = new ModelContext();
+UserRepository userRepository = new UserRepositoryImpl(context);
+UserAggregate newUser = UserAggregate.create("test0", "123", "buyer");
 
+userRepository.add(newUser);
 
 #else
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-// Add services to the container.
+/* Add services to the container. */
+//utils
+builder.Services.AddSingleton(new JwtHelper(configuration));
+builder.Services.AddSingleton(new ModelContext());
+
+//application services
+builder.Services.AddScoped<UserIdentificationService, UserIdentificationServiceImpl>();
+
+//domain services
+builder.Services.AddScoped<LoginService, LoginServiceImpl>();
+
+//repositories
+builder.Services.AddSingleton<UserRepository, UserRepositoryImpl>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -70,9 +92,6 @@ options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     };
 });
 
-builder.Services.AddSingleton(new JwtHelper(configuration));
-builder.Services.AddSingleton(new ModelContext());
-builder.Services.AddScoped<LoginService, LoginServiceImpl>();
 
 var app = builder.Build();
 

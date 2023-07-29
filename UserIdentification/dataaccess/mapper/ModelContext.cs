@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityFramework.Models;
 using Microsoft.EntityFrameworkCore;
+using UserIdentification.dataaccess.DBModels;
 
-namespace UserIdentification.mapper;
+namespace UserIdentification.dataaccess.mapper;
 
 public partial class ModelContext : DbContext
 {
