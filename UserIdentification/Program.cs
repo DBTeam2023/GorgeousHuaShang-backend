@@ -29,9 +29,13 @@ IPage<int> testPage = IPage<int>.builder()
 
 ModelContext context = new ModelContext();
 UserRepository userRepository = new UserRepositoryImpl(context);
-UserAggregate newUser = UserAggregate.create("test0", "123", "buyer");
+UserAggregate test = userRepository.getByUsername("buyer01");
+test.buyerInfo.Address = "test address0";
+userRepository.update(test);
 
-userRepository.add(newUser);
+BuyerEntity buyer = test.buyerInfo;
+
+int i = 0;
 
 #else
 

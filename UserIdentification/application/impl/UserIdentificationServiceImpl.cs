@@ -31,7 +31,7 @@ namespace UserIdentification.application.impl
             return userRepository.getByUsername(username);
         }
 
-        public void updateUserInfo(UserAggregate userAggregate)
+        public void update(UserAggregate userAggregate)
         {
             userRepository.update(userAggregate);
         }

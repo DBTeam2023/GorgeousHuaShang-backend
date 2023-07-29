@@ -39,6 +39,14 @@ namespace UserIdentification.resource.controller
             return ComResponse<TokenDto>.success(userIdentificationService.register(user.Username,user.Password,user.Type));
         }
 
+        [HttpPost]
+        public ComResponse<int> update([FromBody] UserAggregate userAggregate)
+        {
+            userIdentificationService.update(userAggregate);
+
+            return ComResponse<int>.success(0);
+        }
+
         [HttpGet]
         public async Task<ComResponse<UserAggregate>> getUserInfo()
         {
