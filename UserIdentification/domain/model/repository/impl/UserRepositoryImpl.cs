@@ -90,7 +90,8 @@ namespace UserIdentification.domain.model.repository.impl
 
         public void update(UserAggregate userAggregate)
         {
-
+            modelContext.Update(userAggregate);
+            modelContext.SaveChanges(true);
         }
 
         public void delete(string userId)
@@ -111,7 +112,7 @@ namespace UserIdentification.domain.model.repository.impl
             }
 
             //get detail info for account
-            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.Password,userInfo.NickName,userInfo.Type);
+            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName, userInfo.Password, userInfo.Type);
             if(userInfo.Type == UserType.Buyer)
             {
                 Buyer buyerPo = modelContext.Buyers.FirstOrDefault(e => e.UserId == userId);
@@ -143,6 +144,10 @@ namespace UserIdentification.domain.model.repository.impl
         public UserAggregate getByUsername(string username)
         {
             User userInfo = modelContext.Users.FirstOrDefault(e => e.NickName == username);
+            if(userInfo == null)
+            {
+                throw new NotFoundException("user not found");
+            }
 
             return getById(userInfo.UserId);
         }
