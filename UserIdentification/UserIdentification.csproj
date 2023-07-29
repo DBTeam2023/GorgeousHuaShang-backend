@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="entity\DBModels\" />
+    <Folder Include="dataaccess\DBModels\" />
+    <Folder Include="entity\" />
+    <Folder Include="resource\remote\" />
     <Folder Include="test\" />
   </ItemGroup>
 

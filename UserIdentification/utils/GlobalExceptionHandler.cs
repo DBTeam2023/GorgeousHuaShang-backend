@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text.Json;
 using System;
-using UserIdentification.web;
 using UserIdentification.exception;
 
 namespace UserIdentification.utils
@@ -78,6 +77,10 @@ namespace UserIdentification.utils
                     break;
                 case InvalidTypeException ex:
                     response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case ParamMissingException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
                 default:

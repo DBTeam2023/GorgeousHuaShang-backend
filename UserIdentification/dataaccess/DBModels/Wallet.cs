@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EntityFramework.Models;
+namespace UserIdentification.dataaccess.DBModels;
 
 public partial class Wallet
 {

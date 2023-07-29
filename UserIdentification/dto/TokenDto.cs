@@ -1,4 +1,4 @@
-﻿namespace UserIdentification.core.dto
+﻿namespace UserIdentification.dto
 {
     public class TokenDto
     {
