@@ -14,6 +14,71 @@ namespace UserIdentification.domain.model.repository.impl
             this.modelContext = modelContext;
         }
 
+        private User aggregateToUser(UserAggregate user)
+        {
+            UserType.TypeCheck(user.Type);
+
+            if (user.Type == UserType.Buyer)
+            {
+                BuyerEntity buyerInfo = user.buyerInfo;
+                Buyer buyerPo = new Buyer
+                {
+                    UserId = user.UserId,
+                    Age = buyerInfo.Age,
+                    ReceiveAddress = buyerInfo.Address,
+                    Gender = buyerInfo.Gender,
+                    Height = buyerInfo.Height,
+                    Weight = buyerInfo.Weight,
+                    IsVip = buyerInfo.IsVip,
+                };
+
+                User userPo = new User
+                {
+                    UserId = user.UserId,
+                    Password = user.Password,
+                    NickName = user.NickName,
+                    Type = user.Type,
+                    Buyer = buyerPo
+                };
+
+                return userPo;
+            }
+            else if (user.Type == UserType.Seller)
+            {
+                SellerEntity sellerInfo = user.sellerInfo;
+                Seller sellerPo = new Seller
+                {
+                    UserId = user.UserId,
+                    SendAddress = sellerInfo.Address
+                };
+
+                User userPo = new User
+                {
+                    UserId = user.UserId,
+                    Password = user.Password,
+                    NickName = user.NickName,
+                    Type = user.Type,
+                    Seller = sellerPo
+                };
+
+                return userPo;
+            }
+            else if(user.Type == UserType.Administrator)
+            {
+                User userPo = new User
+                {
+                    UserId = user.UserId,
+                    Password = user.Password,
+                    NickName = user.NickName,
+                    Type = user.Type
+                };
+
+                return userPo;
+            }
+
+            throw new InvalidTypeException("invalid user aggregate type transfer");
+        }
+
         public void add(UserAggregate user)
         {
             //security check
@@ -90,7 +155,27 @@ namespace UserIdentification.domain.model.repository.impl
 
         public void update(UserAggregate userAggregate)
         {
+            //security check
+            User updateUser = modelContext.Users.Where(x => x.UserId == userAggregate.UserId).FirstOrDefault();
+            if (updateUser == null)
+            {
+                throw new NotFoundException("user not found");
+            }
 
+            //transfer
+            User updateInfo = aggregateToUser(userAggregate);
+
+            //set values
+            modelContext.Entry(updateUser).CurrentValues.SetValues(updateInfo);
+            if (userAggregate.Type == UserType.Buyer) updateUser.Buyer = updateInfo.Buyer;
+            else if (userAggregate.Type == UserType.Seller) updateUser.Seller = updateInfo.Seller;
+
+            //set entity status
+            modelContext.Entry(updateUser).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            if (userAggregate.Type == UserType.Buyer) modelContext.Entry(updateUser.Buyer).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            else if (userAggregate.Type == UserType.Seller) modelContext.Entry(updateUser.Seller).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+            modelContext.SaveChanges();
         }
 
         public void delete(string userId)
@@ -111,7 +196,7 @@ namespace UserIdentification.domain.model.repository.impl
             }
 
             //get detail info for account
-            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.Password,userInfo.NickName,userInfo.Type);
+            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName, userInfo.Password, userInfo.Type);
             if(userInfo.Type == UserType.Buyer)
             {
                 Buyer buyerPo = modelContext.Buyers.FirstOrDefault(e => e.UserId == userId);
@@ -143,6 +228,10 @@ namespace UserIdentification.domain.model.repository.impl
         public UserAggregate getByUsername(string username)
         {
             User userInfo = modelContext.Users.FirstOrDefault(e => e.NickName == username);
+            if(userInfo == null)
+            {
+                throw new NotFoundException("user not found");
+            }
 
             return getById(userInfo.UserId);
         }

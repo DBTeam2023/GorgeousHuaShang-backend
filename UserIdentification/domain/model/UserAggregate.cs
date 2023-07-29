@@ -1,4 +1,5 @@
-﻿using UserIdentification.common;
+﻿using System.Text.Json.Serialization;
+using UserIdentification.common;
 using UserIdentification.domain.model.repository;
 using UserIdentification.domain.model.repository.impl;
 
@@ -45,6 +46,18 @@ namespace UserIdentification.domain.model
             Password = password;
             NickName = nickName;
             Type = type;
+        }
+
+        [JsonConstructor]
+        public UserAggregate(string userId, DateTime? loginTime, string password, string nickName, string type, BuyerEntity? buyerInfo, SellerEntity? sellerInfo)
+        {
+            UserId = userId;
+            LoginTime = loginTime;
+            Password = password;
+            NickName = nickName;
+            Type = type;
+            this.buyerInfo = buyerInfo;
+            this.sellerInfo = sellerInfo;
         }
 
         public static UserAggregate create(string username, string password, string type)

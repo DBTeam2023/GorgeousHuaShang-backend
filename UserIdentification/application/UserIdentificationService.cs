@@ -11,5 +11,7 @@ namespace UserIdentification.application
         public TokenDto register(string username, string password, string type);
 
         public UserAggregate getUserInfoByUsername(string username);
+
+        public void update(UserAggregate userAggregate);
     }
 }
