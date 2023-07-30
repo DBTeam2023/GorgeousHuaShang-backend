@@ -108,7 +108,7 @@ public partial class ModelContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("TYPE");
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("USER_ID");
             entity.Property(e => e.Validfrom)

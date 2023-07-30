@@ -15,7 +15,7 @@ namespace Payment.service.impl
         {
             _context = context;
             _timer = new System.Timers.Timer();
-            _timer.Interval = 60 * 60 * 1000;
+            _timer.Interval = 60 * 60 * 1000;  // an hour
             _timer.Elapsed += async (s, e) => await TimedEvent();
             _timer.Start();
         }
