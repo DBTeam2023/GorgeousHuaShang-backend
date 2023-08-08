@@ -35,6 +35,9 @@ userRepository.update(test);
 
 BuyerEntity buyer = test.buyerInfo;
 
+Type derivedType = typeof(UserRepositoryImpl);
+derivedType = derivedType.BaseType;
+
 int i = 0;
 
 #else
