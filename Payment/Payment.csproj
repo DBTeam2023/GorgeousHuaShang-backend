@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Json.Net" Version="1.0.33" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
@@ -18,7 +19,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="7.21.9" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

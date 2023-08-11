@@ -1,4 +1,5 @@
 ﻿using EntityFramework.Models;
+using Payment.utils;
 namespace Payment.service
 {
     public interface CouponService
@@ -8,7 +9,7 @@ namespace Payment.service
         public Task DelCoupon(string couponId);
 
         public Task<Coupon> getInfo(string couponId);
-        public Task<List<Coupon>> getPage(int current, int size, string? userId, string? storeId, string? commodityId);
+        public Task<IPage<Coupon>> getPage(int PageNo, int PageSize, string? userId, string? storeId, string? commodityId,  string? storeName, string? commodityName);
 
         public Task Clean();
       

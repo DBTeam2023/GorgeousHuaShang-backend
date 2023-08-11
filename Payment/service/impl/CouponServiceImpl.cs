@@ -3,6 +3,8 @@ using EntityFramework.Models;
 using Payment.exception;
 using System.Timers;
 using Microsoft.EntityFrameworkCore;
+using Payment.message;
+using Payment.utils;
 
 namespace Payment.service.impl
 {
@@ -39,7 +41,7 @@ namespace Payment.service.impl
         {
             if (commodityId != null)
             {
-                var commodity = _context.Commodities.Where(x => x.StoreId == storeId && x.CommodityId == commodityId).FirstOrDefault();
+                var commodity = _context.CommodityGenerals.Where(x => x.StoreId == storeId && x.CommodityId == commodityId).FirstOrDefault();
                 if (commodity == null)
                     throw new NotFoundException("Cannot find such commodity");
             }
@@ -132,9 +134,22 @@ namespace Payment.service.impl
         // @return: a coupon
         public async Task<Coupon> getInfo(string couponId)
         {
+            //string ip = "47.115.231.142";
+            string ip = "localhost";
+            string user = "admin";
+            string pw = "123";
+            //var eventSender = new RabbitMQEventSender(ip, "my_queue", user, pw);
+            //var eventData = new { EventName = "MyEvent", Data = "Event data" };
+            //eventSender.SendEvent(eventData);
+            var messageReceiver = new RabbitMQMessageReceiver("localhost", "my_queue");
+            messageReceiver.StartReceiving();
+            Console.WriteLine(messageReceiver);
+
+
             var coupon = await _context.Coupons.Where(_x => _x.CouponId == couponId).FirstOrDefaultAsync();
             if (coupon == null)
                 throw new NotFoundException("This coupon does not exist");
+          
             return coupon;
         }
 
@@ -144,17 +159,65 @@ namespace Payment.service.impl
         // size            the number of records in a page
         // userId, storeId, commodityId
         // @return: all coupons that satisfy the conditions
-        public async Task<List<Coupon>> getPage(int current, int size, string? userId, string? storeId, string? commodityId)
+        public async Task<IPage<Coupon>> getPage(int PageNo, int pageSize, string? userId, string? storeId, string? commodityId, string? storeName, string? commodityName)
         {
             List<Coupon> coupons = await _context.Coupons.ToListAsync();
-            if(userId != null)
-                coupons = coupons.Where(x => x.UserId == userId).ToList();
-            if(storeId != null)
-                coupons = coupons.Where(x => x.StoreId.Contains(storeId)).ToList();
-            if(commodityId != null)
-                coupons = coupons.Where(x => x.CommodityId != null && x.CommodityId.Contains(commodityId)).ToList();
+            List<Coupon> result = new List<Coupon>();
 
-            return coupons;
+            // get all related coupons
+            if(userId != null)
+                result.AddRange(coupons.Where(x => x.UserId == userId).ToList());
+            else
+                result.AddRange(coupons);
+
+            if (storeId == null)
+            {
+                if(storeName != null)
+                {
+                    List<Coupon> temp = new List<Coupon>();
+                    var store = _context.Stores.Where(x => x.StoreName.Contains(storeName)).ToList();
+                    foreach (var s in store)
+                    {
+                        var x = result.FirstOrDefault(x => x.StoreId == s.StoreId);
+                        if (x != null)
+                            temp.Add(x);
+                    }
+                    result = temp;
+                }
+            }
+            else
+                result = result.Where(x => x.StoreId == storeId).ToList();
+             
+
+            if(commodityId == null)
+            {
+                if (commodityName != null)
+                {
+                    List<Coupon> temp = new List<Coupon>();
+                    var commodity = _context.CommodityGenerals.Where(x => x.CommodityName.Contains(commodityName)).ToList();
+                    foreach(var com in commodity)
+                    {
+                        var x = result.FirstOrDefault(x => x.CommodityId == com.CommodityId);
+                        if(x != null)
+                            temp.Add(x);
+                    }
+                    result = temp;
+                }
+            }
+            else
+                result = result.Where(x => x.CommodityId == commodityId).ToList();
+
+            // return the certain list
+            var list = result.Skip((PageNo - 1) * pageSize)
+               .Take(pageSize)
+               .ToList();
+            IPage<Coupon> Page = IPage<Coupon>.builder()
+               .records(list)
+               .total(result.Count)
+               .size(pageSize)
+               .current(PageNo)
+               .build();
+            return Page;
         }
 
         // @summary: clean expired coupons
@@ -162,7 +225,6 @@ namespace Payment.service.impl
         // @return: void
         public async Task Clean()
         {
-            Console.WriteLine("hello");
             var expiredCoupons = _context.Coupons.Where(c => c.Validto < DateTime.Now);
             _context.Coupons.RemoveRange(expiredCoupons);
             await _context.SaveChangesAsync();

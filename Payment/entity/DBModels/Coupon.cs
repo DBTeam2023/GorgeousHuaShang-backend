@@ -25,8 +25,6 @@ public partial class Coupon
 
     public DateTime Validto { get; set; }
 
-    public virtual Commodity? Commodity { get; set; }
-
     public virtual Store Store { get; set; } = null!;
 
     public virtual User? User { get; set; }

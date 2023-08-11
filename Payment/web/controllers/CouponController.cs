@@ -48,17 +48,8 @@ namespace Payment.web.controllers
         [HttpPost]
         public async Task<ComResponse<IPage<Coupon>>> getPage([FromBody] CouponPageDto couponPage)
         {
-            List<Coupon> x = await couponService.getPage(couponPage.PageNo, couponPage.pageSize, couponPage.userId, couponPage.storeId, couponPage.commodityId);
-            var list = x.Skip((couponPage.PageNo - 1) * couponPage.pageSize)
-               .Take(couponPage.pageSize)
-               .ToList();
-            IPage<Coupon> Page = IPage<Coupon>.builder()
-               .records(list)
-               .total(x.Count)
-               .size(couponPage.pageSize)
-               .current(couponPage.PageNo)
-               .build();
-            return ComResponse<IPage<Coupon>>.success(Page);
+            IPage<Coupon> x = await couponService.getPage(couponPage.PageNo, couponPage.pageSize, couponPage.userId, couponPage.storeId, couponPage.commodityId, couponPage.storeName, couponPage.commodityName);
+            return ComResponse<IPage<Coupon>>.success(x);
         }
     }
 }

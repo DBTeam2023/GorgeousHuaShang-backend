@@ -13,7 +13,7 @@ public partial class Store
 
     public bool IsDeleted { get; set; }
 
-    public virtual ICollection<Commodity> Commodities { get; set; } = new List<Commodity>();
+    public virtual ICollection<CommodityGeneral> CommodityGenerals { get; set; } = new List<CommodityGeneral>();
 
     public virtual ICollection<Coupon> Coupons { get; set; } = new List<Coupon>();
 

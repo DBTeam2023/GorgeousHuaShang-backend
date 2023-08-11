@@ -16,7 +16,7 @@ public partial class ModelContext : DbContext
     {
     }
 
-    public virtual DbSet<Commodity> Commodities { get; set; }
+    public virtual DbSet<CommodityGeneral> CommodityGenerals { get; set; }
 
     public virtual DbSet<Coupon> Coupons { get; set; }
 
@@ -36,18 +36,18 @@ public partial class ModelContext : DbContext
     {
         modelBuilder.HasDefaultSchema("DBTEAM");
 
-        modelBuilder.Entity<Commodity>(entity =>
+        modelBuilder.Entity<CommodityGeneral>(entity =>
         {
-            entity.HasKey(e => e.CommodityId).HasName("COMMODITY_PK");
+            entity.HasKey(e => e.CommodityId).HasName("COMMODITY_GENERAL_PK");
 
-            entity.ToTable("commodity");
+            entity.ToTable("COMMODITY_GENERAL");
 
             entity.Property(e => e.CommodityId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("COMMODITY_ID");
             entity.Property(e => e.CommodityName)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("COMMODITY_NAME");
             entity.Property(e => e.Description)
@@ -55,25 +55,22 @@ public partial class ModelContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPTION");
             entity.Property(e => e.IsDeleted)
+                .IsRequired()
                 .HasPrecision(1)
                 .HasDefaultValueSql("0 ")
                 .HasColumnName("IS_DELETED");
             entity.Property(e => e.Price)
-                .HasColumnType("NUMBER(7,2)")
-                .HasColumnName("PRICE");
-            entity.Property(e => e.StockQuantity)
-                .HasPrecision(6)
-                .HasDefaultValueSql("0 ")
-                .HasColumnName("STOCK_QUANTITY");
-            entity.Property(e => e.StoreId)
                 .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("PRICE");
+            entity.Property(e => e.StoreId)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("STORE_ID");
 
-            entity.HasOne(d => d.Store).WithMany(p => p.Commodities)
+            entity.HasOne(d => d.Store).WithMany(p => p.CommodityGenerals)
                 .HasForeignKey(d => d.StoreId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_store");
+                .HasConstraintName("FK_STORE1");
         });
 
         modelBuilder.Entity<Coupon>(entity =>
@@ -117,11 +114,6 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.Validto)
                 .HasColumnType("TIMESTAMP(6) WITH LOCAL TIME ZONE")
                 .HasColumnName("VALIDTO");
-
-            entity.HasOne(d => d.Commodity).WithMany(p => p.Coupons)
-                .HasForeignKey(d => d.CommodityId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_commodity22");
 
             entity.HasOne(d => d.Store).WithMany(p => p.Coupons)
                 .HasForeignKey(d => d.StoreId)
@@ -171,11 +163,6 @@ public partial class ModelContext : DbContext
                 .HasColumnType("TIMESTAMP(6) WITH LOCAL TIME ZONE")
                 .HasColumnName("VALIDTO");
 
-            entity.HasOne(d => d.Commodity).WithMany(p => p.Coupontemps)
-                .HasForeignKey(d => d.CommodityId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_commodity33");
-
             entity.HasOne(d => d.Store).WithMany(p => p.Coupontemps)
                 .HasForeignKey(d => d.StoreId)
                 .HasConstraintName("FK_store33");
@@ -188,7 +175,7 @@ public partial class ModelContext : DbContext
             entity.ToTable("store");
 
             entity.Property(e => e.StoreId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("STORE_ID");
             entity.Property(e => e.IsDeleted)

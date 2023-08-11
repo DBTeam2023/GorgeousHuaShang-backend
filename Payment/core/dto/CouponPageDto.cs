@@ -10,5 +10,8 @@
         public string? storeId { get; set; } = null!;
         public string? commodityId { get; set; } = null!;
 
+        public string? storeName { get; set; } = null!;
+        public string? commodityName { get; set; } = null!;
+
     }
 }
