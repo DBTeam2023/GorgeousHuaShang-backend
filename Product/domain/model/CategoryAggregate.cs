@@ -8,8 +8,8 @@ namespace Product.domain.model
 
         public List<DPick> DetailPicks;
 
-        //不可以用字典，因为key不唯一
-        public List<KeyValuePair<string, List<string>>> Property;
+        
+        public Dictionary<string, List<string>> Property;
 
         public BasicSortType? ClassficationType { get; set; }
         internal CategoryAggregate() { }
@@ -17,7 +17,7 @@ namespace Product.domain.model
 
         internal CategoryAggregate(string productId,
             List<DPick> picks,
-            List<KeyValuePair<string, List<string>>> property)
+            Dictionary<string, List<string>> property)
         {
             ProductId = productId;
             DetailPicks = picks;
@@ -28,7 +28,7 @@ namespace Product.domain.model
 
         [JsonConstructor]
         internal CategoryAggregate(string productId, List<DPick> picks,
-            List<KeyValuePair<string, List<string>>> property,
+            Dictionary<string, List<string>> property,
             BasicSortType? classficationType)
         {
             ProductId = productId;
@@ -38,13 +38,7 @@ namespace Product.domain.model
         }
 
 
-        ////首次创建
-        //public static CategoryAggregate create()
-        //{
-
-        //}
-
-        //
+       
 
 
     }
