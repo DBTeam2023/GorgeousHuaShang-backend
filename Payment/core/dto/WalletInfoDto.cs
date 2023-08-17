@@ -2,7 +2,7 @@
 {
     public class WalletInfoDto
     {
-        public string userId { get; set; }
+        public string token { get; set; }
         public decimal amount { get; set; }
     }
 }

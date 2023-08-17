@@ -1,6 +1,7 @@
 ﻿using EntityFramework.Context;
 using EntityFramework.Models;
 using Payment.exception;
+using Newtonsoft.Json.Linq;
 
 namespace Payment.service.impl
 {
@@ -17,7 +18,7 @@ namespace Payment.service.impl
         // @summary: get the information of a wallet by id
         // @param: string userId
         // @return: a wallet struct
-        public Wallet GetWallet(string userId)
+        public async Task<Wallet> GetWallet(string userId)
         {
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
 
@@ -114,5 +115,40 @@ namespace Payment.service.impl
             await _context.SaveChangesAsync();
             return wallet;
         }
+
+        public async Task<string> getUserId(string token)
+        {
+            string userId;
+            string url = "http://47.115.231.142:1025/UserIdentification/getUserInfo";
+
+            HttpClient client = new HttpClient();
+            try
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Authorization", token);
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody);
+
+                JObject code = JObject.Parse(responseBody);
+                Console.WriteLine(code);
+
+                // 获取 userId 字段的值
+                userId = (string)code["data"]["userId"];
+
+                Console.WriteLine(userId);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            if (userId == null)
+                throw new NotFoundException("There is no match to this token.");
+
+            return userId;
+        }
+
     }
 }

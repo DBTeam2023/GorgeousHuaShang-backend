@@ -225,7 +225,7 @@ public partial class ModelContext : DbContext
             entity.ToTable("wallet");
 
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("USER_ID");
             entity.Property(e => e.Balance)

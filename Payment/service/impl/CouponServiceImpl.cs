@@ -5,6 +5,7 @@ using System.Timers;
 using Microsoft.EntityFrameworkCore;
 using Payment.message;
 using Payment.utils;
+using Newtonsoft.Json.Linq;
 
 namespace Payment.service.impl
 {
@@ -234,5 +235,41 @@ namespace Payment.service.impl
         {
             await Clean();
         }
+       
+        public async Task<string>getUserId(string token)
+        {
+            string userId;
+            string url = "http://47.115.231.142:1025/UserIdentification/getUserInfo";
+
+            HttpClient client = new HttpClient();
+            try
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Authorization", token);
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody);
+
+                JObject code = JObject.Parse(responseBody);
+                Console.WriteLine(code);
+
+                // 获取 userId 字段的值
+                userId = (string)code["data"]["userId"];
+
+                Console.WriteLine(userId);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            if (userId == null)
+                throw new NotFoundException("Can not find this user.");
+
+            return userId;
+        }
     }
+
+
 }
