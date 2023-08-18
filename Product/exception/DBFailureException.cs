@@ -1,6 +1,7 @@
 ﻿namespace Product.exception
 {
-    public class DBFailure
+    public class DBFailureException:MyException
     {
+        public DBFailureException(string message) : base(message) { }
     }
 }

@@ -34,18 +34,22 @@ public partial class ModelContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CommodotyId).HasName("CATEGORY_PK");
+            entity.HasKey(e => e.CommodityId).HasName("CATEGORY_PK");
 
             entity.ToTable("CATEGORY");
 
-            entity.Property(e => e.CommodotyId)
+            entity.Property(e => e.CommodityId)
                 .HasMaxLength(100)
                 .IsUnicode(false)
-                .HasColumnName("COMMODOTY_ID");
+                .HasColumnName("COMMODITY_ID");
             entity.Property(e => e.Type)
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("TYPE");
+
+            entity.HasOne(d => d.Commodity).WithOne(p => p.Category)
+                .HasForeignKey<Category>(d => d.CommodityId)
+                .HasConstraintName("FK_COMMODITY_GENERAL4");
         });
 
         modelBuilder.Entity<CommodityGeneral>(entity =>
@@ -72,8 +76,7 @@ public partial class ModelContext : DbContext
                 .HasDefaultValueSql("0 ")
                 .HasColumnName("IS_DELETED");
             entity.Property(e => e.Price)
-                .HasMaxLength(20)
-                .IsUnicode(false)
+                .HasColumnType("NUMBER(7,2)")
                 .HasColumnName("PRICE");
             entity.Property(e => e.StoreId)
                 .HasMaxLength(100)
@@ -99,6 +102,10 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PROPERTY_VALUE");
+
+            entity.HasOne(d => d.Commodity).WithMany(p => p.CommodityProperties)
+                .HasForeignKey(d => d.CommodityId)
+                .HasConstraintName("FK_COMMODITY_GENERAL3");
         });
 
         modelBuilder.Entity<Pick>(entity =>
@@ -129,8 +136,7 @@ public partial class ModelContext : DbContext
                 .HasDefaultValueSql("0 ")
                 .HasColumnName("IS_DELETED");
             entity.Property(e => e.Price)
-                .HasMaxLength(20)
-                .IsUnicode(false)
+                .HasColumnType("NUMBER(7,2)")
                 .HasColumnName("PRICE");
             entity.Property(e => e.PropertyValue)
                 .HasMaxLength(100)

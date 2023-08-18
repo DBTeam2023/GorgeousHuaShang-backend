@@ -6,7 +6,7 @@
 
         public bool? IsDeleted { get; set; }
 
-        public string? Price { get; set; }
+        public decimal? Price { get; set; }
 
         public string? Description { get; set; }
 
@@ -14,6 +14,6 @@
 
         public string PropertyType { get; set; } = null!;
 
-        public string? PropertyValue { get; set; }
+        public string PropertyValue { get; set; } = null!;
     }
 }

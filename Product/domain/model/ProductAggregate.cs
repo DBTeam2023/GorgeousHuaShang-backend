@@ -1,4 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using Product.common;
+using Product.domain.model.repository;
+using Product.domain.model.repository.impl;
+using Product.dto;
+using System.Text.Json.Serialization;
 
 namespace Product.domain.model
 {
@@ -8,45 +12,59 @@ namespace Product.domain.model
 
         public string ProductId { get; set; } = null!;
 
-        public Price Price { get; set; } = null!;
+        public string ProductName { get; set; } = null!;
 
-        public CommentEntity Comment { get; set; }
+        public string? Description { get; set; }
+
+        public decimal Price { get; set; }
+
+        //public CommentEntity? Comment { get; set; }
 
         public CategoryAggregate Category { get; set; }
 
+        public bool? IsDeleted { get; set; } = false;
+
+     
         internal ProductAggregate() { }
-        internal ProductAggregate(string storeId, string productId, Price price)
-        {
-            StoreId = storeId;
-            ProductId = productId;
-            Price = price;
-        }
-        internal ProductAggregate(string storeId, string productId, CommentEntity comment)
-        {
-            StoreId = storeId;
-            ProductId = productId;
-            Comment = comment;
-        }
-        internal ProductAggregate(string storeId, string productId, CategoryAggregate category)
-        {
-            StoreId = storeId;
-            ProductId = productId;
-            Category = category;
-        }
-
+        
         [JsonConstructor]
-        internal ProductAggregate(string storeId, string productId, Price price, CommentEntity comment, CategoryAggregate category)
+        internal ProductAggregate( string storeId, string productId,
+            string productName, decimal price,string? description,
+            CategoryAggregate category, bool? isDeleted = false)
         {
+            
             StoreId = storeId;
             ProductId = productId;
+            ProductName = productName;
             Price = price;
-            Comment = comment;
+            Description = description;
+            IsDeleted = isDeleted;
             Category = category;
         }
-        //public static ProductAggregate create()
-        //{
 
-        //}
+        public static ProductAggregate create(CreateCommodityDto commodity)
+        {
+            var guid = Guid.NewGuid().ToString();
+
+            var category = new CategoryAggregate(guid,
+                new List<DPick>(), commodity.Property, BasicSortType.getFinalType(commodity.ClassficationType));
+
+            return new ProductAggregate(
+                commodity.StoreId, guid, commodity.ProductName,
+                commodity.Price, commodity.Description, category, commodity.IsDeleted);
+        }
+
+        public static ProductAggregate create(CommodityDto commodity)
+        {
+            var category = new CategoryAggregate(commodity.ProductId,
+                new List<DPick>(), commodity.Property, BasicSortType.getFinalType(commodity.ClassficationType));
+
+            return new ProductAggregate(
+                commodity.StoreId, commodity.ProductId, commodity.ProductName,
+                commodity.Price, commodity.Description, category, commodity.IsDeleted);
+        }
+
+
 
 
     }

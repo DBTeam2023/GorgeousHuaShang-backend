@@ -1,9 +1,18 @@
-﻿namespace Product.domain.model.repository
+﻿using Product.dto;
+using Product.utils;
+
+namespace Product.domain.model.repository
 {
     public interface ProductRepository
     {
-        //public void add(ProductAggregate userAggregate);
+        public Task add(ProductAggregate productAggregate);
 
-        //public void update(ProductAggregate userAggregate);
+        public Task update(ProductAggregate productAggregate);
+
+        public ProductAggregate getById(string commodityId);
+
+        public Task delete(string commodityId);
+
+        public IPage<ProductAggregate> pageQuery(PageQueryDto pageQuery);
     }
 }

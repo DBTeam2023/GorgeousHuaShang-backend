@@ -1,22 +1,17 @@
-﻿using Product.exception;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Product.dto
 {
-    public class PageQueryDto
+    public class MyFilterDto
     {
-        public int PageSize { get; set; } = 0;
-        public int PageIndex { get; set; } = 0;
         public Dictionary<string, string>? Filter { get; set; }
 
-        public void check()
+        [JsonConstructor]
+        public MyFilterDto(Dictionary<string, string?> filter)
         {
-            if (PageSize <= 0)
-                throw new PageException("page size should be positive");
-            if (PageIndex <= 0)
-                throw new PageException("page index should be larger than 0");
+            Filter = filter;
         }
-       
+
 
         public string? getStrValue(string key)
         {
@@ -41,11 +36,8 @@ namespace Product.dto
                 else
                     return null;
             }
-                
+
 
         }
-
-
-
     }
 }

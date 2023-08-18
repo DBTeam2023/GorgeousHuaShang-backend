@@ -6,12 +6,12 @@ namespace Product.domain.model
     {
         public string ProductId { get; set; } = null!;
 
-        public List<DPick> DetailPicks;
-
+        public List<DPick> DetailPicks { get; set; }
         
-        public Dictionary<string, List<string>> Property;
+        public Dictionary<string, List<string>> Property { get; set; }
 
         public BasicSortType? ClassficationType { get; set; }
+
         internal CategoryAggregate() { }
 
 
