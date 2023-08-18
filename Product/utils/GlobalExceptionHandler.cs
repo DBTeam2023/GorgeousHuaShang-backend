@@ -65,21 +65,20 @@ namespace Product.utils
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     errorResponse.msg = ex.Message;
                     break;
-                case LoginException ex:
-                    if(ex.UserNotFound == true)
-                    {
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        errorResponse.msg = ex.Message;
-                        break;
-                    }
+                
+                case DBFailureException ex:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
-                case InvalidTypeException ex:
-                    response.StatusCode = (int)HttpStatusCode.Forbidden;
+                case IncompleteBuildException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
-                case ParamMissingException ex:
+                case PageException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case TransactionCommitException ex:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;

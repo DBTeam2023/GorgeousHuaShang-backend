@@ -42,7 +42,7 @@ namespace Product.resource.controller
 
         //Authorization:seller
         [HttpPost]
-        public async Task<ComResponse<ProductInfoVo>> getCommodity([FromBody] CommodityIdDto commodityId)
+        public ComResponse<ProductInfoVo> getCommodity([FromBody] CommodityIdDto commodityId)
         {
             var productAggrgate=productApplicationService.getCommodity(commodityId);
             return ComResponse<ProductInfoVo>.success(new ProductInfoVo(productAggrgate));
