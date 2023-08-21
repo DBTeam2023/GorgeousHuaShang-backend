@@ -50,8 +50,7 @@ namespace Product.application.impl
         //对pick表更新 not batch
         public async Task updatePick(PickDto pick)
         {
-            await _categoryRepository.setPick(pick.commodityId, pick.Filter,
-                new MyFilterDto(pick.Change));
+            await _categoryRepository.setPick(pick);
         }
 
         //Authorization:seller
@@ -60,8 +59,7 @@ namespace Product.application.impl
         {
             foreach(var it in pick)
             {
-                await _categoryRepository.setPick(it.commodityId, it.Filter,
-                new MyFilterDto(it.Change));
+                await _categoryRepository.setPick(it);
             }
             
         }

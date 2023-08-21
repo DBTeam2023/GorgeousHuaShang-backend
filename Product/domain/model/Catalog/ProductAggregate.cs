@@ -42,22 +42,24 @@ namespace Product.domain.model
             Category = category;
         }
 
+        //初始化时候
         public static ProductAggregate create(CreateCommodityDto commodity)
         {
             var guid = Guid.NewGuid().ToString();
 
             var category = new CategoryAggregate(guid,
-                new List<DPick>(), commodity.Property, BasicSortType.getFinalType(commodity.ClassficationType));
+                new List<DPick>(), commodity.Property,commodity.ClassficationType);
 
             return new ProductAggregate(
                 commodity.StoreId, guid, commodity.ProductName,
                 commodity.Price, commodity.Description, category, commodity.IsDeleted);
         }
 
+        //非初始化时候
         public static ProductAggregate create(CommodityDto commodity)
         {
             var category = new CategoryAggregate(commodity.ProductId,
-                new List<DPick>(), commodity.Property, BasicSortType.getFinalType(commodity.ClassficationType));
+                new List<DPick>(), commodity.Property, commodity.ClassficationType);
 
             return new ProductAggregate(
                 commodity.StoreId, commodity.ProductId, commodity.ProductName,

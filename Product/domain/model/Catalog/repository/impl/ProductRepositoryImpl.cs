@@ -174,21 +174,21 @@ namespace Product.domain.model.repository.impl
 
 
             var ans = _context.CommodityGenerals
-                .Where(x => x.CommodityId == (pageQuery.getStrValue("commodityId") ?? x.CommodityId))
-                .Where(x => x.StoreId == (pageQuery.getStrValue("storeId") ?? x.StoreId))
-                .Where(x => x.CommodityName.Contains((pageQuery.getStrValue("name") ?? "")))
-                .Where(x => x.Price >= (pageQuery.getDoubleValue("pricemin") ?? decimal.MinValue))
-                .Where(x => x.Price <= (pageQuery.getDoubleValue("pricemax") ?? decimal.MaxValue)).ToList();
+                .Where(x => x.CommodityId == (pageQuery.CommodityId ?? x.CommodityId))
+                .Where(x => x.StoreId == (pageQuery.StoreId ?? x.StoreId))
+                .Where(x => x.CommodityName.Contains((pageQuery.Name ?? "")))
+                .Where(x => x.Price >= (pageQuery.Pricemin ?? decimal.MinValue))
+                .Where(x => x.Price <= (pageQuery.Pricemax ?? decimal.MaxValue)).ToList();
 
 
-            if (pageQuery.getStrValue("description") != null)
-                ans = ans.Where(x => x.Description != null && x.Description.Contains((pageQuery.getStrValue("description") ?? ""))).ToList();
+            if (pageQuery.Description != null)
+                ans = ans.Where(x => x.Description != null && x.Description.Contains((pageQuery.Description ?? ""))).ToList();
 
             var ans_type = _context.Categories.ToList();
                
 
-            if(pageQuery.getStrValue("type") != null)
-                ans_type= ans_type.Where(x => x.Type != null && x.Type.Contains((pageQuery.getStrValue("type") ?? ""))).ToList();
+            if(pageQuery.Type != null)
+                ans_type= ans_type.Where(x => x.Type != null && x.Type.Contains((pageQuery.Type ?? ""))).ToList();
 
             var result = ans.Join(ans_type,
                  ansItem => ansItem.CommodityId,
@@ -208,7 +208,11 @@ namespace Product.domain.model.repository.impl
                     result = result.GetRange((page_index - 1) * page_size, page_size);
             }
             else//page not found
-                throw new PageException("Page not found");
+            {
+                if(!(total==0&&page_index==1))
+                    throw new PageException("Page not found");
+            }
+                
 
 
 

@@ -7,7 +7,28 @@ namespace Product.dto
     {
         public int PageSize { get; set; } = 0;
         public int PageIndex { get; set; } = 0;
-        public Dictionary<string, string>? Filter { get; set; }
+
+        //commodityId       equal
+        //storeId           equal
+        //pricemin          range
+        //pricemax          range
+        //type              like
+        //name              like
+        //desription        like
+        public string? CommodityId { get; set; }
+
+        public string? StoreId { get; set; }
+
+        public decimal? Pricemin { get; set; }
+        
+        public decimal? Pricemax { get; set; }
+
+        public string? Type { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? Description { get; set; }
+
 
         public void check()
         {
@@ -18,32 +39,32 @@ namespace Product.dto
         }
        
 
-        public string? getStrValue(string key)
-        {
-            if (Filter == null)
-                return null;
+        //public string? getStrValue(string key)
+        //{
+        //    if (Filter == null)
+        //        return null;
 
-            if (Filter.ContainsKey(key))
-                return Filter[key];
-            else
-                return null;
-        }
-        public decimal? getDoubleValue(string key)
-        {
-            var val = getStrValue(key);
-            if (val == null)
-                return null;
-            else
-            {
-                decimal ans;
-                if (decimal.TryParse(val, out ans))
-                    return ans;
-                else
-                    return null;
-            }
+        //    if (Filter.ContainsKey(key))
+        //        return Filter[key];
+        //    else
+        //        return null;
+        //}
+        //public decimal? getDoubleValue(string key)
+        //{
+        //    var val = getStrValue(key);
+        //    if (val == null)
+        //        return null;
+        //    else
+        //    {
+        //        decimal ans;
+        //        if (decimal.TryParse(val, out ans))
+        //            return ans;
+        //        else
+        //            return null;
+        //    }
                 
 
-        }
+        //}
 
 
 

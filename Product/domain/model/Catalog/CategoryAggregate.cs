@@ -10,7 +10,9 @@ namespace Product.domain.model
         
         public Dictionary<string, List<string>> Property { get; set; }
 
-        public BasicSortType? ClassficationType { get; set; }
+        public string? ClassficationType { get; set; }
+
+       
 
         internal CategoryAggregate() { }
 
@@ -29,7 +31,7 @@ namespace Product.domain.model
         [JsonConstructor]
         internal CategoryAggregate(string productId, List<DPick> picks,
             Dictionary<string, List<string>> property,
-            BasicSortType? classficationType)
+            string? classficationType)
         {
             ProductId = productId;
             DetailPicks = picks;

@@ -6,30 +6,29 @@ namespace Product.resource.vo
     {
         public string CommodityId { get; set; } = null!;
 
-        public decimal? Price { get; set; }
-
-        public string? Description { get; set; }
-
-        public Dictionary<string, string> Property { get; set; } = null!;
+        public List<PickAuxVo> CommodityInfo { get;set; }
        
 
-        public PickVo(List<DPick> pick)
+        private void addCommodityInfo(List<DPick> pick)
         {
-            Property = new Dictionary<string, string>();
-            foreach (var it in pick)
-                Property.Add(it.PropertyType, it.PropertyValue);
             CommodityId = pick[0].CommodityId;
-            Price = pick[0].Price;
-            Description = pick[0].Description;
+            var property = new Dictionary<string, string>();
+            foreach (var it in pick)
+                property.Add(it.PropertyType, it.PropertyValue);
+            CommodityInfo.Add(new PickAuxVo(pick[0].Price, pick[0].Description,pick[0].Stock, property));
         }
 
-        public static List<PickVo> createPickVo(List<IGrouping<string,DPick>> pickGroup)
+
+        public PickVo(List<IGrouping<string, DPick>> pickGroup)
         {
-            var result = new List<PickVo>();
+            CommodityInfo = new List<PickAuxVo>();
             foreach (var it in pickGroup)
-                result.Add(new PickVo(it.ToList()));
-            return result;
+                this.addCommodityInfo(it.ToList());
+                          
+         
         }
+
+      
 
     }
 }

@@ -15,5 +15,9 @@
         public string PropertyType { get; set; } = null!;
 
         public string PropertyValue { get; set; } = null!;
+
+        public int Stock { get; set; } = 0;
+
+
     }
 }

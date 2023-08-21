@@ -49,8 +49,6 @@ namespace Product.resource.controller
 
         }
 
-
-
         //Authorization:seller
         [HttpPost]
         public async Task<ComResponse<string>> updateCommodity([FromBody] CommodityDto commodity)
@@ -91,11 +89,11 @@ namespace Product.resource.controller
         [HttpPost]
         //Authorization:buyer
         //某种商品的具体分类
-        public ComResponse<List<PickVo>> displayPicks([FromBody] CommodityIdDto commodityId)
+        public ComResponse<PickVo> displayPicks([FromBody] CommodityIdDto commodityId)
         {
             var picks=productApplicationService.displayPicks(commodityId);
             
-            return ComResponse<List<PickVo>>.success(PickVo.createPickVo(picks));
+            return ComResponse<PickVo>.success(new PickVo(picks));
         }
 
 

@@ -17,6 +17,8 @@ namespace Product.resource.vo
 
             public bool? IsDeleted { get; set; }
 
+            public int Stock { get; set; }
+
             public ProductPickVo(List<DPick> pick)
             {
                 Property=new Dictionary<string, string>();
@@ -26,6 +28,7 @@ namespace Product.resource.vo
                 Price = pick[0].Price;
                 Description = pick[0].Description;
                 IsDeleted = pick[0].IsDeleted;
+                Stock = pick[0].Stock;
             }
 
             public static List<ProductPickVo> createProductPickVo(List<IGrouping<string, DPick>> pickGroup)
@@ -67,7 +70,7 @@ namespace Product.resource.vo
             Price = productAggregate.Price;
             IsDeleted = productAggregate.IsDeleted;
             Property = productAggregate.Category.Property;
-            ClassficationType = BasicSortType.getAns(productAggregate.Category.ClassficationType);
+            ClassficationType = productAggregate.Category.ClassficationType;
             DetailPicks = ProductPickVo.createProductPickVo(
                 productAggregate.Category.DetailPicks.GroupBy(g => g.PickId).ToList());
         }

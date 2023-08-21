@@ -17,7 +17,7 @@ namespace Product.domain.model.repository
         //全部删除 classification property pick
         public Task delete(string commodityId);
 
-        public Task setPick(string id, Dictionary<string, string> filter, MyFilterDto change);
+        public Task setPick(PickDto picks);
 
 
     }

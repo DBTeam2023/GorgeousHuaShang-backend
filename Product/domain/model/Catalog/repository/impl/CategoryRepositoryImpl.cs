@@ -21,13 +21,13 @@ namespace Product.domain.model.repository.impl
 
 
 
-        internal static Category transferToDBCategory(string id, BasicSortType? type_model)
+        internal static Category transferToDBCategory(string id, string? type_model)
         {
             //category 表
             var db_add_classification = new Category
             {
                 CommodityId = id,
-                Type = type_model == null ? null : BasicSortType.getAns(type_model),
+                Type = type_model,
             };
 
             return db_add_classification;
@@ -66,6 +66,7 @@ namespace Product.domain.model.repository.impl
                     Price = pick.Price,
                     PropertyType = pick.PropertyType,
                     PropertyValue = pick.PropertyValue,
+                    Stock=pick.Stock
                 };
                 db_add_picks.Add(new_pick);
             }
@@ -178,9 +179,6 @@ namespace Product.domain.model.repository.impl
                 }
             }           
         }
-
-
-
 
 
         //exception fixed
@@ -306,13 +304,15 @@ namespace Product.domain.model.repository.impl
         }
 
         //exception fixed
-        public async Task setPick(string id, Dictionary<string, string> filter, MyFilterDto change)
+        public async Task setPick(PickDto picks)
         {
             //the arguments in filter are like this
             //@arguments        @query
             //"color"           "red"
             //"size"            "big"
             //"made"            "silk"
+            var id = picks.commodityId;
+            var filter = picks.Filter;
             var db_picks = _context.Picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
             foreach (var item in filter)
             {
@@ -328,21 +328,17 @@ namespace Product.domain.model.repository.impl
                     //isDeleted   y/n
                     //price eg:100.02
                     //description
-
-                    string? del = change.getStrValue("isDeleted");
-                    if (del != null)
-                    {
-                        if (del == "y")
-                            pick.IsDeleted = true;
-                        else
-                            pick.IsDeleted = false;
-                    }
+                    //stock
+   
+                    if (picks.IsDeleted != null)
+                        pick.IsDeleted = picks.IsDeleted;
 
 
-                    pick.Price = change.getDoubleValue("price") ?? pick.Price;
+                    pick.Price = picks.Price ?? pick.Price;
 
-                    pick.Description = change.getStrValue("description") ?? pick.Description;
+                    pick.Description = picks.Description ?? pick.Description;
 
+                    pick.Stock = picks.Stock ?? pick.Stock;
 
                 }
             }
@@ -373,7 +369,7 @@ namespace Product.domain.model.repository.impl
 
 
         //exception fixed
-        internal async Task updateCategory(string id, BasicSortType? type)
+        internal async Task updateCategory(string id, string? type)
         {
             try
             {
@@ -483,7 +479,7 @@ namespace Product.domain.model.repository.impl
 
             var db_category = _context.Categories.Where(x => x.CommodityId == commodityId).FirstOrDefault();
 
-            BasicSortType? domain_category = (db_category == null ? null : BasicSortType.getFinalType(db_category.Type));
+            string? domain_category = (db_category == null ? null :db_category.Type);
 
             var db_pick = _context.Picks.Where(x => x.CommodityId == commodityId);
 
@@ -498,7 +494,9 @@ namespace Product.domain.model.repository.impl
                     PickId = it.PickId,
                     Price = it.Price,
                     PropertyType = it.PropertyType,
-                    PropertyValue = it.PropertyValue
+                    PropertyValue = it.PropertyValue,
+                    Stock=it.Stock
+                    
                 });
             }
 
@@ -509,17 +507,13 @@ namespace Product.domain.model.repository.impl
                 DetailPicks = domain_pick,
                 ClassficationType = domain_category,
             };
-
             return ans;
-
         }
 
 
         //exception fixed
         public async Task delete(string commodityId)
         {
-
-
             try
             {
                 //property 表
@@ -545,22 +539,22 @@ namespace Product.domain.model.repository.impl
 
 
         //return xxx
-        public List<IGrouping<string, Pick>> setAvailable(string commodityId, Dictionary<string, string> filter)
-        {
-            //the arguments are like this
-            //@arguments        @query
-            //"color"           "red"
-            //"size"            "big"
-            //"made"            "silk"
-            var db_picks = _context.Picks.Where(p => p.CommodityId == commodityId).GroupBy(p => p.PickId).ToList();
-            foreach (var item in filter)
-            {
-                db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
-            }
+        //public List<IGrouping<string, Pick>> setAvailable(string commodityId, Dictionary<string, string> filter)
+        //{
+        //    //the arguments are like this
+        //    //@arguments        @query
+        //    //"color"           "red"
+        //    //"size"            "big"
+        //    //"made"            "silk"
+        //    var db_picks = _context.Picks.Where(p => p.CommodityId == commodityId).GroupBy(p => p.PickId).ToList();
+        //    foreach (var item in filter)
+        //    {
+        //        db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
+        //    }
 
-            return db_picks;
+        //    return db_picks;
 
-        }
+        //}
 
 
 
