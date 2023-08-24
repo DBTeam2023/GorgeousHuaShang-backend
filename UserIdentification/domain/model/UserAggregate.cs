@@ -18,6 +18,8 @@ namespace UserIdentification.domain.model
 
         public string NickName { get; set; } = null!;
 
+        public string Username { get; set; } = null!;
+
         public string Type { get; set; } = null!;
 
         public BuyerEntity? buyerInfo { get; set; }
@@ -35,26 +37,36 @@ namespace UserIdentification.domain.model
         {
             Guid id = Guid.NewGuid();
             UserId = id.ToString();
-            NickName = username;
+            Username = username;
             Password = password;
             Type = type;
         }
 
-        internal UserAggregate(string userId, string nickName, string password, string type)
+        internal UserAggregate(string userId, string username, string password, string type)
+        {
+            UserId = userId;
+            Password = password;
+            Username = username;
+            Type = type;
+        }
+
+        internal UserAggregate(string userId, string nickName, string username, string password, string type)
         {
             UserId = userId;
             Password = password;
             NickName = nickName;
+            Username = username;
             Type = type;
         }
 
         [JsonConstructor]
-        public UserAggregate(string userId, DateTime? loginTime, string password, string nickName, string type, BuyerEntity? buyerInfo, SellerEntity? sellerInfo)
+        public UserAggregate(string userId, DateTime? loginTime, string password, string nickName, string username, string type, BuyerEntity? buyerInfo, SellerEntity? sellerInfo)
         {
             UserId = userId;
             LoginTime = loginTime;
             Password = password;
             NickName = nickName;
+            Username = username;
             Type = type;
             this.buyerInfo = buyerInfo;
             this.sellerInfo = sellerInfo;

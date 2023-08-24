@@ -1,4 +1,5 @@
-﻿using UserIdentification.dataaccess.DBModels;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserIdentification.dataaccess.DBModels;
 using UserIdentification.domain.model;
 using UserIdentification.dto;
 
@@ -13,5 +14,9 @@ namespace UserIdentification.application
         public UserAggregate getUserInfoByUsername(string username);
 
         public void update(UserAggregate userAggregate);
+
+        public void setAvatar(IFormFile image, string avatarName);
+
+        public FileContentResult getAvatar(string avatarName);
     }
 }

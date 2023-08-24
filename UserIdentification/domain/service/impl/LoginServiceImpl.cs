@@ -48,7 +48,7 @@ namespace UserIdentification.domain.service.impl
         {
             UserAggregate newUser = UserAggregate.create(username, password, type);
 
-            return new TokenDto(jwt.CreateToken(newUser.NickName));
+            return new TokenDto(jwt.CreateToken(newUser.Username));
         }
 
         public TokenDto resetPassword(string username, string password)

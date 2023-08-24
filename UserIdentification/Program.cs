@@ -35,6 +35,9 @@ userRepository.update(test);
 
 BuyerEntity buyer = test.buyerInfo;
 
+Type derivedType = typeof(UserRepositoryImpl);
+derivedType = derivedType.BaseType;
+
 int i = 0;
 
 #else
@@ -52,6 +55,7 @@ builder.Services.AddScoped<UserIdentificationService, UserIdentificationServiceI
 
 //domain services
 builder.Services.AddScoped<LoginService, LoginServiceImpl>();
+builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
 
 //repositories
 builder.Services.AddSingleton<UserRepository, UserRepositoryImpl>();

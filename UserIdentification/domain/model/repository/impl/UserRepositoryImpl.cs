@@ -37,6 +37,7 @@ namespace UserIdentification.domain.model.repository.impl
                     UserId = user.UserId,
                     Password = user.Password,
                     NickName = user.NickName,
+                    Username = user.Username,
                     Type = user.Type,
                     Buyer = buyerPo
                 };
@@ -57,6 +58,7 @@ namespace UserIdentification.domain.model.repository.impl
                     UserId = user.UserId,
                     Password = user.Password,
                     NickName = user.NickName,
+                    Username = user.Username,
                     Type = user.Type,
                     Seller = sellerPo
                 };
@@ -70,6 +72,7 @@ namespace UserIdentification.domain.model.repository.impl
                     UserId = user.UserId,
                     Password = user.Password,
                     NickName = user.NickName,
+                    Username = user.Username,
                     Type = user.Type
                 };
 
@@ -83,22 +86,11 @@ namespace UserIdentification.domain.model.repository.impl
         {
             //security check
             UserType.TypeCheck(user.Type);
-            var existUser = modelContext.Users.Where(x => x.NickName == user.NickName).FirstOrDefault();
+            var existUser = modelContext.Users.Where(x => x.Username == user.Username).FirstOrDefault();
             if (existUser != null)
             {
                 throw new DuplicateException("username already exists");
             }
-
-            //save user info
-            //User userPo = new User()
-            //{
-            //    UserId = user.UserId,
-            //    Password = user.Password,
-            //    NickName = user.NickName,
-            //    Type = user.Type
-            //};
-            //modelContext.Users.Add(userPo);
-            //modelContext.SaveChanges();
 
             //save specialization info
             if (user.Type == UserType.Buyer)
@@ -120,6 +112,7 @@ namespace UserIdentification.domain.model.repository.impl
                     UserId = user.UserId,
                     Password = user.Password,
                     NickName = user.NickName,
+                    Username = user.Username,
                     Type = user.Type,
                     Buyer = buyerPo
                 };
@@ -141,6 +134,7 @@ namespace UserIdentification.domain.model.repository.impl
                     UserId = user.UserId,
                     Password = user.Password,
                     NickName = user.NickName,
+                    Username = user.Username,
                     Type = user.Type,
                     Seller = sellerPo
                 };
@@ -196,7 +190,7 @@ namespace UserIdentification.domain.model.repository.impl
             }
 
             //get detail info for account
-            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName, userInfo.Password, userInfo.Type);
+            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName,userInfo.Username, userInfo.Password, userInfo.Type);
             if(userInfo.Type == UserType.Buyer)
             {
                 Buyer buyerPo = modelContext.Buyers.FirstOrDefault(e => e.UserId == userId);
@@ -227,7 +221,7 @@ namespace UserIdentification.domain.model.repository.impl
 
         public UserAggregate getByUsername(string username)
         {
-            User userInfo = modelContext.Users.FirstOrDefault(e => e.NickName == username);
+            User userInfo = modelContext.Users.FirstOrDefault(e => e.Username == username);
             if(userInfo == null)
             {
                 throw new NotFoundException("user not found");
