@@ -39,7 +39,7 @@ public partial class ModelContext : DbContext
             entity.ToTable("buyer");
 
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("USER_ID");
             entity.Property(e => e.Age)
@@ -75,11 +75,11 @@ public partial class ModelContext : DbContext
             entity.ToTable("seller");
 
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("USER_ID");
             entity.Property(e => e.SendAddress)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("SEND_ADDRESS");
 
@@ -96,18 +96,22 @@ public partial class ModelContext : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("USER_ID");
             entity.Property(e => e.LoginTime)
                 .HasPrecision(6)
                 .HasColumnName("LOGIN_TIME");
             entity.Property(e => e.NickName)
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("NICK_NAME");
+            entity.Property(e => e.Username)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("USERNAME");
             entity.Property(e => e.Password)
-                .HasMaxLength(20)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PASSWORD");
             entity.Property(e => e.Type)

@@ -21,12 +21,18 @@ namespace UserIdentification.domain.service.impl
 
             string filename = avatarName + Path.GetExtension(image.FileName);
             string imagePath = Path.Combine(directoryPath, filename);
-            
-            using (var stream = new FileStream(imagePath, FileMode.OpenOrCreate))
+            try
             {
-                image.CopyTo(stream);  // save the picture
+                using (var stream = new FileStream(imagePath, FileMode.OpenOrCreate))
+                {
+                    image.CopyTo(stream);  // save the picture
+                }
             }
-
+            catch (Exception ex)
+            {
+                throw new NotFoundException("directory not found");
+            }
+            
             return;
         }
 
@@ -38,7 +44,7 @@ namespace UserIdentification.domain.service.impl
             try
             {
                 byte[] imageData = System.IO.File.ReadAllBytes(imagePath);
-                string contentType = "image/png"; // 根据实际图片类型进行设置（例如 "image/png"）
+                string contentType = "image/png"; // file type
 
                 return new FileContentResult(imageData, contentType);
             }
