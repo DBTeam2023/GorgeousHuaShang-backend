@@ -1,4 +1,5 @@
-﻿using UserIdentification.domain.model;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserIdentification.domain.model;
 using UserIdentification.domain.model.repository;
 using UserIdentification.domain.service;
 using UserIdentification.dto;
@@ -9,11 +10,13 @@ namespace UserIdentification.application.impl
     {
         UserRepository userRepository;
         LoginService loginService;
+        AvatarService avatarService;
 
-        public UserIdentificationServiceImpl(UserRepository _userRepository, LoginService _loginService)
+        public UserIdentificationServiceImpl(UserRepository _userRepository, LoginService _loginService, AvatarService _avatarService)
         {
             userRepository = _userRepository;
             loginService = _loginService;
+            avatarService = _avatarService;
         }
 
         public TokenDto login(string username, string password)
@@ -34,6 +37,17 @@ namespace UserIdentification.application.impl
         public void update(UserAggregate userAggregate)
         {
             userRepository.update(userAggregate);
+        }
+
+        public void setAvatar(IFormFile image, string avatarName)
+        {
+            avatarService.setAvatar(image, avatarName);
+            return;
+        }
+
+        public FileContentResult getAvatar(string avatarName)
+        {
+            return avatarService.getAvatar(avatarName);
         }
     }
 }

@@ -27,6 +27,20 @@ namespace UserIdentification.resource.controller
             userIdentificationService = _userIdentificationService;
         }
 
+        private string resolveToken()
+        {
+            //resolve token
+            string token = Request.Headers["Authorization"].ToString();
+            if (token == null)
+            {
+                throw new ParamMissingException("token required");
+            }
+            var newToken = token.Replace("Bearer ", "");
+            var username = jwt.resolveToken(newToken);
+
+            return username;
+        }
+
         [HttpPost]
         public ComResponse<TokenDto> login([FromBody] LoginDto user)
         {
@@ -51,15 +65,26 @@ namespace UserIdentification.resource.controller
         public async Task<ComResponse<UserAggregate>> getUserInfo()
         {
             //resolve token
-            string token = Request.Headers["Authorization"].ToString();
-            if(token == null)
-            {
-                throw new ParamMissingException("token required");
-            }
-            var newToken = token.Replace("Bearer ", "");
-            var username = jwt.resolveToken(newToken);
+            var username = resolveToken();
 
             return ComResponse<UserAggregate>.success(userIdentificationService.getUserInfoByUsername(username));
+        }
+
+        [HttpPost]
+        public ComResponse<int> setAvatar([FromForm]IFormFile avatar)
+        {
+            var username = resolveToken();
+            userIdentificationService.setAvatar(avatar, username);
+
+            return ComResponse<int>.success(0);
+        }
+
+        [HttpGet]
+        public async Task<ComResponse<FileContentResult>> getAvatar()
+        {
+            var username = resolveToken();
+
+            return ComResponse<FileContentResult>.success(userIdentificationService.getAvatar(username));
         }
     }
 }

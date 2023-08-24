@@ -55,6 +55,7 @@ builder.Services.AddScoped<UserIdentificationService, UserIdentificationServiceI
 
 //domain services
 builder.Services.AddScoped<LoginService, LoginServiceImpl>();
+builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
 
 //repositories
 builder.Services.AddSingleton<UserRepository, UserRepositoryImpl>();
