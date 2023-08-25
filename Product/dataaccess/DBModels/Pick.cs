@@ -19,7 +19,7 @@ public partial class Pick
 
     public string? PropertyValue { get; set; }
 
-    public int Stock { get; set; }
+    public decimal Stock { get; set; }
 
     public virtual CommodityProperty? CommodityProperty { get; set; }
 }

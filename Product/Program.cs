@@ -9,6 +9,8 @@ using Product.domain.service;
 using Product.domain.service.impl;
 using Product.application;
 using Product.application.impl;
+using Product.domain.service.Stock.impl;
+using Product.application.Stock.impl;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -22,9 +24,10 @@ builder.Services.AddScoped<ProductRepository, ProductRepositoryImpl>();
 
 //domain services
 builder.Services.AddScoped<ProductService, ProductServiceImpl>();
+builder.Services.AddScoped<StockService, StockServiceImpl>();
 //application services
 builder.Services.AddScoped<ProductApplicationService, ProductApplicationServiceImpl>();
-
+builder.Services.AddScoped<StockApplicationService, StockApplicationServiceImpl>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

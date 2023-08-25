@@ -17,7 +17,7 @@ namespace Product.resource.vo
 
             public bool? IsDeleted { get; set; }
 
-            public int Stock { get; set; }
+            public decimal Stock { get; set; }
 
             public ProductPickVo(List<DPick> pick)
             {

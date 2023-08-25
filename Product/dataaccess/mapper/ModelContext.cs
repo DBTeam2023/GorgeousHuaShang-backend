@@ -142,6 +142,9 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PROPERTY_VALUE");
+            entity.Property(e => e.Stock)
+                .HasColumnType("NUMBER(38)")
+                .HasColumnName("STOCK");
 
             entity.HasOne(d => d.CommodityProperty).WithMany(p => p.Picks)
                 .HasForeignKey(d => new { d.CommodityId, d.PropertyType, d.PropertyValue })

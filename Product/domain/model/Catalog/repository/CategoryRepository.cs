@@ -1,4 +1,5 @@
-﻿using Product.dto;
+﻿using EntityFramework.Models;
+using Product.dto;
 
 namespace Product.domain.model.repository
 {
@@ -18,6 +19,8 @@ namespace Product.domain.model.repository
         public Task delete(string commodityId);
 
         public Task setPick(PickDto picks);
+
+        public List<IGrouping<string, Pick>> getPicks(PickDto picks);
 
 
     }

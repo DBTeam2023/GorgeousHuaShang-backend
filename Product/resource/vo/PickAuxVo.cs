@@ -6,11 +6,11 @@
 
         public string? Description { get; set; }
 
-        public int Stock { get; set; }
+        public decimal Stock { get; set; }
 
         public Dictionary<string, string> Property { get; set; } = null!;
 
-        public PickAuxVo(decimal? price,string? description,int stock, Dictionary<string, string> property)
+        public PickAuxVo(decimal? price,string? description,decimal stock, Dictionary<string, string> property)
         {
             Price = price;
             Description = description;

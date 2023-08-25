@@ -311,13 +311,7 @@ namespace Product.domain.model.repository.impl
             //"color"           "red"
             //"size"            "big"
             //"made"            "silk"
-            var id = picks.commodityId;
-            var filter = picks.Filter;
-            var db_picks = _context.Picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
-            foreach (var item in filter)
-            {
-                db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
-            }
+            var db_picks = getPicks(picks);
 
             foreach (var item in db_picks)
             {
@@ -366,8 +360,6 @@ namespace Product.domain.model.repository.impl
         }
 
        
-
-
         //exception fixed
         internal async Task updateCategory(string id, string? type)
         {
@@ -534,6 +526,19 @@ namespace Product.domain.model.repository.impl
                 throw new DBFailureException("delete failure");
             }
 
+        }
+
+
+        public List<IGrouping<string, Pick>> getPicks(PickDto picks)
+        {
+            var id = picks.commodityId;
+            var filter = picks.Filter;
+            var db_picks = _context.Picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
+            foreach (var item in filter)
+            {
+                db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
+            }
+            return db_picks;
         }
 
 

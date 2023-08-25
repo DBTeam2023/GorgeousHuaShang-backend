@@ -13,6 +13,6 @@ namespace Product.dto
         
         public string? Description { get; set; }
 
-        public int? Stock { get; set; }
+        public decimal? Stock { get; set; }
     }
 }
