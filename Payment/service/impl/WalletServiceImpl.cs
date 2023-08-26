@@ -23,7 +23,7 @@ namespace Payment.service.impl
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
 
             if (wallet == null)
-                throw new NotFoundException("This user does not exist");
+                throw new NotFoundException("This wallet does not exist");
             return wallet;
         }
 
@@ -56,7 +56,7 @@ namespace Payment.service.impl
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
 
             if (wallet == null)
-                throw new NotFoundException("This user does not exist");
+                throw new NotFoundException("This wallet does not exist");
 
             _context.Wallets.Remove(wallet);
             await _context.SaveChangesAsync();
@@ -70,7 +70,7 @@ namespace Payment.service.impl
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
 
             if (wallet == null)
-                throw new NotFoundException("This user does not exist");
+                throw new NotFoundException("This wallet does not exist");
 
             if (wallet.Status == false)
                 throw new StatusException("The wallet is frozen");
@@ -88,7 +88,7 @@ namespace Payment.service.impl
         {
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
             if (wallet == null)
-                throw new NotFoundException("This user does not exist");
+                throw new NotFoundException("This wallet does not exist");
 
             if (wallet.Balance < amount)
                 throw new RangeException("The balance is insufficient");
@@ -109,7 +109,7 @@ namespace Payment.service.impl
         {
             var wallet = _context.Wallets.Where(x => x.UserId == userId).FirstOrDefault();
             if (wallet == null)
-                throw new NotFoundException("This user does not exist");
+                throw new NotFoundException("This wallet does not exist");
 
             wallet.Status = status;
             await _context.SaveChangesAsync();
