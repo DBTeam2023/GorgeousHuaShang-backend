@@ -52,11 +52,12 @@ namespace UserIdentification.domain.model
             Type = type;
         }
 
-        internal UserAggregate(string userId, string nickName, string username, string password, string type)
+        internal UserAggregate(string userId, string nickName, string phonenumber, string username, string password, string type)
         {
             UserId = userId;
             Password = password;
             NickName = nickName;
+            PhoneNumber = phonenumber;
             Username = username;
             Type = type;
         }

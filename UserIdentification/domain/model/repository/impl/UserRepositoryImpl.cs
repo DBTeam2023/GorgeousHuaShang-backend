@@ -195,7 +195,7 @@ namespace UserIdentification.domain.model.repository.impl
             }
 
             //get detail info for account
-            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName,userInfo.Username, userInfo.Password, userInfo.Type);
+            UserAggregate userAggregate = new UserAggregate(userInfo.UserId,userInfo.NickName,userInfo.PhoneNumber,userInfo.Username, userInfo.Password, userInfo.Type);
             if(userInfo.Type == UserType.Buyer)
             {
                 Buyer buyerPo = modelContext.Buyers.FirstOrDefault(e => e.UserId == userId);
