@@ -20,6 +20,8 @@ namespace UserIdentification.domain.model
 
         public string Username { get; set; } = null!;
 
+        public string PhoneNumber { get; set; } = null!;
+
         public string Type { get; set; } = null!;
 
         public BuyerEntity? buyerInfo { get; set; }
@@ -60,13 +62,14 @@ namespace UserIdentification.domain.model
         }
 
         [JsonConstructor]
-        public UserAggregate(string userId, DateTime? loginTime, string password, string nickName, string username, string type, BuyerEntity? buyerInfo, SellerEntity? sellerInfo)
+        public UserAggregate(string userId, DateTime? loginTime, string password, string nickName, string username, string phonenumber, string type, BuyerEntity? buyerInfo, SellerEntity? sellerInfo)
         {
             UserId = userId;
             LoginTime = loginTime;
             Password = password;
             NickName = nickName;
             Username = username;
+            PhoneNumber = phonenumber;
             Type = type;
             this.buyerInfo = buyerInfo;
             this.sellerInfo = sellerInfo;

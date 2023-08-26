@@ -114,6 +114,10 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PASSWORD");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("PHONE_NUMBER");
             entity.Property(e => e.Type)
                 .HasMaxLength(20)
                 .IsUnicode(false)

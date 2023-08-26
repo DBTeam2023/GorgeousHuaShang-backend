@@ -38,6 +38,7 @@ namespace UserIdentification.domain.model.repository.impl
                     Password = user.Password,
                     NickName = user.NickName,
                     Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
                     Type = user.Type,
                     Buyer = buyerPo
                 };
@@ -59,6 +60,7 @@ namespace UserIdentification.domain.model.repository.impl
                     Password = user.Password,
                     NickName = user.NickName,
                     Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
                     Type = user.Type,
                     Seller = sellerPo
                 };
@@ -73,6 +75,7 @@ namespace UserIdentification.domain.model.repository.impl
                     Password = user.Password,
                     NickName = user.NickName,
                     Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
                     Type = user.Type
                 };
 
@@ -113,6 +116,7 @@ namespace UserIdentification.domain.model.repository.impl
                     Password = user.Password,
                     NickName = user.NickName,
                     Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
                     Type = user.Type,
                     Buyer = buyerPo
                 };
@@ -135,6 +139,7 @@ namespace UserIdentification.domain.model.repository.impl
                     Password = user.Password,
                     NickName = user.NickName,
                     Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
                     Type = user.Type,
                     Seller = sellerPo
                 };
