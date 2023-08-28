@@ -48,9 +48,29 @@ namespace UserIdentification.utils
                     image.CopyTo(stream);  // save the picture
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
+            {
+                throw new ParamException("null image path");
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ParamException("invalid image path");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new AuthorizationException("unauthorized file");
+            }
+            catch (DirectoryNotFoundException ex)
             {
                 throw new NotFoundException("directory not found");
+            }
+            catch (PathTooLongException ex)
+            {
+                throw new ParamException("path too long");
+            }
+            catch (IOException ex)
+            {
+                throw new IOInternalException("internal IO error");
             }
 
             return;

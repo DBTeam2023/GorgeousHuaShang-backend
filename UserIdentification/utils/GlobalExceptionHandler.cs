@@ -83,6 +83,18 @@ namespace UserIdentification.utils
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
+                case AuthorizationException ex:
+                    response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case IOInternalException ex:
+                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case ParamException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     errorResponse.msg = "Internal Server errors. Check Logs!";
