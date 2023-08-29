@@ -50,6 +50,8 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.User).WithOne(p => p.Seller)
                 .HasForeignKey<Seller>(d => d.UserId)
                 .HasConstraintName("FK_user22");
+
+            entity.Ignore(e => e.SellerStores);
         });
 
         modelBuilder.Entity<SellerStore>(entity =>
@@ -100,6 +102,7 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("STORE_NAME");
+            entity.Ignore(e => e.SellerStores);
         });
 
         modelBuilder.Entity<User>(entity =>

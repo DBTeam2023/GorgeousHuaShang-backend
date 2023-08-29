@@ -110,7 +110,7 @@ namespace Storesys.service.impl
             return sellerStore;
         }
 
-        public async Task<IPage<Store>> getStoreBySeller(int pageNo, int pageSize, string token)
+        public async Task<IPage<Store>> getMyStore(int pageNo, int pageSize, string token)
         {
             string userId = await getUserId(token);
             var stores = _context.SellerStores.Where(s => s.UserId == userId).ToList();
@@ -135,13 +135,48 @@ namespace Storesys.service.impl
             return Page;
         }
 
-        public async Task<IPage<Store>> getStoreByName(int pageNo, int pageSize, string? storeName)
+        //public async Task<IPage<Store>> getStoreByName(int pageNo, int pageSize, string? storeName)
+        //{
+        //    List<Store> result = new List<Store>();
+        //    if (storeName == null)
+        //        result = _context.Stores.ToList();
+        //    else
+        //        result = _context.Stores.Where(s => s.StoreName.Contains(storeName)).ToList();
+
+        //    var list = result.Skip((pageNo - 1) * pageSize)
+        //      .Take(pageSize)
+        //      .ToList();
+        //    IPage<Store> Page = IPage<Store>.builder()
+        //       .records(list)
+        //       .total(result.Count)
+        //       .size(pageSize)
+        //       .current(pageNo)
+        //       .build();
+        //    return Page;
+
+        //}
+        public async Task<IPage<Store>> getPage(int pageNo, int pageSize, string? token, string? storeName)
         {
+            List<Store> temp = new List<Store>();
             List<Store> result = new List<Store>();
-            if (storeName == null)
-                result = _context.Stores.ToList();
+            if (token == null)
+                temp = _context.Stores.ToList();
             else
-                result = _context.Stores.Where(s => s.StoreName.Contains(storeName)).ToList();
+            {
+                var userId = await getUserId(token);
+                var stores = _context.SellerStores.Where(s => s.UserId == userId).ToList();
+                foreach(var store in stores)
+                {
+                    var x = _context.Stores.FirstOrDefault(s => s.StoreId == store.StoreId);
+                    if(x != null)
+                        temp.Add(x);
+                }
+            }
+            if(storeName == null)
+                result = temp;
+            else
+                result = temp.Where(s => s.StoreName.Contains(storeName)).ToList();
+
 
             var list = result.Skip((pageNo - 1) * pageSize)
               .Take(pageSize)
@@ -155,7 +190,7 @@ namespace Storesys.service.impl
             return Page;
 
         }
-        public async Task<Store> getStoreById(string storeId)
+        public async Task<Store> getInfo(string storeId)
         {
             var store = _context.Stores.FirstOrDefault(s => s.StoreId == storeId);
             if (store == null)
@@ -163,7 +198,7 @@ namespace Storesys.service.impl
             return store;
         }
 
-        public async Task<IPage<User>> getUserByStore(int pageNo, int pageSize, string storeId)
+        public async Task<IPage<User>> getSeller(int pageNo, int pageSize, string storeId)
         {
             var store = await _context.Stores.FirstOrDefaultAsync(s =>s.StoreId == storeId);
             if (store == null)
