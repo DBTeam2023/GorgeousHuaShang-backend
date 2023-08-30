@@ -13,7 +13,6 @@ namespace Product.application
         public OrderAggregate[] getAllOrder(string ID);
         public Task DeleteOrder(string orderID);
         // 创建
-        // 支付
 
     }
 }
