@@ -20,7 +20,10 @@ namespace Product.domain.model
         // TODO 存pick 写个返回pick的
         public string StoreID { get; set; }
         public string UserID { get; set; }
-        // 名字，电话号码地址一起返回给前端
+        public string NickName { get; set; }
+        public string PhoneNumber { get; set; }
+        // TODO 地址在哪呢？
+        public string Address { get; set; }
 
         public bool? IsDeleted { get; set; } = false;
 
