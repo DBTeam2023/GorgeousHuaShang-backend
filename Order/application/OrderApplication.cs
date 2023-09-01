@@ -14,5 +14,7 @@ namespace Product.application
         public Task DeleteOrder(string orderID);
         // 创建
 
+        //分页查询
+        public IPage<OrderAggregate> orderPageQuery(PageQueryDto pageQuery);
     }
 }

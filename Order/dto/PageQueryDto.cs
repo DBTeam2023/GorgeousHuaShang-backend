@@ -1,72 +1,33 @@
-﻿using Product.exception;
-using System.Text.Json.Serialization;
+﻿using Order.exception;
 
-namespace Product.dto
+namespace Order.dto
 {
-    public class PageQueryDto
+    public class OrderPageQueryDto
     {
-        public int PageSize { get; set; } = 0;
-        public int PageIndex { get; set; } = 0;
+        public int PageSize { get; set; } = 10;
+        public int PageIndex { get; set; } = 1;
 
-        //commodityId       equal
-        //storeId           equal
-        //pricemin          range
-        //pricemax          range
-        //type              like
-        //name              like
-        //desription        like
+        // 订单查询条件
+        public int? OrderId { get; set; }
+
+        public string? UserID { get; set; }
+
+        public decimal? Moneymin { get; set; }
+
+        public decimal? Moneymax { get; set; }
+
         public string? CommodityId { get; set; }
 
-        public string? StoreId { get; set; }
+        public decimal? TotalAmount { get; set; }
 
-        public decimal? Pricemin { get; set; }
-        
-        public decimal? Pricemax { get; set; }
+        public string? OrderStatus { get; set; }
 
-        public string? Type { get; set; }
-
-        public string? Name { get; set; }
-
-        public string? Description { get; set; }
-
-
-        public void check()
+        public void Check()
         {
             if (PageSize <= 0)
-                throw new PageException("page size should be positive");
+                throw new PageException("Page size should be positive");
             if (PageIndex <= 0)
-                throw new PageException("page index should be larger than 0");
+                throw new PageException("Page index should be larger than 0");
         }
-       
-
-        //public string? getStrValue(string key)
-        //{
-        //    if (Filter == null)
-        //        return null;
-
-        //    if (Filter.ContainsKey(key))
-        //        return Filter[key];
-        //    else
-        //        return null;
-        //}
-        //public decimal? getDoubleValue(string key)
-        //{
-        //    var val = getStrValue(key);
-        //    if (val == null)
-        //        return null;
-        //    else
-        //    {
-        //        decimal ans;
-        //        if (decimal.TryParse(val, out ans))
-        //            return ans;
-        //        else
-        //            return null;
-        //    }
-                
-
-        //}
-
-
-
     }
 }

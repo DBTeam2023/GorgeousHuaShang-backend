@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityFramework.Models;
+using Microsoft.AspNetCore.Mvc;
 using Product.common;
 using Product.domain.model;
 using Product.domain.model.repository;
@@ -14,11 +15,22 @@ namespace Product.application.impl
         private CategoryRepository _categoryRepository;
         private ProductService _productService;
 
+        //order
+        private OrderRepository _orderRepository;
+
         public OrderApplicationServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProductService productService)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _productService = productService;
+            //order
+            _orderRepository = orderRepository;
+        }
+
+        //分页
+        public IPage<OrderAggregate> orderPageQuery(PageQueryDto pageQuery)
+        {
+            return _orderRepository.pageQuery(pageQuery);
         }
 
         //Authorization:seller
@@ -95,6 +107,10 @@ namespace Product.application.impl
         }
 
 
+        public IPage<ProductAggregate> orderPageQuery(PageQueryDto pageQuery)
+        {
+            return _productRepository.pageQuery(pageQuery);
+        }
 
 
 
