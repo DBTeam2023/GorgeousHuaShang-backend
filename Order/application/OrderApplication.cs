@@ -1,6 +1,6 @@
-﻿using Product.domain.model;
-using Product.dto;
-using Product.utils;
+﻿using Order.domain.model;
+using Order.dto;
+using Order.utils;
 
 namespace Product.application
 {

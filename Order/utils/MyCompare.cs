@@ -1,5 +1,5 @@
 ﻿using EntityFramework.Models;
-namespace Product.utils
+namespace Order.utils
 {
     public class MyCompare
     {

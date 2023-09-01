@@ -1,10 +1,10 @@
-﻿using Product.common;
-using Product.domain.model.repository;
-using Product.domain.model.repository.impl;
-using Product.dto;
+﻿using Order.common;
+using Order.domain.model.repository;
+using Order.domain.model.repository.impl;
+using Order.dto;
 using System.Text.Json.Serialization;
 
-namespace Product.domain.model
+namespace Order.domain.model
 {
     public class OrderAggregate
     {

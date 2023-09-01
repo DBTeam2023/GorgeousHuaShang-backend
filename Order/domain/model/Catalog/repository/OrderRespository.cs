@@ -1,7 +1,7 @@
-﻿using Product.dto;
-using Product.utils;
+﻿using Order.utils;
+using Order.dto;
 
-namespace Product.domain.model.repository
+namespace Order.domain.model.repository
 {
     public interface OrderRepository
     {
@@ -12,5 +12,7 @@ namespace Product.domain.model.repository
         public OrderAggregate getById(string OrderId);
 
         public Task delete(string OrderId);
+
+        public IPage<OrderAggregate> pageQuery(PageQueryDto pageQuery);
     }
 }

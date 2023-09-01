@@ -1,6 +1,6 @@
-﻿using Product.common;
+﻿using Order.common;
 
-namespace Product.utils
+namespace Order.utils
 {
     /**
      * @author sty

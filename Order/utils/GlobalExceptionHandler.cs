@@ -2,9 +2,9 @@
 using System.Net;
 using System.Text.Json;
 using System;
-using Product.exception;
+using Order.exception;
 
-namespace Product.utils
+namespace Order.utils
 {
     /**
      * @author sty

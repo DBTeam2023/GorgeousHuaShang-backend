@@ -1,4 +1,4 @@
-﻿namespace Product.utils
+﻿namespace Order.utils
 {
     public class AreKeysEqual
     {

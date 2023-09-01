@@ -1,4 +1,4 @@
-﻿namespace Product.common
+﻿namespace Order.common
 {
     /**
      * @implnote enumeration for com response codes

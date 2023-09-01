@@ -1,4 +1,4 @@
-﻿namespace Product.dto
+﻿namespace Order.dto
 {
     public class OrderDto
     {

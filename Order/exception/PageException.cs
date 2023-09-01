@@ -1,4 +1,4 @@
-﻿namespace Product.exception
+﻿namespace Order.exception
 {
     public class PageException:MyException
     {

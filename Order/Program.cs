@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Product.utils;
-using Product.domain.model.repository;
-using Product.domain.model.repository.impl;
+using Order.utils;
+using Order.domain.model.repository;
+using Order.domain.model.repository.impl;
 using EntityFramework.Context;
-using Product.domain.service;
-using Product.domain.service.impl;
-using Product.application;
-using Product.application.impl;
+using Order.domain.service;
+using Order.domain.service.impl;
+using Order.application;
+using Order.application.impl;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

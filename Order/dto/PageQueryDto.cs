@@ -2,7 +2,7 @@
 
 namespace Order.dto
 {
-    public class OrderPageQueryDto
+    public class PageQueryDto
     {
         public int PageSize { get; set; } = 10;
         public int PageIndex { get; set; } = 1;
@@ -11,6 +11,8 @@ namespace Order.dto
         public int? OrderId { get; set; }
 
         public string? UserID { get; set; }
+
+        public string? CreateTime { get; set; }
 
         public decimal? Moneymin { get; set; }
 

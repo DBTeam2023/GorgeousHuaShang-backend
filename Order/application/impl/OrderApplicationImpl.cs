@@ -1,29 +1,27 @@
 ﻿using EntityFramework.Models;
 using Microsoft.AspNetCore.Mvc;
-using Product.common;
-using Product.domain.model;
-using Product.domain.model.repository;
-using Product.domain.service;
-using Product.dto;
-using Product.utils;
+using Order.common;
+using Order.domain.model;
+using Order.domain.model.repository;
+using Order.domain.service;
+using Order.dto;
+using Order.utils;
 
-namespace Product.application.impl
+namespace Order.application.impl
 {
     public class OrderApplicationServiceImpl : OrderApplicationService
     {
+        /*
         private ProductRepository _productRepository;
         private CategoryRepository _categoryRepository;
         private ProductService _productService;
+        */
 
         //order
         private OrderRepository _orderRepository;
 
-        public OrderApplicationServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProductService productService)
+        public OrderApplicationServiceImpl(OrderRepository orderRepository)
         {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
-            _productService = productService;
-            //order
             _orderRepository = orderRepository;
         }
 
@@ -33,6 +31,7 @@ namespace Product.application.impl
             return _orderRepository.pageQuery(pageQuery);
         }
 
+        /*
         //Authorization:seller
         //首次创建某种商品，包含property,type信息
         public async Task<CommodityIdDto> createCommodity(CreateCommodityDto commodity)
@@ -111,7 +110,7 @@ namespace Product.application.impl
         {
             return _productRepository.pageQuery(pageQuery);
         }
-
+        */
 
 
 
