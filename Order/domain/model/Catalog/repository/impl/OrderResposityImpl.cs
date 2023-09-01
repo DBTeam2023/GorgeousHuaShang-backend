@@ -15,32 +15,32 @@ namespace Product.domain.model.repository.impl
     {
         private readonly ModelContext _context;
 
-        public OrderRepositoryImpl(ModelContext context, CategoryRepository categoryRepository)
+        public OrderRepositoryImpl(ModelContext context)
         {
             _context = context;
         }
 
-        public async Task Add(OrderAggregate productAggregate)
+        public async Task add(OrderAggregate orderAggregate)
         {
             // 实现添加订单的逻辑
-            _context.Orders.Add(productAggregate);
+            _context.Orders.Add(orderAggregate);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(OrderAggregate productAggregate)
+        public async Task update(OrderAggregate orderAggregate)
         {
             // 实现更新订单的逻辑
-            _context.Orders.Update(productAggregate);
+            _context.Orders.Update(orderAggregate);
             await _context.SaveChangesAsync();
         }
 
-        public OrderAggregate GetById(string orderId)
+        public OrderAggregate getById(string orderId)
         {
             // 实现通过订单ID获取订单的逻辑
             return _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
         }
 
-        public async Task Delete(string orderId)
+        public async Task delete(string orderId)
         {
             // 实现删除订单的逻辑
             var order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
