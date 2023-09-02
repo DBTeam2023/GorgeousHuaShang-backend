@@ -8,9 +8,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using EntityFramework.Context;
-
-using Order.utils;
 using Microsoft.OpenApi.Any;
+using Product.domain.model.repository;
 
 namespace Order.domain.model.repository.impl
 {
@@ -26,34 +25,104 @@ namespace Order.domain.model.repository.impl
         public async Task add(OrderAggregate orderAggregate)
         {
             // 实现添加订单的逻辑
-            _context.Orders.Add(orderAggregate);
+
+            // 首先检查订单是否已存在
+            var existingOrder = _context.Orders.FirstOrDefault(o => o.ID == orderAggregate.OrderID);
+            if (existingOrder != null)
+            {
+                throw new DuplicateException("Order already exists.");
+            }
+
+            // 创建新的 Order 实例并从 OrderAggregate 对象中初始化数据
+            var newOrder = new EntityFramework.Models.Order
+            {
+                ID = orderAggregate.OrderID,
+                Time = orderAggregate.CreateTime,
+                Money = orderAggregate.Money,
+                State = orderAggregate.State,
+                LogisticID = orderAggregate.LogisticID,
+                UserID = orderAggregate.UserID,
+                IsDeleted = orderAggregate.IsDeleted,
+                PickID = orderAggregate.PickID,
+            };
+            // 添加新订单到数据库
+            _context.Orders.Add(newOrder);
             await _context.SaveChangesAsync();
         }
 
         public async Task update(OrderAggregate orderAggregate)
         {
-            // 实现更新订单的逻辑
-            _context.Orders.Update(orderAggregate);
-            await _context.SaveChangesAsync();
+            var dbOrder = await _context.Orders.FirstOrDefaultAsync(o => o.ID == orderAggregate.OrderID);
+            if (dbOrder == null)
+                throw new NotFoundException("The order doesn't exist.");
+
+            // 更新订单属性
+            dbOrder.ID = orderAggregate.OrderID;
+            dbOrder.Time = orderAggregate.CreateTime;
+            dbOrder.Money = orderAggregate.Money;
+            dbOrder.State = orderAggregate.State;
+            dbOrder.LogisticID = orderAggregate.LogisticID;
+            dbOrder.UserID = orderAggregate.UserID;
+            dbOrder.IsDeleted = orderAggregate.IsDeleted;
+            dbOrder.PickID = orderAggregate.PickID;
+
+            IDbContextTransaction? transaction = null;
+            try
+            {
+                transaction = _context.Database.BeginTransaction();
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+                throw new DBFailureException("Failed to update the order.");
+            }
+            finally
+            {
+                transaction?.Dispose();
+            }
         }
 
         public OrderAggregate getById(string orderId)
         {
-            // 实现通过订单ID获取订单的逻辑
-            return _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            var dbOrder = _context.Orders.FirstOrDefault(o => o.ID == orderId);
+            if (dbOrder == null)
+                throw new NotFoundException("The order doesn't exist.");
+
+            var orderAggregate = new OrderAggregate
+            {
+                OrderID = dbOrder.ID,
+                CreateTime = dbOrder.Time,
+                Money = dbOrder.Money,
+                State = dbOrder.State,
+                LogisticID = dbOrder.LogisticID,
+                UserID = dbOrder.UserID,
+                IsDeleted = dbOrder.IsDeleted,
+                PickID = dbOrder.PickID,
+            };
+
+            return orderAggregate;
         }
 
         public async Task delete(string orderId)
         {
-            // 实现删除订单的逻辑
-            var order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
-            if (order != null)
+            var order = _context.Orders.FirstOrDefault(o => o.ID == orderId);
+            if (order == null)
+                throw new NotFoundException("The order doesn't exist.");
+
+            _context.Orders.Remove(order);
+            try
             {
-                _context.Orders.Remove(order);
                 await _context.SaveChangesAsync();
             }
+            catch
+            {
+                throw new DBFailureException("Failed to delete the order.");
+            }
         }
-        private List<OrderAggregate> Convert(List<Order> orders)
+        private List<OrderAggregate> Convert(List<EntityFramework.Models.Order> orders)
         {
             var ans = new List<OrderAggregate>();
 
@@ -65,7 +134,7 @@ namespace Order.domain.model.repository.impl
                     CreateTime = order.Time,
                     Money = (decimal)order.Money,
                     State = order.State,
-                    LogisticID = order.LogisticsID,
+                    LogisticID = order.LogisticID,
                     StoreID = order.StoreID,
                     UserID = order.UserID,
                     IsDeleted = order.IsDeleted

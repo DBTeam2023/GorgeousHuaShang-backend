@@ -2,7 +2,7 @@
 {
     public class OrderDto
     {
-        public string OrderId { get; set; } = null!;
+        public string OrderID { get; set; } = null!;
 
         public string CreateTime { get; set; } = null!;
 
@@ -10,9 +10,13 @@
 
         public int State { get; set; }
 
-        public string LogisticsID { get; set; } = null!;
+        public string LogisticID { get; set; } = null!;
+        public string[] PickID { get; set; } = null!;
         public string StoreID { get; set; } = null!;
         public string UserID { get; set; } = null!;
+        public string NickName { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
+        public string Address { get; set; } = null!;
 
         public bool? IsDeleted { get; set; } = false;
 
