@@ -11,7 +11,6 @@ namespace Order.resource.vo
         public decimal Money { get; set; }
         public int State { get; set; }
         public string LogisticId { get; set; }
-        public string StoreId { get; set; }
         public string UserId { get; set; }
         public bool IsDeleted { get; set; }
 
