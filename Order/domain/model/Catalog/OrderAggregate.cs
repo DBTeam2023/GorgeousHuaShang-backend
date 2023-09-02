@@ -18,7 +18,6 @@ namespace Order.domain.model
 
         public string LogisticID { get; set; } = null!;
         public string[] PickID { get; set; } = null!;
-        public string StoreID { get; set; } = null!;
         public string UserID { get; set; } = null!;
         public string NickName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
@@ -32,7 +31,7 @@ namespace Order.domain.model
         [JsonConstructor]
         internal OrderAggregate(string orderID, string createTime,
            decimal money, int state, bool? isDeleted,
-           string logisticID, string[] pickID, string storeID, string userID,
+           string logisticID, string[] pickID,string userID,
            string nickName, string phoneNumber, string address)
         {
             OrderID = orderID;
@@ -42,7 +41,6 @@ namespace Order.domain.model
             IsDeleted = isDeleted;
             LogisticID = logisticID;
             PickID = pickID;
-            StoreID = storeID;
             UserID = userID;
             NickName = nickName;
             PhoneNumber = phoneNumber;
@@ -54,7 +52,16 @@ namespace Order.domain.model
         {
             return new OrderAggregate(
                 order.OrderID, order.CreateTime, order.Money, order.State, order.IsDeleted,
-                order.LogisticID, order.PickID, order.StoreID, order.UserID,
+                order.LogisticID, order.PickID, order.UserID,
+                order.NickName, order.PhoneNumber, order.Address);
+        }
+
+        public static OrderAggregate Create(CreateOrderDto order)
+        {
+            var guid = Guid.NewGuid().ToString();
+            return new OrderAggregate(
+                guid, order.CreateTime, order.Money, order.State, false,
+                order.LogisticID, order.PickID, order.UserID,
                 order.NickName, order.PhoneNumber, order.Address);
         }
 

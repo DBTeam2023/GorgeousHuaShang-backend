@@ -1,8 +1,7 @@
 ﻿namespace Order.dto
 {
-    public class OrderDto
+    public class CreateOrderDto
     {
-        public string OrderID { get; set; } = null!;
 
         public string CreateTime { get; set; } = null!;
 
@@ -16,8 +15,6 @@
         public string NickName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public string Address { get; set; } = null!;
-
-        public bool? IsDeleted { get; set; } = false;
 
     }
 }
