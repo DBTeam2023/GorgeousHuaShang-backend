@@ -22,7 +22,6 @@ namespace Order.resource.vo
             Money = orderAggregate.Money;
             State = orderAggregate.State;
             LogisticId = orderAggregate.LogisticID;
-            StoreId = orderAggregate.StoreID;
             UserId = orderAggregate.UserID;
             IsDeleted = orderAggregate.IsDeleted ?? false;
         }
@@ -41,5 +40,4 @@ namespace Order.resource.vo
                 .build();
         }
     }
-}
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using EntityFramework.Context;
 using Microsoft.OpenApi.Any;
-using Product.domain.model.repository;
+using Order.domain.model.repository;
 
 namespace Order.domain.model.repository.impl
 {
@@ -132,10 +132,9 @@ namespace Order.domain.model.repository.impl
                 {
                     OrderID = order.ID,
                     CreateTime = order.Time,
-                    Money = (decimal)order.Money,
+                    Money = order.Money,
                     State = order.State,
                     LogisticID = order.LogisticID,
-                    StoreID = order.StoreID,
                     UserID = order.UserID,
                     IsDeleted = order.IsDeleted
                 };
@@ -157,13 +156,14 @@ namespace Order.domain.model.repository.impl
 
             // 根据查询参数逐步过滤订单记录
             var filteredOrders = allOrders
-                .Where(x => x.OrderID == (pageQuery.OrderId ?? x.OrderID))
+                .Where(x => x.ID == (pageQuery.OrderId ?? x.ID))
                 .Where(x => x.UserID == (pageQuery.UserID ?? x.UserID))
                 .Where(x => x.Money >= (pageQuery.Moneymin ?? decimal.MinValue))
                 .Where(x => x.Money <= (pageQuery.Moneymax ?? decimal.MaxValue))
-                .Where(x => x.CommodityId == (pageQuery.CommodityId ?? x.CommodityId))
-                .Where(x => x.TotalAmount >= (pageQuery.TotalAmount ?? decimal.MinValue))
-                .Where(x => x.OrderStatus == (pageQuery.OrderStatus ?? x.OrderStatus))
+                //.Where(x => x.PickID == (pageQuery.CommodityId ?? x.PickID))
+                .Where(x => x.PickID.Contains(pageQuery.CommodityId ?? ""))
+                .Where(x => x.Money >= (pageQuery.TotalAmount ?? decimal.MinValue))
+                .Where(x => x.State == (pageQuery.OrderStatus ?? x.State))
             .ToList();
 
 
