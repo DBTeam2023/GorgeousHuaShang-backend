@@ -6,8 +6,9 @@ namespace Product.resource.vo
     {
         public string CommodityId { get; set; } = null!;
 
-        public List<PickAuxVo> CommodityInfo { get;set; }
+        public List<PickSingleVo> CommodityInfo { get;set; }
        
+
 
         private void addCommodityInfo(List<DPick> pick)
         {
@@ -15,13 +16,13 @@ namespace Product.resource.vo
             var property = new Dictionary<string, string>();
             foreach (var it in pick)
                 property.Add(it.PropertyType, it.PropertyValue);
-            CommodityInfo.Add(new PickAuxVo(pick[0].Price, pick[0].Description,pick[0].Stock, property));
+            CommodityInfo.Add(new PickSingleVo(pick[0].PickId,pick[0].Price, pick[0].Description,pick[0].Stock, property, CommodityId));
         }
 
 
         public PickVo(List<IGrouping<string, DPick>> pickGroup)
         {
-            CommodityInfo = new List<PickAuxVo>();
+            CommodityInfo = new List<PickSingleVo>();
             foreach (var it in pickGroup)
                 this.addCommodityInfo(it.ToList());
                           

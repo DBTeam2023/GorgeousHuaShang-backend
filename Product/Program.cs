@@ -25,6 +25,7 @@ builder.Services.AddScoped<ProductRepository, ProductRepositoryImpl>();
 //domain services
 builder.Services.AddScoped<ProductService, ProductServiceImpl>();
 builder.Services.AddScoped<StockService, StockServiceImpl>();
+builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
 //application services
 builder.Services.AddScoped<ProductApplicationService, ProductApplicationServiceImpl>();
 builder.Services.AddScoped<StockApplicationService, StockApplicationServiceImpl>();

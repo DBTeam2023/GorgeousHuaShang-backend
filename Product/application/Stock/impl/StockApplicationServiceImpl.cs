@@ -11,9 +11,17 @@ namespace Product.application.Stock.impl
         {
             _stockService = stockService;
         }
-        public async Task reduceStock(ReduceStockDto reduceStock)
+        public async Task reduceStock(StockDto reduceStock)
         {
+
             await _stockService.reduceStock(reduceStock);
+        }
+
+        public async Task restoreStock(StockDto reduceStock)
+        {
+
+
+            await _stockService.restoreStock(reduceStock);
         }
 
     }

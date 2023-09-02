@@ -20,8 +20,9 @@ namespace Product.domain.model.repository
 
         public Task setPick(PickDto picks);
 
-        public List<IGrouping<string, Pick>> getPicks(PickDto picks);
+        public List<IGrouping<string, DPick>> getPicks(PickDto picks);
 
+       
 
     }
 }

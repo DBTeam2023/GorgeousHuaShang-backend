@@ -1,4 +1,6 @@
-﻿namespace Product.dto
+﻿using Product.utils;
+
+namespace Product.dto
 {
     public class CommodityDto
     {
@@ -18,6 +20,22 @@
         public string? ClassficationType { get; set; }
 
         public bool? IsDeleted { get; set; } = false;
+
+        public IFormFile? image { get; set; }
+
+        public CommodityDto(CommodityAuxDto commodity)
+        {
+            Property = JsonConvertService<Dictionary<string, List<string>>>.convertToJson(commodity.Property);
+            StoreId = commodity.StoreId;
+            ProductName = commodity.ProductName;
+            Description = commodity.Description;
+            Price = commodity.Price;
+            ClassficationType = commodity.ClassficationType;
+            IsDeleted = commodity.IsDeleted;
+            image = commodity.image;
+            ProductId = commodity.ProductId;
+        }
+
 
     }
 }

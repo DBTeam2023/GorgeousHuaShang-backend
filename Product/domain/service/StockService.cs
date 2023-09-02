@@ -4,7 +4,7 @@ namespace Product.domain.service
 {
     public interface StockService
     {
-      
-        public Task reduceStock(ReduceStockDto reduceStock);
+        public Task restoreStock(StockDto restoreStock);
+        public Task reduceStock(StockDto reduceStock);
     }
 }

@@ -73,6 +73,27 @@ namespace Product.domain.model.repository.impl
             return db_add_picks;
         }
 
+        public static List<DPick> transferToModelPick(List<Pick> db_pick)
+        {
+            var db_add_picks = new List<DPick>();
+            foreach (Pick pick in db_pick)
+            {
+                var new_pick = new DPick
+                {
+                    PickId = pick.PickId,
+                    Description = pick.Description,
+                    CommodityId = pick.CommodityId,
+                    IsDeleted = pick.IsDeleted,
+                    Price = pick.Price,
+                    PropertyType = pick.PropertyType,
+                    PropertyValue = pick.PropertyValue,
+                    Stock = pick.Stock,
+                };
+                db_add_picks.Add(new_pick);
+            }
+            return db_add_picks;
+        }
+
         internal Dictionary<string, List<string>> transferToDModelProperty(List<CommodityProperty> property)
         {
             Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
@@ -303,6 +324,11 @@ namespace Product.domain.model.repository.impl
 
         }
 
+
+        
+
+
+
         //exception fixed
         public async Task setPick(PickDto picks)
         {
@@ -311,7 +337,7 @@ namespace Product.domain.model.repository.impl
             //"color"           "red"
             //"size"            "big"
             //"made"            "silk"
-            var db_picks = getPicks(picks);
+            var db_picks = getPicksAux(picks);
 
             foreach (var item in db_picks)
             {
@@ -348,14 +374,7 @@ namespace Product.domain.model.repository.impl
                 throw new DBFailureException("reset pick failure");
             }
 
-
-
-
-
-
-
-
-
+           
 
         }
 
@@ -529,37 +548,59 @@ namespace Product.domain.model.repository.impl
         }
 
 
-        public List<IGrouping<string, Pick>> getPicks(PickDto picks)
+        internal List<IGrouping<string, Pick>> getPicksAux(PickDto picks)
+        {
+
+            var id = picks.commodityId;
+            var filter = picks.Filter;
+            var pickId = picks.PickId;
+            var db_picks = _context.Picks;
+            if (pickId==null)
+            {
+                var db_picks_group= db_picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
+                
+                foreach (var item in filter)
+                {
+                    db_picks_group = db_picks_group.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
+                }
+                return db_picks_group;
+            }
+            else
+            {
+                return db_picks.Where(p => p.PickId == pickId).GroupBy(p => p.PickId).ToList();
+            }
+        
+           
+        }
+
+        public List<IGrouping<string, DPick>> getPicks(PickDto picks)
         {
             var id = picks.commodityId;
             var filter = picks.Filter;
-            var db_picks = _context.Picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
-            foreach (var item in filter)
+            var pickId = picks.PickId;
+            var db_picks = transferToModelPick(_context.Picks.ToList());
+
+            if (pickId == null)
             {
-                db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
+                var db_picks_group = db_picks.Where(p => p.CommodityId == id).GroupBy(p => p.PickId).ToList();
+
+                foreach (var item in filter)
+                {
+                    db_picks_group = db_picks_group.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
+                }
+                return db_picks_group;
             }
-            return db_picks;
+            else
+            {
+                return db_picks.Where(p => p.PickId == pickId).GroupBy(p => p.PickId).ToList();
+            }
         }
 
 
 
-        //return xxx
-        //public List<IGrouping<string, Pick>> setAvailable(string commodityId, Dictionary<string, string> filter)
-        //{
-        //    //the arguments are like this
-        //    //@arguments        @query
-        //    //"color"           "red"
-        //    //"size"            "big"
-        //    //"made"            "silk"
-        //    var db_picks = _context.Picks.Where(p => p.CommodityId == commodityId).GroupBy(p => p.PickId).ToList();
-        //    foreach (var item in filter)
-        //    {
-        //        db_picks = db_picks.Where(g => g.Any(pv => pv.PropertyType == item.Key && pv.PropertyValue == item.Value)).ToList();
-        //    }
 
-        //    return db_picks;
+      
 
-        //}
 
 
 

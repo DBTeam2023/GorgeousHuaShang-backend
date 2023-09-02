@@ -45,10 +45,11 @@ namespace Product.domain.model
         //初始化时候
         public static ProductAggregate create(CreateCommodityDto commodity)
         {
+
             var guid = Guid.NewGuid().ToString();
 
             var category = new CategoryAggregate(guid,
-                new List<DPick>(), commodity.Property,commodity.ClassficationType);
+                new List<DPick>(), commodity.Property, commodity.ClassficationType);
 
             return new ProductAggregate(
                 commodity.StoreId, guid, commodity.ProductName,

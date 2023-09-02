@@ -1,5 +1,8 @@
-﻿using Product.common;
+﻿using Microsoft.AspNetCore.Mvc;
+using Product.common;
 using Product.domain.model;
+using Product.domain.service;
+using Product.domain.service.impl;
 
 namespace Product.resource.vo
 {
@@ -8,6 +11,8 @@ namespace Product.resource.vo
         public class ProductPickVo
         {
             public string CommodityId { get; set; } = null!;
+
+            public string PickId { get; set; } = null!;
 
             public decimal? Price { get; set; }
 
@@ -19,6 +24,11 @@ namespace Product.resource.vo
 
             public decimal Stock { get; set; }
 
+            public FileContentResult? Image { get; set; }
+
+            public AvatarService _avatarService = new AvatarServiceImpl();
+
+
             public ProductPickVo(List<DPick> pick)
             {
                 Property=new Dictionary<string, string>();
@@ -29,6 +39,8 @@ namespace Product.resource.vo
                 Description = pick[0].Description;
                 IsDeleted = pick[0].IsDeleted;
                 Stock = pick[0].Stock;
+                PickId = pick[0].PickId;
+                Image=_avatarService.getPickAvatar(PickId, CommodityId);
             }
 
             public static List<ProductPickVo> createProductPickVo(List<IGrouping<string, DPick>> pickGroup)
@@ -59,10 +71,16 @@ namespace Product.resource.vo
 
         public string? ClassficationType { get; set; }
 
+        public FileContentResult? Image { get; set; }
+
         public List<ProductPickVo> DetailPicks { get; set; }
+
+        public AvatarService _avatarService = new AvatarServiceImpl();
+
 
         public ProductInfoVo(ProductAggregate productAggregate)
         {
+            
             StoreId = productAggregate.StoreId;
             ProductId = productAggregate.ProductId;
             ProductName = productAggregate.ProductName;
@@ -71,6 +89,9 @@ namespace Product.resource.vo
             IsDeleted = productAggregate.IsDeleted;
             Property = productAggregate.Category.Property;
             ClassficationType = productAggregate.Category.ClassficationType;
+
+            Image = _avatarService.getCommodityAvatar(ProductId);
+      
             DetailPicks = ProductPickVo.createProductPickVo(
                 productAggregate.Category.DetailPicks.GroupBy(g => g.PickId).ToList());
         }

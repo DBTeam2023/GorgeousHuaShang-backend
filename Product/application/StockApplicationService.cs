@@ -4,7 +4,9 @@ namespace Product.application
 {
     public interface StockApplicationService
     {
-        public Task reduceStock(ReduceStockDto reduceStock);
+        public Task reduceStock(StockDto reduceStock);
+
+        public Task restoreStock(StockDto reduceStock);
 
     }
 }

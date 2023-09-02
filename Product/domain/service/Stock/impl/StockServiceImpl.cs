@@ -15,16 +15,48 @@ namespace Product.domain.service.Stock.impl
             categoryRepository = _categoryRepository;
         }
 
+        public async Task restoreStock(StockDto restoreStock)
+        {
+            var pickdto = new PickDto(new PickAuxDto
+            {
+                PickId = restoreStock.PickId
+            });
+           
+
+            decimal original_stocks = 0;
+            var first_pick = categoryRepository.getPicks(pickdto);
+
+            if (first_pick.Count() == 0)
+                throw new NotFoundException("no picks found");
+
+
+            original_stocks = first_pick[0].First().Stock;
+
+
+            if (restoreStock.Number <= 0)
+                throw new StockException("reduce number should be larger than 0");
+
+
+            await categoryRepository.setPick(new PickDto(new PickAuxDto
+            {
+                PickId = restoreStock.PickId,
+                Stock = original_stocks + restoreStock.Number,
+            }));
+           
+
+
+        }
+       
+
 
        
 
-        public async Task reduceStock(ReduceStockDto reduceStock)
+        public async Task reduceStock(StockDto reduceStock)
         {
-            var pickdto = new PickDto
+            var pickdto = new PickDto(new PickAuxDto
             {
-                commodityId = reduceStock.CommodityId,
-                Filter = reduceStock.Filter
-            };
+                PickId = reduceStock.PickId
+            });
 
             decimal original_stocks = 0;
             var first_pick = categoryRepository.getPicks(pickdto);
@@ -36,18 +68,17 @@ namespace Product.domain.service.Stock.impl
             original_stocks = first_pick[0].First().Stock;
             
 
-            if(reduceStock.reduceNum<= 0)
+            if(reduceStock.Number <= 0)
                 throw new StockException("reduce number should be larger than 0");
 
-            if (original_stocks < reduceStock.reduceNum)
+            if (original_stocks < reduceStock.Number)
                 throw new StockException("Insufficient stock");
 
-            await categoryRepository.setPick(new PickDto()
+            await categoryRepository.setPick(new PickDto(new PickAuxDto
             {
-                commodityId = reduceStock.CommodityId,
-                Filter = reduceStock.Filter,
-                Stock = original_stocks - reduceStock.reduceNum,
-            });
+                PickId = reduceStock.PickId,
+                Stock = original_stocks-reduceStock.Number,
+            }));
         }
     }
 }

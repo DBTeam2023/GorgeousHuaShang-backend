@@ -3,6 +3,7 @@ using Product.common;
 using Product.domain.model;
 using Product.domain.model.repository;
 using Product.domain.service;
+using Product.domain.service.impl;
 using Product.dto;
 using Product.utils;
 
@@ -13,12 +14,16 @@ namespace Product.application.impl
         private ProductRepository _productRepository;
         private CategoryRepository _categoryRepository;
         private ProductService _productService;
+        private AvatarService _avatarService;
 
-        public ProductApplicationServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,ProductService productService)
+        public ProductApplicationServiceImpl(ProductRepository productRepository,
+            CategoryRepository categoryRepository,ProductService productService,
+            AvatarService avatarService)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _productService = productService;
+            _avatarService = avatarService;
         }
       
         //Authorization:seller
@@ -27,14 +32,17 @@ namespace Product.application.impl
         {
             var productAggregate = ProductAggregate.create(commodity);
             await _productRepository.add(productAggregate);
+            _avatarService.setCommodityAvatar(commodity.image, productAggregate.ProductId);
             return new CommodityIdDto {commodityId=productAggregate.ProductId};
         }
 
         //Authorization:seller
         //seller获得某一id的商品的所有信息
-        public ProductAggregate getCommodity([FromBody] CommodityIdDto commodityId)
+        public ProductAggregate getCommodity(CommodityIdDto commodityId)
         {
             var productAggregate = _productRepository.getById(commodityId.commodityId);
+            
+
             return productAggregate;
         }
 
@@ -44,38 +52,37 @@ namespace Product.application.impl
         {
             var productAggregate = ProductAggregate.create(commodity);
             await _productRepository.update(productAggregate);
+            _avatarService.setCommodityAvatar(commodity.image, productAggregate.ProductId);
         }
 
         //Authorization:seller
         //对pick表更新 not batch
         public async Task updatePick(PickDto pick)
         {
+            var picks = _categoryRepository.getPicks(pick);
             await _categoryRepository.setPick(pick);
-        }
-
-        //Authorization:seller
-        //对pick表更新 batch
-        public async Task updatePick(List<PickDto> pick)
-        {
-            foreach(var it in pick)
-            {
-                await _categoryRepository.setPick(it);
-            }
+            foreach (var item in picks)
+                _avatarService.setPickAvatar(pick.image, item.Key);          
             
         }
+
+        ////Authorization:seller
+        ////对pick表更新 batch
+        //public async Task updatePick(List<PickDto> pick)
+        //{
+        //    foreach (var it in pick)
+        //    {
+        //        await _categoryRepository.setPick(it);
+        //    }
+
+        //}
 
         //对某种商品的分页查询，不包含property，type信息
         public IPage<ProductAggregate> commodityPageQuery(PageQueryDto pageQuery)
         {
-            return _productRepository.pageQuery(pageQuery);
+            var ans = _productRepository.pageQuery(pageQuery);        
+            return ans;
         }
-
-        //Authorization:seller
-        public ProductAggregate getCommodityInfo(CommodityIdDto commodityId)
-        {
-            return _productRepository.getById(commodityId.commodityId);
-        }
-
 
 
 
@@ -83,7 +90,9 @@ namespace Product.application.impl
         //某种商品的具体分类
         public List<IGrouping<string, DPick>> displayPicks(CommodityIdDto commodityId)
         {
-            return _productService.displayPicks(commodityId);
+            var picks= _productService.displayPicks(commodityId);
+
+            return picks;
         }
 
 
@@ -91,7 +100,15 @@ namespace Product.application.impl
         //对某种商品的删除（全部删除）
         public async Task deleteCommodity(CommodityIdDto commodityId)
         {
+            var all_picks = _productRepository.getById(commodityId.commodityId);
+
             await _productRepository.delete(commodityId.commodityId);
+
+            _avatarService.deleteCommodityAvatar(commodityId.commodityId);
+
+            foreach (var pick in all_picks.Category.DetailPicks)
+                _avatarService.deletePickAvatar(pick.PickId);
+            
         }
 
 
@@ -99,6 +116,6 @@ namespace Product.application.impl
 
 
 
-     
+
     }
 }

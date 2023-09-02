@@ -1,4 +1,7 @@
-﻿using Product.domain.model;
+﻿using Microsoft.AspNetCore.Mvc;
+using Product.domain.model;
+using Product.domain.service;
+using Product.domain.service.impl;
 using Product.utils;
 
 namespace Product.resource.vo
@@ -15,6 +18,10 @@ namespace Product.resource.vo
 
         public decimal Price { get; set; }
 
+        public FileContentResult? Image { get; set; }
+
+        public AvatarService _avatarService = new AvatarServiceImpl();
+
         public CommodityVo(ProductAggregate productAggregate)
         {
             StoreId = productAggregate.StoreId;
@@ -22,6 +29,7 @@ namespace Product.resource.vo
             ProductName = productAggregate.ProductName;
             Description = productAggregate.Description;
             Price = productAggregate.Price;
+            Image = _avatarService.getCommodityAvatar(ProductId);
         }
 
         public static IPage<CommodityVo> createCommodityPageVo(IPage<ProductAggregate> productAggrgatePage)
