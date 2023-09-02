@@ -7,6 +7,8 @@ using Order.utils;
 using Order.application;
 using Order.dto;
 using Order.resource.vo;
+using Product.application;
+using Product.resource.vo;
 
 namespace Order.resource.controller
 {
@@ -52,6 +54,13 @@ namespace Order.resource.controller
         {
             await OrderApplicationService.DeleteOrder(orderID.OrderId);
             return ComResponse<string>.success("成功删除");
+        }
+
+        [HttpPost]
+        public ComResponse<IPage<OrderVo>> orderPageQuery([FromBody] PageQueryDto pageQuery)
+        {
+            var page = OrderApplicationService.orderPageQuery(pageQuery);
+            return ComResponse<IPage<OrderVo>>.success(OrderVo.CreateOrderPageVo(page));
         }
     }
 
