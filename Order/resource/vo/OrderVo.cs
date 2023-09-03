@@ -11,7 +11,7 @@ namespace Order.resource.vo
         public decimal Money { get; set; }
         public int State { get; set; }
         public string LogisticId { get; set; }
-        public string StoreId { get; set; }
+        public string[] PickId { get; set; }
         public string UserId { get; set; }
         public bool IsDeleted { get; set; }
 
@@ -22,6 +22,7 @@ namespace Order.resource.vo
             Money = orderAggregate.Money;
             State = orderAggregate.State;
             LogisticId = orderAggregate.LogisticID;
+            PickId = orderAggregate.PickID;
             UserId = orderAggregate.UserID;
             IsDeleted = orderAggregate.IsDeleted ?? false;
         }

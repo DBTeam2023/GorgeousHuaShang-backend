@@ -7,8 +7,6 @@ using Order.utils;
 using Order.application;
 using Order.dto;
 using Order.resource.vo;
-using Product.application;
-using Product.resource.vo;
 
 namespace Order.resource.controller
 {

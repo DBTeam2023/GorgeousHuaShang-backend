@@ -6,11 +6,6 @@ using Order.domain.model.repository;
 using Order.domain.service;
 using Order.dto;
 using Order.utils;
-using Product.domain.model;
-using Product.domain.model.repository;
-using Product.domain.service;
-using Product.dto;
-using Product.resource.vo;
 
 namespace Order.application.impl
 {

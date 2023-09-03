@@ -17,13 +17,12 @@ var configuration = builder.Configuration;
 builder.Services.AddScoped<ModelContext>();
 
 //repositories
-builder.Services.AddScoped<CategoryRepository, CategoryRepositoryImpl>();
-builder.Services.AddScoped<ProductRepository, ProductRepositoryImpl>();
+builder.Services.AddScoped<OrderRepository, OrderRepositoryImpl>();
 
 //domain services
-builder.Services.AddScoped<ProductService, ProductServiceImpl>();
+builder.Services.AddScoped<OrderService, OrderServiceImpl>();
 //application services
-builder.Services.AddScoped<ProductApplicationService, ProductApplicationServiceImpl>();
+builder.Services.AddScoped<OrderApplicationService, OrderApplicationServiceImpl>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
