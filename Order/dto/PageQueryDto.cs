@@ -8,7 +8,7 @@ namespace Order.dto
         public int PageIndex { get; set; } = 1;
 
         // 订单查询条件
-        public int? OrderId { get; set; }
+        public string? OrderId { get; set; }
 
         public string? UserID { get; set; }
 
@@ -22,7 +22,7 @@ namespace Order.dto
 
         public decimal? TotalAmount { get; set; }
 
-        public string? OrderStatus { get; set; }
+        public int? OrderStatus { get; set; }
 
         public void Check()
         {

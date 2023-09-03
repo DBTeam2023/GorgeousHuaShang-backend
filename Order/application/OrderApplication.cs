@@ -1,7 +1,6 @@
 ﻿using Order.domain.model;
 using Order.dto;
 using Order.utils;
-using Product.dto;
 
 namespace Order.application
 {
