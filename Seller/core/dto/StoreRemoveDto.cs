@@ -1,7 +1,8 @@
 ﻿namespace Storesys.core.dto
 {
-    public class StoreDelDto
+    public class StoreRemoveDto
     {
+        public string userName { get; set; }
         public string StoreId { get; set; }
     }
 }

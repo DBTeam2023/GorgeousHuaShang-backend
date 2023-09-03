@@ -19,5 +19,7 @@ public partial class User
 
     public string? PhoneNumber { get; set; }
 
+    public virtual Buyer? Buyer { get; set; }
+
     public virtual Seller? Seller { get; set; }
 }

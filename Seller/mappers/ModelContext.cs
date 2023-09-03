@@ -16,6 +16,10 @@ public partial class ModelContext : DbContext
     {
     }
 
+    public virtual DbSet<Buyer> Buyers { get; set; }
+
+    public virtual DbSet<BuyerStore> BuyerStores { get; set; }
+
     public virtual DbSet<Seller> Sellers { get; set; }
 
     public virtual DbSet<SellerStore> SellerStores { get; set; }
@@ -31,6 +35,72 @@ public partial class ModelContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("DBTEAM");
+
+        modelBuilder.Entity<Buyer>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("BUYER_PK");
+
+            entity.ToTable("buyer");
+
+            entity.Property(e => e.UserId)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("USER_ID");
+            entity.Property(e => e.Age)
+                .HasPrecision(3)
+                .HasColumnName("AGE");
+            entity.Property(e => e.Gender)
+                .HasPrecision(1)
+                .HasColumnName("GENDER");
+            entity.Property(e => e.Height)
+                .HasColumnType("NUMBER(5,2)")
+                .HasColumnName("HEIGHT");
+            entity.Property(e => e.IsVip)
+                .HasPrecision(1)
+                .HasColumnName("IS_VIP");
+            entity.Property(e => e.ReceiveAddress)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("RECEIVE_ADDRESS");
+            entity.Property(e => e.Weight)
+                .HasColumnType("NUMBER(5,2)")
+                .HasColumnName("WEIGHT");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Buyer)
+                .HasForeignKey<Buyer>(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_BUYER");
+
+            entity.Ignore(s => s.BuyerStores);
+        });
+
+        modelBuilder.Entity<BuyerStore>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.StoreId }).HasName("BUYER_STORE_PK");
+
+            entity.ToTable("BUYER_STORE");
+
+            entity.Property(e => e.UserId)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("USER_ID");
+            entity.Property(e => e.StoreId)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("STORE_ID");
+            entity.Property(e => e.Hasbought)
+                .HasPrecision(2)
+                .HasColumnName("HASBOUGHT");
+
+            entity.HasOne(d => d.Store).WithMany(p => p.BuyerStores)
+                .HasForeignKey(d => d.StoreId)
+                .HasConstraintName("FK_store12");
+
+            entity.HasOne(d => d.User).WithMany(p => p.BuyerStores)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_buyer12");
+            entity.Ignore(s => s.User);
+        });
 
         modelBuilder.Entity<Seller>(entity =>
         {
@@ -50,8 +120,7 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.User).WithOne(p => p.Seller)
                 .HasForeignKey<Seller>(d => d.UserId)
                 .HasConstraintName("FK_user22");
-
-            entity.Ignore(e => e.SellerStores);
+            entity.Ignore(s => s.SellerStores);
         });
 
         modelBuilder.Entity<SellerStore>(entity =>
@@ -92,6 +161,14 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("STORE_ID");
+            entity.Property(e => e.Address)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("ADDRESS");
+            entity.Property(e => e.Description)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
             entity.Property(e => e.IsDeleted)
                 .HasPrecision(1)
                 .HasColumnName("IS_DELETED");
@@ -102,7 +179,8 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("STORE_NAME");
-            entity.Ignore(e => e.SellerStores);
+            entity.Ignore(s => s.BuyerStores);
+            entity.Ignore(s => s.SellerStores);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -140,7 +218,7 @@ public partial class ModelContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("USERNAME");
         });
-
+       
         OnModelCreatingPartial(modelBuilder);
     }
 

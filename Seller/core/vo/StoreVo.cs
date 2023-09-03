@@ -7,6 +7,8 @@ namespace Storesys.core.vo
         public string storeName { get; set; }   
         public decimal score { get; set; }
         public bool isDeleted { get; set; }
+        public string? des { get; set; } = null!;
+        public string? address { get; set; } = null!;
 
         public StoreVo(Store x)
         {
@@ -14,6 +16,9 @@ namespace Storesys.core.vo
             storeName = x.StoreName;
             score = x.Score;
             isDeleted = x.IsDeleted;
+            des = x.Description;
+            address = x.Address;
         }
+        
     }
 }
