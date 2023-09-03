@@ -22,7 +22,7 @@ namespace Order.dto
 
         public decimal? TotalAmount { get; set; }
 
-        public int? OrderStatus { get; set; }
+        public bool? OrderStatus { get; set; }
 
         public void Check()
         {

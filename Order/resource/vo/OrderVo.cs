@@ -1,15 +1,15 @@
 ﻿using Order.domain.model;
 using Order.utils;
-
+using System;
 
 namespace Order.resource.vo
 {
     public class OrderVo
     {
         public string OrderId { get; set; } = null!;
-        public string CreateTime { get; set; } = null!;
+        public DateTime CreateTime { get; set; }
         public decimal Money { get; set; }
-        public int State { get; set; }
+        public bool State { get; set; }
         public string LogisticId { get; set; }
         public string[] PickId { get; set; }
         public string UserId { get; set; }
@@ -24,7 +24,7 @@ namespace Order.resource.vo
             LogisticId = orderAggregate.LogisticID;
             PickId = orderAggregate.PickID;
             UserId = orderAggregate.UserID;
-            IsDeleted = orderAggregate.IsDeleted ?? false;
+            IsDeleted = orderAggregate.IsDeleted;
         }
 
         public static IPage<OrderVo> CreateOrderPageVo(IPage<OrderAggregate> orderAggregatePage)

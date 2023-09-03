@@ -3,15 +3,23 @@ using System.Collections.Generic;
 
 namespace EntityFramework.Models;
 
-
 public partial class Order
 {
-    public string ID { get; set; } = null!;
-    public string Time { get; set; } = null!;
+    public string OrderId { get; set; } = null!;
+
+    public DateTime CreateTime { get; set; }
+
     public decimal Money { get; set; }
-    public int State { get; set; }
-    public bool? IsDeleted { get; set; }
-    public string[] PickID { get; set; } = null!;
-    public string LogisticID { get; set; } = null!;
-    public string UserID { get; set; } = null!;
+
+    public bool State { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public string LogisticsId { get; set; } = null!;
+
+    public string UserId { get; set; } = null!;
+
+    public virtual ICollection<OrderPick> OrderPicks { get; set; } = new List<OrderPick>();
+
+    public virtual User User { get; set; } = null!;
 }

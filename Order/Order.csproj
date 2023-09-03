@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="resource\remote\" />
-    <Folder Include="test\" />
   </ItemGroup>
 
 </Project>

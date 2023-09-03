@@ -39,7 +39,9 @@ namespace Order.application.impl
         // 创建
         public async Task<OrderIdDto> createOrder(CreateOrderDto order)
         {
-            var orderAggregate = OrderAggregate.Create(order);
+            // 查询名称，电话号码和地址
+            var buyerInfo = _orderService.getBuyerInfo(order.UserID);
+            var orderAggregate = OrderAggregate.Create(order, buyerInfo);
             await _orderRepository.add(orderAggregate);
             return new OrderIdDto { OrderId = orderAggregate.OrderID };
         }

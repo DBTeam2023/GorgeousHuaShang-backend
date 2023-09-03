@@ -25,7 +25,6 @@ namespace Order.resource.controller
         [HttpPost]
         public async Task<ComResponse<OrderIdDto>> createOrder([FromBody] CreateOrderDto order)
         {
-            // TODO 是不是要自行查一下用户信息比较好还是让前端发过来
             return ComResponse<OrderIdDto>.success(await OrderApplicationService.createOrder(order));
         }
 
@@ -34,8 +33,8 @@ namespace Order.resource.controller
         public ComResponse<OrderInfoVo> getOrderInfo([FromBody] OrderIdDto orderId)
         {
             var OrderAggrgate = OrderApplicationService.getOrderInfo(orderId.OrderId);
+            // TODO 改成也返回pick其他信息
             return ComResponse<OrderInfoVo>.success(new OrderInfoVo(OrderAggrgate));
-
         }
 
         //Authorization:seller
