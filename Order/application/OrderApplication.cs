@@ -13,5 +13,6 @@ namespace Order.application
         public Task<OrderIdDto> createOrder(CreateOrderDto order);
         //分页查询
         public IPage<OrderAggregate> orderPageQuery(PageQueryDto pageQuery);
+        public  Task<PickInfoDto[]> getPickInfo(string[] pickID);
     }
 }

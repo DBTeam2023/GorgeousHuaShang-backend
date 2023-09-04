@@ -30,11 +30,11 @@ namespace Order.resource.controller
 
         //Authorization:seller
         [HttpPost]
-        public ComResponse<OrderInfoVo> getOrderInfo([FromBody] OrderIdDto orderId)
+        public async Task<ComResponse<OrderInfoVo>> getOrderInfo([FromBody] OrderIdDto orderId)
         {
             var OrderAggrgate = OrderApplicationService.getOrderInfo(orderId.OrderId);
-            // TODO 改成也返回pick其他信息
-            return ComResponse<OrderInfoVo>.success(new OrderInfoVo(OrderAggrgate));
+            var pickInfo = await OrderApplicationService.getPickInfo(OrderAggrgate.PickID);
+            return ComResponse<OrderInfoVo>.success(new OrderInfoVo(OrderAggrgate,pickInfo));
         }
 
         //Authorization:seller

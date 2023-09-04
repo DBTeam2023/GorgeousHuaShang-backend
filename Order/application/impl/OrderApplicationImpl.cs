@@ -21,7 +21,11 @@ namespace Order.application.impl
             _orderService = orderService;
         }
 
-
+        public async Task<PickInfoDto[]> getPickInfo(string[] pickID)
+        {
+            var pickInfoDto = await _orderService.getPickInfos(pickID);
+            return pickInfoDto;
+        }
         public async Task UpdateOrder(OrderDto order)
         {
             var orderAggregate = OrderAggregate.Create(order);

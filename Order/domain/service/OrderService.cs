@@ -8,7 +8,7 @@ namespace Order.domain.service
 
         public BuyerInfoDto getBuyerInfo(string userID);
 
-        //public PickInfoDto getPickInfo(string orderID);
+        public Task<PickInfoDto[]> getPickInfos(string[] pickID);
 
 
     }

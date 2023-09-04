@@ -3,13 +3,10 @@
     public class PickInfoDto
     {
        
-        public string[] PickID { get; set; } = null!;
-
-        public string[] NickName { get; set; } = null!;
-
-        public string[] PhoneNumber { get; set; } = null!;
-        public string[] Addresss { get; set; } = null!;
-
+        public string PickID { get; set; } = null!;
+        public string StoreID { get; set; } = null!;
+        public Dictionary<string, string> Property { get; set; } = null!;
+        public string CommodityID { set; get; } = null!;
 
     }
 }

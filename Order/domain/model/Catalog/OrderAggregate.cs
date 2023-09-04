@@ -18,6 +18,9 @@ namespace Order.domain.model
 
         public string LogisticID { get; set; } = null!;
         public string[] PickID { get; set; } = null!;
+        //public string[] StoreID { get; set; } = null!;
+        //public string[] Property { get; set; } = null!;
+        //public string[] PropertyValue { get; set; } = null!;
         public string UserID { get; set; } = null!;
         public string NickName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
