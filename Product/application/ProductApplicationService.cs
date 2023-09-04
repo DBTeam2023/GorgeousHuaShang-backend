@@ -18,6 +18,8 @@ namespace Product.application
         //public Task updatePick(List<PickDto> pick);
         public IPage<ProductAggregate> commodityPageQuery(PageQueryDto pageQuery);
         public List<IGrouping<string, DPick>> displayPicks(CommodityIdDto commodityId);
+
+        public List<IGrouping<string, DPick>> getSinglePick(PickIdDto pickId);
         public Task deleteCommodity(CommodityIdDto commodityId);
 
     }

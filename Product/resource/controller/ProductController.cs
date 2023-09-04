@@ -87,6 +87,16 @@ namespace Product.resource.controller
             return ComResponse<PickVo>.success(new PickVo(picks));
         }
 
+        [HttpPost]
+        //Authorization:buyer
+        public ComResponse<PickVo> getSinglePick([FromBody] PickIdDto pickId)
+        {
+            var pick = productApplicationService.getSinglePick(pickId);
+            return ComResponse<PickVo>.success(new PickVo(pick));
+        }
+
+
+
 
 
         //Authorization:seller

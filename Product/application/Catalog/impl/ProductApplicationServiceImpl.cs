@@ -95,6 +95,13 @@ namespace Product.application.impl
             return picks;
         }
 
+        public List<IGrouping<string, DPick>> getSinglePick(PickIdDto pickId)
+        {
+            var pick = _productService.getPick(pickId);
+            return pick;
+        }
+
+
 
         //Authorization:seller
         //对某种商品的删除（全部删除）

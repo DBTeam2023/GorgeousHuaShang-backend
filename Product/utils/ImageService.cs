@@ -18,12 +18,24 @@ namespace Product.utils
 
         public static string[] suffix = { ".png", ".jpg", ".jpeg" };
 
-        public static readonly int RestrictedKb = 4;
+        public static readonly int RestrictedKb = 16;
 
         public ImageService(string directoryPath)
         {
             this.directoryPath = directoryPath;
         }
+
+
+        private void imageTypeCheck(string type)
+        {
+            foreach(var std in suffix)
+                if (std == type)
+                    return;
+
+            throw new InvalidTypeException("wrong image type");
+        }
+
+
 
         private void suffixCheck(string mySuffix)
         {
@@ -55,6 +67,8 @@ namespace Product.utils
                 return;
 
             string fileExtension = GetImageExtension(image);
+
+            imageTypeCheck(fileExtension);
 
             string filename = imageName + fileExtension;
 

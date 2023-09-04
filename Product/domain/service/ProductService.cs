@@ -7,8 +7,9 @@ namespace Product.domain.service
     {
         public List<IGrouping<string,DPick>> displayPicks(CommodityIdDto commodityId);
 
+        public List<IGrouping<string, DPick>> getPick(PickIdDto pickId);
 
-      
+
 
 
 
