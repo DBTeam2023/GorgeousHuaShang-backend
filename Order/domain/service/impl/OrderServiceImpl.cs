@@ -17,7 +17,7 @@ namespace Order.domain.service.impl
     {
         private readonly ModelContext modelContext;
         public OrderRepository orderRepository;
-        private string _token = 
+        // private string _token = 
         public OrderServiceImpl(ModelContext _modelContext, OrderRepository _orderRepository)
         {
             modelContext = _modelContext;
@@ -47,7 +47,7 @@ namespace Order.domain.service.impl
 
         public async Task<PickInfoDto[]> getPickInfos(string[] pickID)
         {
-            string commodityID; 
+            string commodityID, storeID;
             string url = "http://47.115.231.142:1030/Product/getSinglePick/";
             var pickInfos = new PickInfoDto[pickID.Length];
             Dictionary<string, string> dic;
@@ -69,6 +69,7 @@ namespace Order.domain.service.impl
                     JObject code = JObject.Parse(responseBody);
 
                     commodityID = (string)code["data"]["CommodityId"];
+                    storeID = (string)code["data"]["StoreId"];
                     dic = code["data"]["CommodityInfo"]["Property"].ToObject<Dictionary<string, string> > ();
                 }
                 catch (HttpRequestException ex)
