@@ -22,15 +22,22 @@ namespace Product.domain.service.impl
 
 
         //for buyer
-        public List<IGrouping<string,DPick>> displayPicks(CommodityIdDto commodityId)
+        public PickGroupDto displayPicks(CommodityIdDto commodityId)
         {
             var productAggregate=productRepository.getById(commodityId.commodityId);
 
             //已经下架了
-            if(productAggregate.IsDeleted==true)
-                return new List<IGrouping<string, DPick>>();
-            
-
+            if (productAggregate.IsDeleted == true)
+            {
+                return new PickGroupDto
+                {
+                    pickList = new List<IGrouping<string, DPick>>(),
+                    storeId = null
+                };
+            }
+                
+                    
+           
             var price = productAggregate.Price;
             var description = productAggregate.Description;
             productAggregate.Category.DetailPicks = productAggregate.Category.DetailPicks
@@ -43,16 +50,21 @@ namespace Product.domain.service.impl
                 if (it.Description == null)
                     it.Description = description;
             }
+            var store_id = productAggregate.StoreId;
 
-           
-            return productAggregate.Category.DetailPicks.GroupBy(g => g.PickId).ToList();
 
+            var picks_group=productAggregate.Category.DetailPicks.GroupBy(g => g.PickId).ToList();
+            return new PickGroupDto
+            {
+                pickList = picks_group,
+                storeId = store_id
+            };
            
         }
 
         
         //for buyer
-        public List<IGrouping<string, DPick>> getPick(PickIdDto pickId)
+        public PickGroupDto getPick(PickIdDto pickId)
         {
            
             var pick = categoryRepository.getPicks(new PickDto(new PickAuxDto
@@ -82,8 +94,13 @@ namespace Product.domain.service.impl
                 }
                 
             }
+            var store_id = productAggregate.StoreId;
 
-            return pick;
+            return new PickGroupDto
+            {
+                pickList = pick,
+                storeId = store_id
+            };
 
 
         }

@@ -5,9 +5,9 @@ namespace Product.domain.service
 {
     public interface ProductService
     {
-        public List<IGrouping<string,DPick>> displayPicks(CommodityIdDto commodityId);
+        public PickGroupDto displayPicks(CommodityIdDto commodityId);
 
-        public List<IGrouping<string, DPick>> getPick(PickIdDto pickId);
+        public PickGroupDto getPick(PickIdDto pickId);
 
 
 

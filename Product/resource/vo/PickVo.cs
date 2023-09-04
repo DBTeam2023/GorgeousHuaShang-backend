@@ -1,10 +1,13 @@
 ﻿using Product.domain.model;
+using Product.dto;
 
 namespace Product.resource.vo
 {
     public class PickVo
     {
         public string CommodityId { get; set; } = null!;
+
+        public string StoreId { get; set; } = null!;
 
         public List<PickSingleVo> CommodityInfo { get;set; }
        
@@ -20,10 +23,11 @@ namespace Product.resource.vo
         }
 
 
-        public PickVo(List<IGrouping<string, DPick>> pickGroup)
+        public PickVo(PickGroupDto pickGroup)
         {
+            StoreId = pickGroup.storeId;
             CommodityInfo = new List<PickSingleVo>();
-            foreach (var it in pickGroup)
+            foreach (var it in pickGroup.pickList)
                 this.addCommodityInfo(it.ToList());
                           
          
