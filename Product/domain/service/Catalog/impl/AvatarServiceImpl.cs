@@ -7,14 +7,17 @@ namespace Product.domain.service.impl
     public class AvatarServiceImpl : AvatarService
     {
 
-        //public readonly static string CommodityImageDirectory = "C:\\Users\\Administrator\\Desktop\\image\\Commodity";
+        public readonly static string CommodityImageDirectory = "C:\\Users\\Administrator\\Desktop\\image\\Commodity";
 
-        //public readonly static string PickImageDirectory = "C:\\Users\\Administrator\\Desktop\\image\\Pick";
+        public readonly static string PickImageDirectory = "C:\\Users\\Administrator\\Desktop\\image\\Pick";
 
         //for local test path
-        public readonly static string CommodityImageDirectory = "D:\\Test\\Commodity";
+        //public readonly static string CommodityImageDirectory = "D:\\Test\\Commodity";
 
-        public readonly static string PickImageDirectory = "D:\\Test\\Pick";
+        //public readonly static string PickImageDirectory = "D:\\Test\\Pick";
+        //public readonly static string CommodityImageDirectory = "C:\\Users\\53460\\Desktop\\test\\Commodity";
+
+        //public readonly static string PickImageDirectory = "C:\\Users\\53460\\Desktop\\test\\Pick";
         public AvatarServiceImpl() { }
 
         public void setCommodityAvatar(IFormFile? image, string avatarName)
