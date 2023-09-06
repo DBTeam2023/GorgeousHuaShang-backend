@@ -6,8 +6,11 @@ namespace Payment.message
     public class RabbitMQEventSender
     {
         private readonly ConnectionFactory _factory;
+
         private readonly string _queueName;
+
         private bool _queueDeclared;
+
 
         public RabbitMQEventSender(string hostName, string queueName, string userName, string password)
         {
