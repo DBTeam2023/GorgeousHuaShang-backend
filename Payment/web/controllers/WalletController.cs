@@ -20,47 +20,53 @@ namespace Payment.web.controllers
         }
 
         [HttpPost]
-        public async Task<ComResponse<WalletVo>> get([FromHeader]string token)
+        public async Task<ComResponse<WalletVo>> get()
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             var x = await walletService.GetWallet(userId);
             return ComResponse<WalletVo>.success(new WalletVo(x));
         }
 
         [HttpPost]
-        public async Task<ComResponse<WalletVo>> add([FromHeader]string token, [FromBody] WalletInfoDto walletInfo)
+        public async Task<ComResponse<WalletVo>> add([FromBody] WalletInfoDto walletInfo)
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             var x = await walletService.AddWallet(userId, walletInfo.amount);
             return ComResponse<WalletVo>.success(new WalletVo(x));
         }
 
         [HttpDelete]
-        public async Task delete([FromHeader]string token)
+        public async Task delete()
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             await walletService.DelWallet(userId);
         }
 
         [HttpPut]
-        public async Task<ComResponse<WalletVo>> recharge([FromHeader]string token, [FromBody]WalletRechargeDto walletRecharge)
+        public async Task<ComResponse<WalletVo>> recharge([FromBody]WalletRechargeDto walletRecharge)
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             var x = await walletService.RechargeWallet(userId, walletRecharge.amount);
             return ComResponse<WalletVo>.success(new WalletVo(x));
         }
 
         [HttpPut]
-        public async Task<ComResponse<WalletVo>> deduct([FromHeader]string token, [FromBody] WalletRechargeDto walletDeduct)
+        public async Task<ComResponse<WalletVo>> deduct([FromBody] WalletRechargeDto walletDeduct)
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             var x = await walletService.DeductWallet(userId, walletDeduct.amount);
             return ComResponse<WalletVo>.success(new WalletVo(x));
         }
 
         [HttpPut]
-        public async Task<ComResponse<WalletVo>> SetStatus([FromHeader]string token, [FromBody] WalletSetDto walletSet)
+        public async Task<ComResponse<WalletVo>> SetStatus([FromBody] WalletSetDto walletSet)
         {
+            string token = Request.Headers["Authorization"].ToString();
             string userId = await walletService.getUserId(token);
             var x = await walletService.SetStatus(userId, walletSet.status);
             return ComResponse<WalletVo>.success(new WalletVo(x));
