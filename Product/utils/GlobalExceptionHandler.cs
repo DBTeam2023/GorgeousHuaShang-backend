@@ -94,10 +94,12 @@ namespace Product.utils
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
+
                 case NullException ex:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
+
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     errorResponse.msg = "Internal Server errors. Check Logs!";

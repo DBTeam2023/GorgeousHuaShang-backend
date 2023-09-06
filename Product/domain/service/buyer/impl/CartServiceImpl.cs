@@ -45,9 +45,9 @@ namespace Product.domain.service.impl
                 var db_commodity = _context.CommodityGenerals.Where(c => c.CommodityId == db_pick.CommodityId).FirstOrDefault();
                 var db_ori_property = _context.CommodityProperties.Where(c => c.CommodityId == db_pick.CommodityId).ToList();
                 var property_list = transferToDModelProperty(db_ori_property);
-                var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId });
+                var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId }).pickList;
                 
-                ans.Add(new CartItemSingleVo(new CartItemDto(db_pick.CommodityId, db_commodity.CommodityName, db_pick.IsDeleted, db_pick.Price, db_pick.Description, db_pick.PickId, property_list, pick_properties, db_pick.Stock, item.PickCount)));
+                ans.Add(new CartItemSingleVo(new CartItemDto(db_pick.CommodityId, db_commodity.CommodityName, db_pick.IsDeleted, db_pick.Price, db_pick.Description, db_pick.PickId, property_list,  pick_properties, db_pick.Stock, item.PickCount)));
 
                 
             }
@@ -83,7 +83,7 @@ namespace Product.domain.service.impl
             var db_commodity = _context.CommodityGenerals.Where(c => c.CommodityId == db_pick.CommodityId).FirstOrDefault();
             var db_ori_property = _context.CommodityProperties.Where(c => c.CommodityId == db_pick.CommodityId).ToList();
             var property_list = transferToDModelProperty(db_ori_property);
-            var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId });
+            var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId }).pickList;
             
             return new CartItemSingleVo(new CartItemDto(db_pick.CommodityId, db_commodity.CommodityName, db_pick.IsDeleted, db_pick.Price, db_pick.Description, db_pick.PickId, property_list, pick_properties, db_pick.Stock, changePickDto.count));
 

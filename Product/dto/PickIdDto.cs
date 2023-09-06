@@ -4,6 +4,5 @@
     {
         public string PickId { get; set; } = null!;
 
-
     }
 }

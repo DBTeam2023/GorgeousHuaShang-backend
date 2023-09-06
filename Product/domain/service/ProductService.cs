@@ -5,10 +5,11 @@ namespace Product.domain.service
 {
     public interface ProductService
     {
-        public List<IGrouping<string,DPick>> displayPicks(CommodityIdDto commodityId);
+        public PickGroupDto displayPicks(CommodityIdDto commodityId);
+
+        public PickGroupDto getPick(PickIdDto pickId);
 
 
-      
 
 
 

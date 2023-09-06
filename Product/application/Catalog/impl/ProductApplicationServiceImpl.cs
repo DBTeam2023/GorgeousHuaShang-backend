@@ -88,12 +88,19 @@ namespace Product.application.impl
 
         //Authorization:buyer
         //某种商品的具体分类
-        public List<IGrouping<string, DPick>> displayPicks(CommodityIdDto commodityId)
+        public PickGroupDto displayPicks(CommodityIdDto commodityId)
         {
             var picks= _productService.displayPicks(commodityId);
 
             return picks;
         }
+
+        public PickGroupDto getSinglePick(PickIdDto pickId)
+        {
+            var pick = _productService.getPick(pickId);
+            return pick;
+        }
+
 
 
         //Authorization:seller
