@@ -5,6 +5,7 @@ using UserIdentification.domain.model;
 using UserIdentification.domain.model.repository;
 using UserIdentification.domain.service;
 using UserIdentification.dto;
+using UserIdentification.resource.remote;
 
 namespace UserIdentification.application.impl
 {
@@ -13,12 +14,14 @@ namespace UserIdentification.application.impl
         UserRepository userRepository;
         LoginService loginService;
         AvatarService avatarService;
+        PaymentService paymentService;
 
-        public UserIdentificationServiceImpl(UserRepository _userRepository, LoginService _loginService, AvatarService _avatarService)
+        public UserIdentificationServiceImpl(UserRepository _userRepository, LoginService _loginService, AvatarService _avatarService, PaymentService _paymentService)
         {
             userRepository = _userRepository;
             loginService = _loginService;
             avatarService = _avatarService;
+            paymentService = _paymentService;
         }
 
         public TokenDto login(string username, string password)
@@ -29,22 +32,7 @@ namespace UserIdentification.application.impl
         public TokenDto register(string username, string password, string type)
         {
             TokenDto token = loginService.register(username, password, type);
-
-            // configurations
-            string ip = "47.115.231.142";
-            //string ip = "localhost";
-            string user = "admin";
-            string pw = "123";
-
-            // send message
-            var eventSender = new RabbitMQEventSender(ip, "my_queue", user, pw);
-            string userId = userRepository.getByUsername(username).UserId;
-            var message = new UserRegistrationMessage(userId);
-            eventSender.SendEvent(message);
-            //var messageReceiver = new RabbitMQMessageReceiver("localhost", "my_queue");
-            //messageReceiver.StartReceiving();
-            //Console.WriteLine(messageReceiver);
-
+            paymentService.addWallet(token, 100000);
             return token;
         }
 
