@@ -6,5 +6,6 @@ namespace Product.domain.service
     {
         public Task restoreStock(StockDto restoreStock);
         public Task reduceStock(StockDto reduceStock);
+        public Task LockStock(StockLockDto stockLockDto);
     }
 }

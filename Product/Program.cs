@@ -11,6 +11,7 @@ using Product.application;
 using Product.application.impl;
 using Product.domain.service.Stock.impl;
 using Product.application.Stock.impl;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -26,10 +27,12 @@ builder.Services.AddScoped<ProductRepository, ProductRepositoryImpl>();
 builder.Services.AddScoped<ProductService, ProductServiceImpl>();
 builder.Services.AddScoped<StockService, StockServiceImpl>();
 builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
+
 //application services
 builder.Services.AddScoped<ProductApplicationService, ProductApplicationServiceImpl>();
 builder.Services.AddScoped<StockApplicationService, StockApplicationServiceImpl>();
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -48,7 +51,11 @@ builder.Services.AddCors(options =>
         );
 });
 
-
+Host.CreateDefaultBuilder(args)
+    .ConfigureServices((hostContext, services) =>
+    {
+        services.AddHostedService<RabbitMQListener>();
+    }).Build().Run();
 
 
 var app = builder.Build();

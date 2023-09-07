@@ -8,5 +8,7 @@ namespace Product.application
 
         public Task restoreStock(StockDto reduceStock);
 
+        public Task LockStock(StockLockDto stockLockDto);
+
     }
 }

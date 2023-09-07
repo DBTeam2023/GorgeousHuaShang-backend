@@ -24,5 +24,10 @@ namespace Product.application.Stock.impl
             await _stockService.restoreStock(reduceStock);
         }
 
+        public async Task LockStock(StockLockDto stockLockDto)
+        {
+            await _stockService.LockStock(stockLockDto);
+        }
+
     }
 }

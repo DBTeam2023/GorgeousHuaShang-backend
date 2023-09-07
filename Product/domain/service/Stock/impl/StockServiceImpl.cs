@@ -2,6 +2,7 @@
 using Product.domain.model.repository;
 using Product.dto;
 using Product.exception;
+using Product.utils;
 
 namespace Product.domain.service.Stock.impl
 {
@@ -80,5 +81,18 @@ namespace Product.domain.service.Stock.impl
                 Stock = original_stocks-reduceStock.Number,
             }));
         }
+
+        public async Task LockStock(StockLockDto stockLockDto)
+        {
+            RabbitMQEventSender sender = new RabbitMQEventSender("stock_delay_queue");
+            var stockEvent = new StockEventDto
+            {
+                orderId = stockLockDto.orderId,
+                pickId = stockLockDto.pickId,
+                number = stockLockDto.number,
+            };
+            sender.sendDelayedEvent(stockEvent, "stock.locked", 300000);
+        }
+
     }
 }
