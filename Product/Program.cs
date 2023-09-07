@@ -21,19 +21,15 @@ builder.Services.AddScoped<ModelContext>();
 //repositories
 builder.Services.AddScoped<CategoryRepository, CategoryRepositoryImpl>();
 builder.Services.AddScoped<ProductRepository, ProductRepositoryImpl>();
-builder.Services.AddScoped<CartRepository, CartRepositoryImpl>();
+
 //domain services
 builder.Services.AddScoped<ProductService, ProductServiceImpl>();
 builder.Services.AddScoped<StockService, StockServiceImpl>();
 builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
-builder.Services.AddScoped<CartService, CartServiceImpl>();
 //application services
 builder.Services.AddScoped<ProductApplicationService, ProductApplicationServiceImpl>();
 builder.Services.AddScoped<StockApplicationService, StockApplicationServiceImpl>();
-builder.Services.AddScoped<CartApplicationService, CartApplicationServiceImpl>();
 builder.Services.AddControllers();
-
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

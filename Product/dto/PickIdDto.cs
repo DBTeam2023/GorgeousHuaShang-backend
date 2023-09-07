@@ -3,6 +3,5 @@
     public class PickIdDto
     {
         public string PickId { get; set; } = null!;
-
     }
 }

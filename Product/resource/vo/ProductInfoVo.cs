@@ -12,6 +12,8 @@ namespace Product.resource.vo
         {
             public string CommodityId { get; set; } = null!;
 
+
+
             public string PickId { get; set; } = null!;
 
             public decimal? Price { get; set; }

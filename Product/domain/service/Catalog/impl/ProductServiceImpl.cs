@@ -57,7 +57,8 @@ namespace Product.domain.service.impl
             return new PickGroupDto
             {
                 pickList = picks_group,
-                storeId = store_id
+                storeId = store_id,
+                productName= productAggregate.ProductName
             };
            
         }
@@ -99,7 +100,8 @@ namespace Product.domain.service.impl
             return new PickGroupDto
             {
                 pickList = pick,
-                storeId = store_id
+                storeId = store_id,
+                productName = productAggregate.ProductName
             };
 
 

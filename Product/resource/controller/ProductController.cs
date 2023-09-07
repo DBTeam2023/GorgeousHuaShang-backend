@@ -57,14 +57,7 @@ namespace Product.resource.controller
             await productApplicationService.updatePick(new PickDto(pick));
             return ComResponse<string>.success("成功更新");
         }
-        ////Authorization:seller
-        ////update batch
-        //[HttpPost]
-        //public async Task<ComResponse<string>> updatePickBatch([FromBody] List<PickDto> pickList)
-        //{
-        //    await productApplicationService.updatePick(pickList);
-        //    return ComResponse<string>.success("成功更新");
-        //}
+      
 
 
         //Authorization:buyer seller
@@ -109,14 +102,7 @@ namespace Product.resource.controller
         }
 
 
-        //test jsonConvertService
-
-        //[HttpPost]
-        //public ComResponse<Dictionary<string,List<string>>> test(string str)
-        //{
-        //    var dict = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(str);
-        //    return ComResponse<Dictionary<string, List<string>>>.success(dict);
-        //}
+        
 
 
 

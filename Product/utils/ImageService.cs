@@ -98,7 +98,9 @@ namespace Product.utils
         //exception fixed
         public FileContentResult? getImage(string imageName)
         {
-          
+            
+
+
             if (!Directory.Exists(directoryPath))
                 throw new NotFoundException("image directory not found");
 

@@ -15,7 +15,6 @@ namespace Product.domain.service.impl
         //public readonly static string CommodityImageDirectory = "D:\\Test\\Commodity";
 
         //public readonly static string PickImageDirectory = "D:\\Test\\Pick";
-
         public AvatarServiceImpl() { }
 
         public void setCommodityAvatar(IFormFile? image, string avatarName)
