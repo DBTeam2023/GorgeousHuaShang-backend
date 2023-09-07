@@ -23,6 +23,7 @@ namespace Product.domain.model.repository.impl
             _context = context;
             _productRepository = productRepository;
         }
+
         //添加购物车表
         public async Task add(string userId)
         {
@@ -42,7 +43,6 @@ namespace Product.domain.model.repository.impl
                 TotalQuantity = 0,
                 TotalAmount = 0,
                 UserId =userId
-
             };
             try
             {
@@ -65,7 +65,6 @@ namespace Product.domain.model.repository.impl
                 }
             }
         }
-      
 
         public async Task addItem(string userID,PickCountDto pick)
         {
@@ -85,12 +84,9 @@ namespace Product.domain.model.repository.impl
             }
             else
             {
-                
-            
                 IDbContextTransaction? tran = null;
                 var new_cart_pick = new CartPick
                 {
-                    
                     UserId = userID,
                     PickCount = pick.Number,
                     PickId = pick.PickId
@@ -101,7 +97,7 @@ namespace Product.domain.model.repository.impl
                     tran = _context.Database.BeginTransaction();
                     await _context.CartPicks.AddAsync(new_cart_pick);
                     db_cart.TotalQuantity++;
-                    db_cart.TotalAmount -= (db_pick.Price ?? 0) * pick.Number;
+                    db_cart.TotalAmount += (db_pick.Price ?? 0) * pick.Number;
                     await _context.SaveChangesAsync();
                     await tran.CommitAsync();
                 }
@@ -122,7 +118,6 @@ namespace Product.domain.model.repository.impl
 
         public async Task changePick(string userID, ChangePickDto changePickDto)
         {
-           
             var db_item = _context.CartPicks.Where(c => c.PickId == changePickDto.oldPickId && c.UserId == userID).FirstOrDefault();
             if (db_item == null)
             {
@@ -176,8 +171,6 @@ namespace Product.domain.model.repository.impl
                         tran.Dispose();
                 }
             }
-
-
         }
 
         
@@ -208,8 +201,6 @@ namespace Product.domain.model.repository.impl
             {
                 tran.Dispose();
             }
-
-
         }
 
         public async Task deletePick(string userID,string pickID)
@@ -218,7 +209,6 @@ namespace Product.domain.model.repository.impl
             if (db_cart_pick == null)
                 throw new NotFoundException("The commodity doesn't exist");
             IDbContextTransaction? tran = null;
-            
            
             var db_cart = _context.Carts.Where(c => c.UserId == userID).FirstOrDefault();
             //var del_pick= cartAggregate.Picks.FirstOrDefault(p => p.PickId == pickID);
@@ -282,9 +272,5 @@ namespace Product.domain.model.repository.impl
 
             return userId;
         }
-       
-
-
     }
-
 }

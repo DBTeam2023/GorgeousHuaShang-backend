@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Product.domain.model.repository;
 using Microsoft.AspNetCore.Mvc;
 using Product.exception;
+using Product.application;
 
 namespace Product.domain.service.impl
 {
@@ -16,13 +17,15 @@ namespace Product.domain.service.impl
         private readonly ModelContext _context;
         // CategoryRepository _categoryRepository;
         private ProductService _productService;
+        private ProductApplicationService _productApplicationService;
 
         private CartRepository _cartRepository;
-        public CartServiceImpl(ModelContext context, ProductService productService, CartRepository cartRepository)
+        public CartServiceImpl(ModelContext context, ProductService productService, CartRepository cartRepository, ProductApplicationService productApplicationService)
         {
             _context = context;
             _productService = productService;
             _cartRepository = cartRepository;
+            _productApplicationService = productApplicationService;
         }
      
         //按照commodityid划分传给前端,还要看是否下架。有失效商品显示
@@ -41,21 +44,14 @@ namespace Product.domain.service.impl
             var ans = new List<CartItemSingleVo>();
             foreach(var item in db_cartItems)
             {
-                var db_pick = _context.Picks.Where(c => c.PickId == item.PickId).FirstOrDefault();
-                var db_commodity = _context.CommodityGenerals.Where(c => c.CommodityId == db_pick.CommodityId).FirstOrDefault();
-                var db_ori_property = _context.CommodityProperties.Where(c => c.CommodityId == db_pick.CommodityId).ToList();
-                var property_list = transferToDModelProperty(db_ori_property);
-                var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId }).pickList;
-                
-                ans.Add(new CartItemSingleVo(new CartItemDto(db_pick.CommodityId, db_commodity.CommodityName, db_pick.IsDeleted, db_pick.Price, db_pick.Description, db_pick.PickId, property_list,  pick_properties, db_pick.Stock, item.PickCount)));
-
-                
+                PickVo pick = new PickVo(_productApplicationService.getSinglePick(new PickIdDto { PickId = item.PickId }));
+                ans.Add(new CartItemSingleVo(pick,item.PickCount));
             }
-           var groupedCartItems = ans.GroupBy(c => c.ProductId).ToList();
-
+            var groupedCartItems = ans.GroupBy(c => c.Pick.CommodityId).ToList();
 
             return groupedCartItems;
         }
+
         internal Dictionary<string, List<string>> transferToDModelProperty(List<CommodityProperty> property)
         {
             Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
@@ -73,7 +69,6 @@ namespace Product.domain.service.impl
                 }
             }
             return dictionary;
-
         }
         public async Task<CartItemSingleVo> changeItem(string userID, ChangePickDto changePickDto)
         {
@@ -84,9 +79,9 @@ namespace Product.domain.service.impl
             var db_ori_property = _context.CommodityProperties.Where(c => c.CommodityId == db_pick.CommodityId).ToList();
             var property_list = transferToDModelProperty(db_ori_property);
             var pick_properties = _productService.displayPicks(new CommodityIdDto { commodityId = db_pick.CommodityId }).pickList;
-            
-            return new CartItemSingleVo(new CartItemDto(db_pick.CommodityId, db_commodity.CommodityName, db_pick.IsDeleted, db_pick.Price, db_pick.Description, db_pick.PickId, property_list, pick_properties, db_pick.Stock, changePickDto.count));
 
+            PickVo pick = new PickVo(_productApplicationService.getSinglePick(new PickIdDto { PickId = db_pick.PickId }));
+            return new CartItemSingleVo(pick, changePickDto.count);
         }
     }
 }

@@ -10,7 +10,5 @@ namespace Product.domain.service
         public List<IGrouping<string, CartItemSingleVo>> displayCartItems(string userId);
 
         public Task<CartItemSingleVo> changeItem(string userID, ChangePickDto changePickDto);
-  
-
     }
 }

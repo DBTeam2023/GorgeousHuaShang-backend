@@ -17,6 +17,7 @@ namespace Product.resource.controller
         private CartApplicationService cartApplicationService;
         private CartRepository cartRepository;
         private CartService cartService;
+
         public CartController(CartApplicationService _cartApplicationService, CartRepository _cartRepository, CartService _cartService)
         {
             cartApplicationService = _cartApplicationService;
@@ -33,11 +34,8 @@ namespace Product.resource.controller
             //var ans = cartService.displayCartItems(userId);
             //return ComResponse<CartVo>.success(new CartVo(ans));
            
-               var ans = cartService.displayCartItems(userId);
-                return ComResponse<CartVo>.success(new CartVo(ans));
-           
-            
-
+            var ans = cartService.displayCartItems(userId);
+            return ComResponse<CartVo>.success(new CartVo(ans));
         }
 
         //添加商品
