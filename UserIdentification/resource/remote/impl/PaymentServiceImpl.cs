@@ -1,33 +1,33 @@
-﻿using  UserIdentification.dto;
+﻿using UserIdentification.dto;
 using Newtonsoft.Json.Linq;
 using UserIdentification.exception;
 using Newtonsoft.Json;
 using System.Text;
 namespace UserIdentification.resource.remote.impl
 {
-    public class PaymentServiceImpl: PaymentService
+    public class PaymentServiceImpl : PaymentService
     {
-        public async Task addWallet(TokenDto tokenDto, decimal balance)
+        public void addWallet(TokenDto tokenDto, decimal balance)
         {
             // send http request
             if (tokenDto.Token == null)
                 throw new NotFoundException("This token is null.");
-            string url = "http://47.115.231.142:1025/UserIdentification/getUserInfo";
+            string url = "http://47.115.231.142:8081/api/Payment/Wallet/add/";
 
             HttpClient client = new HttpClient();
             try
             {
-                var requestData = new { balance = 100000 };
+                var requestData = new { balance = balance };
                 string requestBody = JsonConvert.SerializeObject(requestData);
                 var content = new StringContent(requestBody, Encoding.UTF8, "application/json");
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
                 request.Headers.Add("Authorization", tokenDto.Token);
                 request.Content = content;
 
-                HttpResponseMessage response = await client.SendAsync(request);
+                HttpResponseMessage response = client.Send(request);
                 response.EnsureSuccessStatusCode();
 
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = response.Content.ReadAsStringAsync().Result;
                 Console.WriteLine(responseBody);
 
                 JObject code = JObject.Parse(responseBody);

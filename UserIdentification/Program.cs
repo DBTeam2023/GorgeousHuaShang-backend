@@ -12,6 +12,8 @@ using UserIdentification.domain.service;
 using UserIdentification.domain.service.impl;
 using UserIdentification.dataaccess.mapper;
 using UserIdentification.domain.model;
+using UserIdentification.resource.remote;
+using UserIdentification.resource.remote.impl;
 
 #if TEST
 
@@ -60,6 +62,8 @@ builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
 //repositories
 builder.Services.AddSingleton<UserRepository, UserRepositoryImpl>();
 
+// remote
+builder.Services.AddScoped<PaymentService, PaymentServiceImpl>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

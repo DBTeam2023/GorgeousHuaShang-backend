@@ -3,6 +3,6 @@ namespace UserIdentification.resource.remote
 {
     public interface PaymentService
     {
-        public Task addWallet(TokenDto tokenDto, decimal balance);
+        public void addWallet(TokenDto tokenDto, decimal balance);
     }
 }
