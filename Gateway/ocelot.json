@@ -84,6 +84,27 @@
       "UseServiceDiscovery": false
     },
 
+    { //Order
+      "UpstreamPathTemplate": "/api/Order/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+
+      "DownstreamHeaderTransform": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild",
+        "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, OPTIONS"
+      },
+      "DownstreamPathTemplate": "/Order/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 1029
+        }
+      ],
+
+      "UseServiceDiscovery": false
+    },
+
     { //Product
       "UpstreamPathTemplate": "/api/Product/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],

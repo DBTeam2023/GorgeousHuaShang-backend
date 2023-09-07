@@ -62,7 +62,7 @@ builder.Services.AddScoped<AvatarService, AvatarServiceImpl>();
 //repositories
 builder.Services.AddSingleton<UserRepository, UserRepositoryImpl>();
 
-// remote
+//anti-coruption layer services
 builder.Services.AddScoped<PaymentService, PaymentServiceImpl>();
 
 builder.Services.AddControllers();
