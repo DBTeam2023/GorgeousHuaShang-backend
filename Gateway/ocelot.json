@@ -1,6 +1,7 @@
 {
   "Routes": [
-    { //UserIdentification
+    //UserIdentification
+    {
       "UpstreamPathTemplate": "/api/UserSystem/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
 
@@ -15,13 +16,37 @@
         {
           "Host": "localhost",
           "Port": 1025
+        },
+        {
+          "Host": "localhost",
+          "Port": 1031
+        },
+        {
+          "Host": "localhost",
+          "Port": 1032
+        },
+        {
+          "Host": "localhost",
+          "Port": 1033
+        },
+        {
+          "Host": "localhost",
+          "Port": 1034
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Logistics
+    //Logistics
+    {
       "UpstreamPathTemplate": "/api/Logistics/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
 
@@ -36,13 +61,29 @@
         {
           "Host": "localhost",
           "Port": 1026
+        },
+        {
+          "Host": "localhost",
+          "Port": 1035
+        },
+        {
+          "Host": "localhost",
+          "Port": 1036
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Payment
+    //Payment
+    {
       "UpstreamPathTemplate": "/api/Payment/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
@@ -57,13 +98,37 @@
         {
           "Host": "localhost",
           "Port": 1027
+        },
+        {
+          "Host": "localhost",
+          "Port": 1037
+        },
+        {
+          "Host": "localhost",
+          "Port": 1038
+        },
+        {
+          "Host": "localhost",
+          "Port": 1039
+        },
+        {
+          "Host": "localhost",
+          "Port": 1040
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Store
+    //Store
+    {
       "UpstreamPathTemplate": "/api/Store/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
@@ -78,13 +143,29 @@
         {
           "Host": "localhost",
           "Port": 1028
+        },
+        {
+          "Host": "localhost",
+          "Port": 1041
+        },
+        {
+          "Host": "localhost",
+          "Port": 1042
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Order
+    //Order
+    {
       "UpstreamPathTemplate": "/api/Order/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
@@ -99,13 +180,41 @@
         {
           "Host": "localhost",
           "Port": 1029
+        },
+        {
+          "Host": "localhost",
+          "Port": 1043
+        },
+        {
+          "Host": "localhost",
+          "Port": 1044
+        },
+        {
+          "Host": "localhost",
+          "Port": 1045
+        },
+        {
+          "Host": "localhost",
+          "Port": 1046
+        },
+        {
+          "Host": "localhost",
+          "Port": 1047
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Product
+    //Product
+    {
       "UpstreamPathTemplate": "/api/Product/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
@@ -120,13 +229,49 @@
         {
           "Host": "localhost",
           "Port": 1030
+        },
+        {
+          "Host": "localhost",
+          "Port": 1048
+        },
+        {
+          "Host": "localhost",
+          "Port": 1049
+        },
+        {
+          "Host": "localhost",
+          "Port": 1050
+        },
+        {
+          "Host": "localhost",
+          "Port": 1051
+        },
+        {
+          "Host": "localhost",
+          "Port": 1052
+        },
+        {
+          "Host": "localhost",
+          "Port": 1053
+        },
+        {
+          "Host": "localhost",
+          "Port": 1054
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
     },
 
-    { //Cart
+    //Cart
+    {
       "UpstreamPathTemplate": "/api/Cart/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
@@ -141,7 +286,42 @@
         {
           "Host": "localhost",
           "Port": 1030
+        },
+        {
+          "Host": "localhost",
+          "Port": 1048
+        },
+        {
+          "Host": "localhost",
+          "Port": 1049
+        },
+        {
+          "Host": "localhost",
+          "Port": 1050
+        },
+        {
+          "Host": "localhost",
+          "Port": 1051
+        },
+        {
+          "Host": "localhost",
+          "Port": 1052
+        },
+        {
+          "Host": "localhost",
+          "Port": 1053
+        },
+        {
+          "Host": "localhost",
+          "Port": 1054
         }
+      ],
+
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "DelegatingHandlers": [
+        "HealthCheck"
       ],
 
       "UseServiceDiscovery": false
@@ -154,5 +334,24 @@
     //"ReRoutesCaseSensitive": false,
     //"RequestIdKey": "OcRequestId",
     //"InternalServerErrorStatusCode": 500
-  }
+  },
+
+  "DelegatingHandlers": [
+    {
+      "Key": "HealthCheck",
+      "AssemblyName": "Ocelot.HealthChecks",
+      "ClassName": "Ocelot.Middleware.HealthCheckMiddleware",
+      "IsEnabled": true,
+      "Options": {
+        "Path": "/hc",
+        "Timeout": 1000,
+        "FailureStatusCodes": [ 501 ],
+        "AllowCachingResponses": false,
+        "Predicate": {
+          "Path": "/api/values",
+          "Methods": [ "GET" ]
+        }
+      }
+    }
+  ]
 }
