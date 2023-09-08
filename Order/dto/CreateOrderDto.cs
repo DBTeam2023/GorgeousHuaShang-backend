@@ -2,16 +2,15 @@
 {
     public class CreateOrderDto
     {
+        public class CreateOrder
+        {
+            public string PickId { get; set; } = null!;
 
-        public DateTime CreateTime { get; set; }
+            public decimal Number { get; set; }
+        }
 
-        public decimal Money { get; set; }
-
-        public bool State { get; set; }
-
-        public string LogisticID { get; set; } = null!;
-        public string[] PickID { get; set; } = null!;
-        public string UserID { get; set; } = null!;
+        public List<CreateOrder> OrderCreate { get; set; } = null!;      
+        
 
     }
 }

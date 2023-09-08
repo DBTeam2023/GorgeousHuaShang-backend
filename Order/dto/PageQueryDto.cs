@@ -4,25 +4,17 @@ namespace Order.dto
 {
     public class PageQueryDto
     {
-        public int PageSize { get; set; } = 10;
-        public int PageIndex { get; set; } = 1;
+        public int PageSize { get; set; }
+        public int PageIndex { get; set; }
 
         // 订单查询条件
         public string? OrderId { get; set; }
-
-        public string? UserID { get; set; }
-
-        public string? CreateTime { get; set; }
 
         public decimal? Moneymin { get; set; }
 
         public decimal? Moneymax { get; set; }
 
-        public string? CommodityId { get; set; }
-
-        public decimal? TotalAmount { get; set; }
-
-        public bool? OrderStatus { get; set; }
+        public string? OrderStatus { get; set; }
 
         public void Check()
         {

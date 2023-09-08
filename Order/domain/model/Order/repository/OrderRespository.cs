@@ -9,10 +9,10 @@ namespace Order.domain.model.repository
 
         public Task update(OrderAggregate orderAggregate);
 
-        public OrderAggregate getById(string OrderId);
+        public Task<OrderAggregate> getById(string token,string OrderId);
 
         public Task delete(string OrderId);
 
-        public IPage<OrderAggregate> pageQuery(PageQueryDto pageQuery);
+        public Task<IPage<OrderAggregate>> pageQuery(string token,PageQueryDto pageQuery);
     }
 }

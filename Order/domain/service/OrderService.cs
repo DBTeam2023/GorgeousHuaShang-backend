@@ -5,10 +5,10 @@ namespace Order.domain.service
 {
     public interface OrderService
     {
+        public Task<string> ChangeOrderCancel(string token, string orderID);
+        public Task ChangeOrderPaidSuccess(string token, string orderID);
 
-        public BuyerInfoDto getBuyerInfo(string userID);
-
-        public Task<PickInfoDto[]> getPickInfos(string[] pickID);
+        public Task ChangeOrderPaidComplete(string token, string orderID);
 
 
     }

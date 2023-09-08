@@ -82,6 +82,19 @@ namespace Order.utils
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.msg = ex.Message;
                     break;
+                case OrderStateException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case FindPickException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
+                case LogisticsException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.msg = ex.Message;
+                    break;
+
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     errorResponse.msg = "Internal Server errors. Check Logs!";

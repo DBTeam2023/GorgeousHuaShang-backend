@@ -5,7 +5,9 @@ using Order.domain.model;
 using Order.domain.model.repository;
 using Order.domain.service;
 using Order.dto;
+using Order.resource.remote;
 using Order.utils;
+using Product.utils;
 
 namespace Order.application.impl
 {
@@ -21,39 +23,53 @@ namespace Order.application.impl
             _orderService = orderService;
         }
 
-        public async Task<PickInfoDto[]> getPickInfo(string[] pickID)
+       
+        public async Task<OrderAggregate> getOrderInfo(string token,string orderID)
         {
-            var pickInfoDto = await _orderService.getPickInfos(pickID);
-            return pickInfoDto;
+            return await _orderRepository.getById(token,orderID);
         }
-        public async Task UpdateOrder(OrderDto order)
+
+        public async Task ChangeOrderCancel(string token, string orderID)
         {
-            var orderAggregate = OrderAggregate.Create(order);
-            await _orderRepository.update(orderAggregate);
+            var logisticsId=await _orderService.ChangeOrderCancel(token, orderID);
         }
-        public OrderAggregate getOrderInfo(string orderID)
+
+       
+
+        public async Task ChangeOrderPaidSuccess(string token, string orderID)
         {
-            return _orderRepository.getById(orderID);
+            await _orderService.ChangeOrderPaidSuccess(token, orderID);
         }
+
+        public async Task ChangeOrderPaidComplete(string token, string orderID)
+        {
+            await _orderService.ChangeOrderPaidComplete(token, orderID);
+        }
+
+
+        //ok
         public async Task DeleteOrder(string orderID)
         {
             await _orderRepository.delete(orderID);
+            
 
         }
-        // 创建
-        public async Task<OrderIdDto> createOrder(CreateOrderDto order)
+        // ok
+        public async Task<OrderAggregate> createOrder(string token,CreateOrderDto order)
         {
-            // 查询名称，电话号码和地址
-            var buyerInfo = _orderService.getBuyerInfo(order.UserID);
-            var orderAggregate = OrderAggregate.Create(order, buyerInfo);
+            var buyerInfo = await UserRemote.getUserInfo(token);
+            var orderInfo = await PickRemote.getPickInfos(order);
+
+            var orderAggregate = await OrderAggregate.Create(buyerInfo,orderInfo);
             await _orderRepository.add(orderAggregate);
-            return new OrderIdDto { OrderId = orderAggregate.OrderID };
+
+            return orderAggregate;
         }
 
-        //分页
-        public IPage<OrderAggregate> orderPageQuery(PageQueryDto pageQuery)
+        //ok
+        public async Task<IPage<OrderAggregate>> orderPageQuery(string token,PageQueryDto pageQuery)
         {
-            return _orderRepository.pageQuery(pageQuery);
+            return await _orderRepository.pageQuery(token,pageQuery);
         }
 
     }

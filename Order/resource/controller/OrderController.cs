@@ -6,7 +6,7 @@ using EntityFramework.Context;
 using Order.utils;
 using Order.application;
 using Order.dto;
-using Order.resource.vo;
+using Order.resource.remote;
 
 namespace Order.resource.controller
 {
@@ -15,51 +15,87 @@ namespace Order.resource.controller
     public class OrderController : ControllerBase
     {
         //application service
-        public OrderApplicationService OrderApplicationService;
-        public OrderController(OrderApplicationService _OrderApplicationService)
+        public OrderApplicationService orderApplicationService;
+        public OrderController(OrderApplicationService _orderApplicationService)
         {
-            OrderApplicationService = _OrderApplicationService;
+            orderApplicationService = _orderApplicationService;
         }
 
-        //Authorization:seller
+        //ok
         [HttpPost]
-        public async Task<ComResponse<OrderIdDto>> createOrder([FromBody] CreateOrderDto order)
+        public async Task<ComResponse<OrderAggregate>> createOrder([FromBody] CreateOrderDto order)
         {
-            return ComResponse<OrderIdDto>.success(await OrderApplicationService.createOrder(order));
+           string token = HttpContext.Request.Headers["Authorization"];           
+           return ComResponse<OrderAggregate>.success(await orderApplicationService.createOrder(token, order));
         }
 
-        //Authorization:seller
+
         [HttpPost]
-        public async Task<ComResponse<OrderInfoVo>> getOrderInfo([FromBody] OrderIdDto orderId)
+        public async Task<ComResponse<OrderAggregate>> getOrderInfo([FromBody] OrderIdDto orderId)
         {
-            var OrderAggrgate = OrderApplicationService.getOrderInfo(orderId.OrderId);
-            var pickInfo = await OrderApplicationService.getPickInfo(OrderAggrgate.PickID);
-            return ComResponse<OrderInfoVo>.success(new OrderInfoVo(OrderAggrgate,pickInfo));
+            string token = HttpContext.Request.Headers["Authorization"];
+            var orderAggrgate = await orderApplicationService.getOrderInfo(token,orderId.OrderId);
+            return ComResponse<OrderAggregate>.success(orderAggrgate);
         }
 
-        //Authorization:seller
-        [HttpPost]
-        public async Task<ComResponse<string>> updateOrder([FromBody] OrderDto order)
-        {
-            await OrderApplicationService.UpdateOrder(order);
-            return ComResponse<string>.success("成功更新");
-        }
 
-        //Authorization:seller
-        //对某种商品的删除（全部删除）
+
+        
         [HttpPost]
         public async Task<ComResponse<string>> deleteOrder([FromBody] OrderIdDto orderID)
         {
-            await OrderApplicationService.DeleteOrder(orderID.OrderId);
+            
+            await orderApplicationService.DeleteOrder(orderID.OrderId);
             return ComResponse<string>.success("成功删除");
         }
 
+        //取消订单
         [HttpPost]
-        public ComResponse<IPage<OrderVo>> orderPageQuery([FromBody] PageQueryDto pageQuery)
+        public async Task<ComResponse<int>> ChangeOrderCancel([FromBody] OrderIdDto orderID)
         {
-            var page = OrderApplicationService.orderPageQuery(pageQuery);
-            return ComResponse<IPage<OrderVo>>.success(OrderVo.CreateOrderPageVo(page));
+            string token = HttpContext.Request.Headers["Authorization"];
+            await orderApplicationService.ChangeOrderCancel(token,orderID.OrderId);
+            return ComResponse<int>.success(0);
         }
+
+       
+
+        
+
+        [HttpPost]
+        public async Task<ComResponse<int>> ChangeOrderPaidSuccess([FromBody] OrderIdDto orderID)
+        {
+
+            string token = HttpContext.Request.Headers["Authorization"];
+            await orderApplicationService.ChangeOrderPaidSuccess(token, orderID.OrderId);
+            return ComResponse<int>.success(0);
+        }
+
+        [HttpPost]
+        public async Task<ComResponse<int>> ChangeOrderPaidComplete([FromBody] OrderIdDto orderID)
+        {
+
+            string token = HttpContext.Request.Headers["Authorization"];
+            await orderApplicationService.ChangeOrderPaidComplete(token, orderID.OrderId);
+            return ComResponse<int>.success(0);
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<ComResponse<IPage<OrderAggregate>>> orderPageQuery([FromBody] PageQueryDto pageQuery)
+        {
+            string token = HttpContext.Request.Headers["Authorization"];
+            var page = await orderApplicationService.orderPageQuery(token,pageQuery);
+            return ComResponse<IPage<OrderAggregate>>.success(page);
+        }
+
+
+
+
+
+
     }
 
 }

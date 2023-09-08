@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using EntityFramework.Context;
 using Microsoft.OpenApi.Any;
 using Order.domain.model.repository;
+using Order.domain.model.Order;
+using Order.resource.remote;
 
 namespace Order.domain.model.repository.impl
 {
@@ -22,117 +24,99 @@ namespace Order.domain.model.repository.impl
             _context = context;
         }
 
+        //ok
         public async Task add(OrderAggregate orderAggregate)
         {
             // 实现添加订单的逻辑
 
             // 首先检查订单是否已存在
-            var existingOrder = _context.Orders.FirstOrDefault(o => o.OrderId == orderAggregate.OrderID);
+            var existingOrder = _context.Myorders.FirstOrDefault(o => o.OrderId == orderAggregate.OrderID);
             if (existingOrder != null)
             {
                 throw new DuplicateException("Order already exists.");
             }
 
             // 创建新的 Order 实例并从 OrderAggregate 对象中初始化数据
-            var newOrder = new EntityFramework.Models.Order
+            var newOrder = new Myorder
             {
                 OrderId = orderAggregate.OrderID,
                 CreateTime = orderAggregate.CreateTime,
-                Money = orderAggregate.Money,
-                State = orderAggregate.State,
+                Money = orderAggregate.Money,                
                 LogisticsId = orderAggregate.LogisticID,
                 UserId = orderAggregate.UserID,
-                IsDeleted = orderAggregate.IsDeleted,
+                State=orderAggregate.State
             };
+
+            _context.Myorders.Add(newOrder);
+
             // 处理 pick
-            for (int i = 0;i< orderAggregate.PickID.Length; ++i)
+
+            foreach(var it in orderAggregate.Picks)
             {
                 var newPicks = new EntityFramework.Models.OrderPick
                 {
-                    OrderId = orderAggregate.OrderID,
-                    PickId = orderAggregate.PickID[i],
+                    PickId=it.PickId,
+                    Number=it.Number,
+                    OrderId= orderAggregate.OrderID
                 };
                 _context.OrderPicks.Add(newPicks);
             }
-            // 添加新订单到数据库
-            _context.Orders.Add(newOrder);
+                  
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex)
+            catch 
             {
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine("Inner Exception: " + ex.InnerException.ToString());
-                }
+                throw new DBFailureException("add order failure");
             }
         }
 
+        //偷懒：只修改state
         public async Task update(OrderAggregate orderAggregate)
         {
-            var dbOrder = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderAggregate.OrderID);
+            var dbOrder = await _context.Myorders.FirstOrDefaultAsync(o => o.OrderId == orderAggregate.OrderID);
             if (dbOrder == null)
                 throw new NotFoundException("The order doesn't exist.");
-
-            // 更新订单属性
-            dbOrder.OrderId = orderAggregate.OrderID;
-            dbOrder.CreateTime = orderAggregate.CreateTime;
-            dbOrder.Money = orderAggregate.Money;
+          
             dbOrder.State = orderAggregate.State;
-            dbOrder.LogisticsId = orderAggregate.LogisticID;
-            dbOrder.UserId = orderAggregate.UserID;
-
-            // 处理 pick
-            for (int i = 0; i < orderAggregate.PickID.Length; ++i)
-            {
-                var info = await _context.OrderPicks.FirstOrDefaultAsync(u => u.OrderId == orderAggregate.OrderID && u.PickId == orderAggregate.PickID[i]);
-                if (info == null)
-                {
-                    var newPick = new EntityFramework.Models.OrderPick
-                    {
-                        OrderId = orderAggregate.OrderID,
-                        PickId = orderAggregate.PickID[i],
-                    };
-                    _context.OrderPicks.Add(newPick);
-                }
-                else
-                {
-                    // 从上下文中删除数据行
-                    _context.OrderPicks.Remove(info);
-                }
-            }
-
-            // 异步保存更改到数据库
-            await _context.SaveChangesAsync();
-            IDbContextTransaction? transaction = null;
             try
             {
-                transaction = _context.Database.BeginTransaction();
+                // 异步保存更改到数据库
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
+
             }
             catch
             {
-                if (transaction != null)
-                    await transaction.RollbackAsync();
-                throw new DBFailureException("Failed to update the order.");
+                throw new DBFailureException("update order failure");
             }
-            finally
-            {
-                transaction?.Dispose();
-            }
+
+
         }
 
-        public OrderAggregate getById(string orderId)
+
+
+        //ok
+        public async Task<OrderAggregate> getById(string token,string orderId)
         {
-            var dbOrder = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            var dbOrder = _context.Myorders.FirstOrDefault(o => o.OrderId == orderId);
             if (dbOrder == null)
                 throw new NotFoundException("The order doesn't exist.");
+            
+
             var picks = _context.OrderPicks
                 .Where(u => u.OrderId == orderId)
-                .Select(u => u.PickId)
-                .ToArray();
+                .Select(u => new CreateOrderDto.CreateOrder{PickId=u.PickId,Number=u.Number})
+                .ToList();
+
+            
+            var picks_in_aggregate = await PickRemote.getPickInfos(new CreateOrderDto
+            {
+                OrderCreate = picks,
+            });
+
+            var user_info = await UserRemote.getUserInfo(token);
+                
             var orderAggregate = new OrderAggregate
             {
                 OrderID = dbOrder.OrderId,
@@ -141,19 +125,24 @@ namespace Order.domain.model.repository.impl
                 State = dbOrder.State,
                 LogisticID = dbOrder.LogisticsId,
                 UserID = dbOrder.UserId,
-                IsDeleted = dbOrder.IsDeleted,
-                PickID = picks
+                Picks= picks_in_aggregate,
+                Address=user_info.Address,
+                NickName=user_info.NickName,
+                PhoneNumber=user_info.PhoneNumber
             };
             return orderAggregate;
         }
 
+
+        //ok
         public async Task delete(string orderId)
         {
-            var order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            var order = _context.Myorders.FirstOrDefault(o => o.OrderId == orderId);
             if (order == null)
                 throw new NotFoundException("The order doesn't exist.");
 
-            _context.Orders.Remove(order);
+            _context.Myorders.Remove(order);
+
             var picks = _context.OrderPicks.Where(u => u.OrderId == orderId);
             _context.OrderPicks.RemoveRange(picks);
             try
@@ -165,49 +154,29 @@ namespace Order.domain.model.repository.impl
                 throw new DBFailureException("Failed to delete the order.");
             }
         }
-        private List<OrderAggregate> Convert(List<EntityFramework.Models.Order> orders)
-        {
-            var ans = new List<OrderAggregate>();
 
-            foreach (var order in orders)
-            {
-                var orderAggregate = new OrderAggregate
-                {
-                    OrderID = order.OrderId,
-                    CreateTime = order.CreateTime,
-                    Money = order.Money,
-                    State = order.State,
-                    LogisticID = order.LogisticsId,
-                    UserID = order.UserId,
-                    IsDeleted = order.IsDeleted
-                };
 
-                ans.Add(orderAggregate);
-
-            }
-
-            return ans;
-        }
+       
         
-        public IPage<OrderAggregate> pageQuery(PageQueryDto pageQuery)
+
+        public async Task<IPage<OrderAggregate>> pageQuery(string token,PageQueryDto pageQuery)
         {
             // 检查查询参数的有效性
             pageQuery.Check();
 
             // 获取所有订单记录
-            var allOrders = _context.Orders.ToList();
+            var allOrders = _context.Myorders.ToList();
+
+            var user_info = await UserRemote.getUserInfo(token);
 
             // 根据查询参数逐步过滤订单记录
             var filteredOrders = allOrders
                 .Where(x => x.OrderId == (pageQuery.OrderId ?? x.OrderId))
-                .Where(x => x.UserId == (pageQuery.UserID ?? x.UserId))
+                .Where(x => x.UserId == (user_info.UserId ?? x.UserId))
                 .Where(x => x.Money >= (pageQuery.Moneymin ?? decimal.MinValue))
                 .Where(x => x.Money <= (pageQuery.Moneymax ?? decimal.MaxValue))
-                //.Where(x => x.PickID == (pageQuery.CommodityId ?? x.PickID))
-                // TODO .Where(x => x.PickID.Contains(pageQuery.CommodityId ?? ""))
-                .Where(x => x.Money >= (pageQuery.TotalAmount ?? decimal.MinValue))
                 .Where(x => x.State == (pageQuery.OrderStatus ?? x.State))
-            .ToList();
+                .ToList();
 
 
 
@@ -238,12 +207,19 @@ namespace Order.domain.model.repository.impl
                 }
             }
 
+            var orderAggregateList = new List<OrderAggregate>();
+            foreach (var it in filteredOrders)
+                orderAggregateList.Add(await getById(token, it.OrderId));
+
+
+
+
             // 构建分页结果对象
             var page = IPage<OrderAggregate>.builder()
                 .total(total)
                 .size(pageSize)
                 .current(pageIndex)
-                .records(Convert(filteredOrders))
+                .records(orderAggregateList)
                 .build();
 
             return page;

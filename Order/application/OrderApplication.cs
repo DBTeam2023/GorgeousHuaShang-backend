@@ -6,13 +6,13 @@ namespace Order.application
 {
     public interface OrderApplicationService
     {
-        public Task UpdateOrder(OrderDto order);
-        public OrderAggregate getOrderInfo(string orderID);
+        public Task ChangeOrderCancel(string token, string orderID);
+        public Task ChangeOrderPaidComplete(string token, string orderID);
+        public Task ChangeOrderPaidSuccess(string token, string orderID);
+        public Task<OrderAggregate> getOrderInfo(string token, string orderID);
         public Task DeleteOrder(string orderID);
-        // 创建
-        public Task<OrderIdDto> createOrder(CreateOrderDto order);
+        public Task<OrderAggregate> createOrder(string token, CreateOrderDto order);
         //分页查询
-        public IPage<OrderAggregate> orderPageQuery(PageQueryDto pageQuery);
-        public  Task<PickInfoDto[]> getPickInfo(string[] pickID);
+        public Task<IPage<OrderAggregate>> orderPageQuery(string token,PageQueryDto pageQuery);
     }
 }

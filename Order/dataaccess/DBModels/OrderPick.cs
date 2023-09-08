@@ -9,5 +9,7 @@ public partial class OrderPick
 
     public string PickId { get; set; } = null!;
 
-    public virtual Order Order { get; set; } = null!;
+    public decimal Number { get; set; }
+
+    public virtual Myorder Order { get; set; } = null!;
 }
