@@ -109,9 +109,41 @@ namespace Logistics.service.impl
             };
             await _context.Logistics.AddAsync(info);
             await _context.SaveChangesAsync();
+
+            await JustForDemonstrate(id, address_end);
             return info;
         }
         
+
+        public async Task JustForDemonstrate(string id,string address)
+        {
+            string[] placeList = { "上海青浦中转站", "上海宝山货运码头","菜鸟驿站","顺丰速运站","圆通快递服务区" };
+            string firstPlace = "华商异彩";
+            // 使用 Fisher-Yates 算法打乱数组顺序
+            Random random = new Random();
+            for (int i = placeList.Length - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                string temp = placeList[i];
+                placeList[i] = placeList[j];
+                placeList[j] = temp;
+            }
+
+            await addLogisticsInfo(id, firstPlace);
+            for (int i = 0; i < 2; i++)
+                await addLogisticsInfo(id, placeList[i]);
+
+            Random random2 = new Random();
+            int randomNumber = random.Next(0, 100);
+            if (randomNumber % 2 == 1)
+                await addLogisticsInfo(id, address);
+
+
+        }
+
+
+
+
         //清理物流
         public async Task deleteLogistics()
         {
