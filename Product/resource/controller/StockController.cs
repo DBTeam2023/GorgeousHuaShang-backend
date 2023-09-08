@@ -32,6 +32,10 @@ namespace Product.resource.controller
         }
 
 
-
+        [HttpPost]
+        public async Task LockStock([FromBody] StockLockDto stockLockDto)
+        {
+            await stockApplicationService.LockStock(stockLockDto);
+        }
     }
 }

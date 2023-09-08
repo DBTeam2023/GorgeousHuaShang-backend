@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Product.utils;
@@ -16,7 +17,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-
 
 builder.Services.AddScoped<ModelContext>();
 
@@ -47,21 +47,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy
-        (name: "myCors",
-            builde =>
-            {
-                builde.WithOrigins("*", "*", "*")
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-            }
-        );
+      (name: "myCors",
+        builde =>
+        {
+            builde.WithOrigins("*", "*", "*")
+          .AllowAnyOrigin()
+          .AllowAnyHeader()
+          .AllowAnyMethod();
+        }
+      );
 });
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -80,5 +81,5 @@ app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync(); // 使用 await 关键字异步运行应用程序
 
