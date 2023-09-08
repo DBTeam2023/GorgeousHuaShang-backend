@@ -78,7 +78,7 @@ namespace Product.domain.model.repository.impl
             }
             if (items != null&&db_cart!=null)
             {
-                items.PickCount++;
+                items.PickCount += pick.Number;
                 db_cart.TotalAmount += (db_pick.Price ?? 0) * pick.Number;
                 await _context.SaveChangesAsync();
             }
