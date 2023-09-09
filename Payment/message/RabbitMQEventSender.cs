@@ -27,8 +27,8 @@ namespace Payment.message
             using (var channel = connection.CreateModel())
             {
                 channel.ExchangeDeclare(exchange: "payment_event_exchange", type: ExchangeType.Topic);
-                channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                Console.WriteLine("queue declared");
+                    channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    Console.WriteLine("queue declared");
                 channel.QueueBind(queue: _queueName, exchange: "payment_event_exchange",routingKey: key);
                 var message = JsonConvert.SerializeObject(eventData);
                 var body = Encoding.UTF8.GetBytes(message);

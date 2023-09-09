@@ -81,7 +81,7 @@ namespace Payment.web.controllers
         {
             string token = Request.Headers["Authorization"].ToString();
             IPage<Coupon> x = await couponService.getValid(getValidDto.pageNo, getValidDto.pageSize, token, getValidDto.pickIds);
-            return ComResponse<IPage<Coupon>>.success(x);   
+            return ComResponse<IPage<Coupon>>.success(x);
         }
 
         [HttpPost]

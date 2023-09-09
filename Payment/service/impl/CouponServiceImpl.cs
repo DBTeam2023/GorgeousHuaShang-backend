@@ -173,7 +173,7 @@ namespace Payment.service.impl
             }
             else
                 result = result.Where(x => x.StoreId == storeId).ToList();
-
+             
             // return the certain list
             var list = result.Skip((PageNo - 1) * pageSize)
                .Take(pageSize)
@@ -189,7 +189,7 @@ namespace Payment.service.impl
 
 
         public async Task<IPage<Coupontemp>> getStoreCoupon(int pageNo, int pageSize, string storeId)
-        {
+            {
             List<Coupontemp> result = new List<Coupontemp>();
             result = _context.Coupontemps.Where(x => x.StoreId == storeId).ToList();
 
@@ -206,13 +206,13 @@ namespace Payment.service.impl
         }
 
         public async Task<IPage<Coupon>> getValid(int pageNo, int pageSize, string token, List<string> pickIds)
-        {
+                {
             var userId = await getUserId(token);
             Dictionary<string, decimal?> storePicks = new Dictionary<string, decimal?>();
             List<Coupon> result = new List<Coupon>();
             // 获取店铺与消费金额的键值对
             foreach(var pickId in pickIds)
-            {
+                    {
                 var x = _context.Picks.FirstOrDefault(x => x.PickId == pickId);
                 if (x == null)
                     throw new NotFoundException("This pick of commodity does not exist.");
@@ -225,7 +225,7 @@ namespace Payment.service.impl
                         storePicks[commodity.StoreId] += commodity.Price;
                     else
                         storePicks[commodity.StoreId] += x.Price;
-                }
+                    }
                 else
                 {
                     if (x.Price == null)
@@ -245,7 +245,7 @@ namespace Payment.service.impl
                 {
                     if(coupon.Type == "discount")
                         result.Add(coupon);
-                    else
+            else
                     {
                         if (coupon.Bar < price)
                             result.Add(coupon);
@@ -254,8 +254,8 @@ namespace Payment.service.impl
             }
 
             var list = result.Skip((pageNo - 1) * pageSize)
-              .Take(pageSize)
-              .ToList();
+               .Take(pageSize)
+               .ToList();
             IPage<Coupon> Page = IPage<Coupon>.builder()
                .records(list)
                .total(result.Count)
@@ -352,7 +352,7 @@ namespace Payment.service.impl
         {
             await Clean();
         }
-
+       
 
         public async Task<string>getUserId(string token)
         {

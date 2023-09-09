@@ -9,6 +9,7 @@ public partial class Coupontemp
 
     public string StoreId { get; set; } = null!;
 
+
     public string Type { get; set; } = null!;
 
     public decimal? Discount { get; set; }
