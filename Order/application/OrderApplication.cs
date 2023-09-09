@@ -14,5 +14,9 @@ namespace Order.application
         public Task<OrderAggregate> createOrder(string token, CreateOrderDto order);
         //分页查询
         public Task<IPage<OrderAggregate>> orderPageQuery(string token,PageQueryDto pageQuery);
+
+        public Task<int> PayOrder(string token, string orderId);
+
+        public Task<int> CancelOrder(string token, string orderId);
     }
 }

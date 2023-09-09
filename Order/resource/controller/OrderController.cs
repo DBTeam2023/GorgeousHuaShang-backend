@@ -82,7 +82,6 @@ namespace Order.resource.controller
 
 
 
-
         [HttpPost]
         public async Task<ComResponse<IPage<OrderAggregate>>> orderPageQuery([FromBody] PageQueryDto pageQuery)
         {
@@ -91,8 +90,22 @@ namespace Order.resource.controller
             return ComResponse<IPage<OrderAggregate>>.success(page);
         }
 
+        [HttpPost]
+        public async Task<ComResponse<int>> PayOrder([FromBody] OrderIdDto orderIdDto)
+        {
 
+            string token = HttpContext.Request.Headers["Authorization"];
+            var x = await orderApplicationService.PayOrder(token, orderIdDto.OrderId);
+            return ComResponse<int>.success(x);
+        }
 
+        [HttpPost]
+        public async Task<ComResponse<int>> CancelOrder([FromBody] OrderIdDto orderIdDto)
+        {
+            string token = HttpContext.Request.Headers["Authorization"];
+            var x = await orderApplicationService.CancelOrder(token, orderIdDto.OrderId);
+            return ComResponse<int>.success(x);
+        }
 
 
 

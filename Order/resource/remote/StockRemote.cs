@@ -13,7 +13,7 @@ namespace Order.resource.remote
         {
 
 
-            string url = "http://47.115.231.142:1030/Stock/reduceStock";
+            string url = "http://47.115.231.142:1030/Stock/IsStockEnough";
 
             try
             {

@@ -41,9 +41,6 @@ namespace Order.utils
                         // 处理接收到的消息
                         stockRelease(eventData);
 
-                        // 手动确认消息已被处理
-                        //channel.BasicAck(ea.DeliveryTag, false);
-
                     };
                     channel.BasicConsume(queue: "stock_release_queue", autoAck: true, consumer: StockReleaseConsumer);
 

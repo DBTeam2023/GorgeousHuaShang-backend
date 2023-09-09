@@ -8,6 +8,8 @@ using Order.dto;
 using Order.resource.remote;
 using Order.utils;
 using Product.utils;
+using Order.domain.message;
+using Order.domain.model.Order;
 
 namespace Order.application.impl
 {
@@ -72,5 +74,44 @@ namespace Order.application.impl
             return await _orderRepository.pageQuery(token,pageQuery);
         }
 
+        public async Task<int> PayOrder(string token, string orderId)
+        {
+            await ChangeOrderPaidSuccess(token, orderId);
+            List<DPick> dPicks = getOrderInfo(token, orderId).Result.Picks;
+            List<string> pickIds = new List<string>();
+            foreach(var dPick in dPicks)
+            {
+                pickIds.Add(dPick.PickId);
+                Console.WriteLine(dPick.PickId);
+            }
+            //RabbitMQEventSender sender = new RabbitMQEventSender("stock_reduce_queue");
+            //var orderMessage = new OrderMessage
+            //{
+            //    orderId = orderId,
+            //    pickIds = pickIds,
+            //};
+            //sender.sendEvent(orderMessage, "order.pay.order");
+            return 1;
+        }
+
+        public async Task<int> CancelOrder(string token, string orderId)
+        {
+            await ChangeOrderCancel(token, orderId);
+            List<DPick> dPicks = getOrderInfo(token, orderId).Result.Picks;
+            List<string> pickIds = new List<string>();
+            foreach (var dPick in dPicks)
+            {
+                pickIds.Add(dPick.PickId);
+                Console.WriteLine(dPick.PickId);
+            }
+            RabbitMQEventSender sender = new RabbitMQEventSender("stock_release_queue");
+            var orderMessage = new OrderMessage
+            {
+                orderId = orderId,
+                pickIds = pickIds,
+            };
+            sender.sendEvent(orderMessage, "order.cancel");
+            return 1;
+        }
     }
 }

@@ -27,14 +27,13 @@ namespace Product.utils
             using (var connection = _factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: "", type: ExchangeType.Topic);
-                channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                Console.WriteLine("queue declared");
-                channel.QueueBind(queue: _queueName, exchange: "", routingKey: key);
+                channel.ExchangeDeclare(exchange: "order_event_exchange", type: ExchangeType.Topic, durable: true);
+                channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueBind(queue: _queueName, exchange: "order_event_exchange", routingKey: key);
                 var message = JsonConvert.SerializeObject(eventData);
                 var body = Encoding.UTF8.GetBytes(message);
-
-                channel.BasicPublish(exchange: "", routingKey: key, basicProperties: null, body: body);
+                Console.WriteLine(message);    
+                channel.BasicPublish(exchange: "order_event_exchange", routingKey: key, basicProperties: null, body: body);
             }
         }
 
@@ -51,10 +50,11 @@ namespace Product.utils
                     { "x-dead-letter-exchange", "" },  // 空字符串表示使用默认交换机
                     { "x-dead-letter-routing-key", "delayed_routing_key" }  // 延迟消息过期后将被重新发布的路由键
                  });
+                channel.QueueBind(queue: _queueName, exchange: "order_event_exchange", routingKey: key);
 
                 // 将消息发送到原始队列
                 var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventData));
-                channel.BasicPublish(exchange: "stock_event_exchange", routingKey: key, basicProperties: null, body: messageBytes);
+                channel.BasicPublish(exchange: "order_event_exchange", routingKey: key, basicProperties: null, body: messageBytes);
             }
         }
     }

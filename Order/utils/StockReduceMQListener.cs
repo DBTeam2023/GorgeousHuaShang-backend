@@ -33,7 +33,7 @@ namespace Order.utils
                     channel.QueueBind(queue: "stock_reduce_queue", exchange: "order_event_exchange", routingKey: "order.pay.order");
                     var ReduceConsumer = new EventingBasicConsumer(channel);
                     ReduceConsumer.Received += (model, ea) =>
-                    {
+                    { 
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
                         var eventData = JsonConvert.DeserializeObject(message);
