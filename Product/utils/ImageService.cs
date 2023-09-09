@@ -60,11 +60,11 @@ namespace Product.utils
         //exception fixed
         public void setImage(IFormFile? image, string imageName)
         {
-
+            if (image == null)
+                return;
             //delete original
             deleteImage(imageName);
-            if (image == null)          
-                return;
+            
 
             string fileExtension = GetImageExtension(image);
 
