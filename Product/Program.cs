@@ -38,7 +38,9 @@ builder.Services.AddScoped<CartApplicationService, CartApplicationServiceImpl>()
 builder.Services.AddControllers();
 
 //hosted services
-builder.Services.AddHostedService<RabbitMQListener>();
+builder.Services.AddHostedService<StockReleaseMQListener>();
+builder.Services.AddHostedService<StockReduceMQListener>();
+builder.Services.AddHostedService<StockDelayMQListener>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

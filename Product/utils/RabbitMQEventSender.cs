@@ -16,7 +16,7 @@ namespace Product.utils
                 UserName = "admin",
                 Password = "123",
                 Port = 5672,
-                RequestedConnectionTimeout = TimeSpan.FromSeconds(3000)
+                RequestedConnectionTimeout = TimeSpan.FromSeconds(30000)
             };
             _queueName = queueName;
         }
@@ -37,7 +37,7 @@ namespace Product.utils
             }
         }
 
-        public void sendDelayedEvent(object eventData, string key, int delayMilliseconds)
+        public void sendDelayedEvent(object eventData, string key, int delayMilliseconds=10)
         {
 
             using (var connection = _factory.CreateConnection())

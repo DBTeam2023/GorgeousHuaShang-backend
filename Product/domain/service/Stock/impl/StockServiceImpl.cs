@@ -82,16 +82,23 @@ namespace Product.domain.service.Stock.impl
             }));
         }
 
-        public async Task LockStock(StockLockDto stockLockDto)
+        public async Task LockStock(StockEventDto stockEventDto)
         {
-            RabbitMQEventSender sender = new RabbitMQEventSender("stock_delay_queue");
-            var stockEvent = new StockEventDto
+            var stockdto = new StockDto
             {
-                orderId = stockLockDto.orderId,
-                pickId = stockLockDto.pickId,
-                number = stockLockDto.number,
+                PickId = stockEventDto.pickId,
+                Number = 1,
             };
-            sender.sendDelayedEvent(stockEvent, "stock.locked", 300000);
+            reduceStock(stockdto);
+            RabbitMQEventSender sender = new RabbitMQEventSender("stock_delay_queue");
+            var stockEvent = new StockLockMessage
+            {
+                orderId = stockEventDto.orderId,
+                pickId = stockEventDto.pickId,
+                number = stockEventDto.number,
+                isReduced = stockEventDto.isReduced,
+            };
+            sender.sendDelayedEvent(stockEvent, "stock.locked");
         }
 
     }
