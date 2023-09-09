@@ -7,11 +7,9 @@ public partial class Coupon
 {
     public string CouponId { get; set; } = null!;
 
-    public string? UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
     public string StoreId { get; set; } = null!;
-
-    public string? CommodityId { get; set; }
 
     public string Type { get; set; } = null!;
 
@@ -27,5 +25,5 @@ public partial class Coupon
 
     public virtual Store Store { get; set; } = null!;
 
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

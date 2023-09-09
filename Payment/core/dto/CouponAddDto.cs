@@ -3,7 +3,6 @@
     public class CouponAddDto
     {
         public string storeId { get; set; }
-        public string commodityId { get; set; }
         public string type { get; set; }
         public decimal discount { get; set; }
         public int bar { get; set; }

@@ -13,7 +13,7 @@ public partial class CommodityGeneral
 
     public string StoreId { get; set; } = null!;
 
-    public string Price { get; set; } = null!;
+    public decimal Price { get; set; }
 
     public bool? IsDeleted { get; set; }
 

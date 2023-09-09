@@ -7,50 +7,33 @@ namespace Payment.message
     {
         private readonly ConnectionFactory _factory;
         private readonly string _queueName;
-        private bool _queueDeclared;
 
-        public RabbitMQEventSender(string hostName, string queueName, string userName, string password)
+        public RabbitMQEventSender(string queueName)
         {
             _factory = new ConnectionFactory()
             {
-                HostName = hostName,
-                UserName = userName,
-                Password = password,
+                HostName = "47.115.231.142",
+                UserName = "admin",
+                Password = "123",
                 Port = 5672,
                 RequestedConnectionTimeout = TimeSpan.FromSeconds(3000) 
             };
             _queueName = queueName;
-            _queueDeclared = false;
         }
 
-        public void SendEvent(object eventData)
+        public void SendEvent(object eventData, string key)
         {
             using (var connection = _factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                if (!_queueDeclared)
-                {
-                    //try
-                    //{
-                    //    channel.QueueDeclarePassive(_queueName);
-                    //    Console.WriteLine("queue exists");
-                    //    _queueDeclared = true;
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                    //    Console.WriteLine("queue declared");
-                    //    _queueDeclared = true;
-                    //}
-                    channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                    Console.WriteLine("queue declared");
-                    _queueDeclared = true;
-                }
-
+                channel.ExchangeDeclare(exchange: "payment_event_exchange", type: ExchangeType.Topic);
+                channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                Console.WriteLine("queue declared");
+                channel.QueueBind(queue: _queueName, exchange: "payment_event_exchange",routingKey: key);
                 var message = JsonConvert.SerializeObject(eventData);
                 var body = Encoding.UTF8.GetBytes(message);
 
-                channel.BasicPublish(exchange: "", routingKey: _queueName, basicProperties: null, body: body);
+                channel.BasicPublish(exchange: "payment_event_exchange", routingKey: key, basicProperties: null, body: body);
             }
         }
     }
