@@ -10,5 +10,7 @@ namespace Product.application
 
         public Task LockStock(StockEventDto stockEventDto);
 
+        public Task<bool> IsEnoughStock(StockDto stockEventDto);
+
     }
 }

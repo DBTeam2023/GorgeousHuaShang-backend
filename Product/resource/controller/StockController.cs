@@ -37,5 +37,13 @@ namespace Product.resource.controller
         {
             await stockApplicationService.LockStock(stockEventDto);
         }
+
+        [HttpPost]
+        public async Task<ComResponse<bool>> IsStockEnough([FromBody]StockDto stockDto)
+        {
+            return ComResponse<bool>.success(await stockApplicationService.IsEnoughStock(stockDto));        
+        }
+
+
     }
 }

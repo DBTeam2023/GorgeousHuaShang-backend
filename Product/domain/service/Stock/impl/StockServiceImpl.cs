@@ -101,5 +101,33 @@ namespace Product.domain.service.Stock.impl
             sender.sendDelayedEvent(stockEvent, "stock.locked");
         }
 
+
+        public async Task<bool> IsEnoughStock(StockDto stockDto)
+        {
+            var pickdto = new PickDto(new PickAuxDto
+            {
+                PickId = stockDto.PickId
+            });
+
+
+            decimal original_stocks = 0;
+            var first_pick = categoryRepository.getPicks(pickdto);
+            if (first_pick.Count() == 0)
+                throw new NotFoundException("no picks found");
+
+            original_stocks = first_pick[0].First().Stock;
+            if (original_stocks < stockDto.Number)
+                return false;
+            else
+                return true;
+
+
+
+
+
+        }
+
+
+
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 using Product.application;
+using Product.dto;
 
 namespace Product.utils
 {
@@ -46,7 +47,6 @@ namespace Product.utils
                     var ReduceConsumer = new EventingBasicConsumer(channel);
                     ReduceConsumer.Received += (model, ea) =>
                     {
-                        Console.WriteLine("reduce");
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
                         var eventData = JsonConvert.DeserializeObject(message);
@@ -71,6 +71,21 @@ namespace Product.utils
         {
             RabbitMQEventSender sender = new RabbitMQEventSender("stock_delay_queue");
             sender.sendDelayedEvent(eventData, "stock.locked");
+
+            //dynamic data = JsonConvert.DeserializeObject(eventData.ToString());
+
+            //int pickId = data.pickId;
+
+            //int number = data.number;
+
+            var data = JsonConvert.DeserializeObject<StockLockMessage>(eventData.ToString());
+
+            //获取Number字段
+            int number = data.number;
+            string pickId = data.pickId;
+            Console.WriteLine(pickId);
+            Console.WriteLine(number);
+
 
             // 在这里处理接收到的消息
             Console.WriteLine("reduce：" + eventData.ToString());

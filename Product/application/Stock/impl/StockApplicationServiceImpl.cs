@@ -29,5 +29,13 @@ namespace Product.application.Stock.impl
             await _stockService.LockStock(stockEventDto);
         }
 
+        public async Task<bool> IsEnoughStock(StockDto stockEventDto)
+        {
+            return await _stockService.IsEnoughStock(stockEventDto);
+        }
+
+
+
+
     }
 }

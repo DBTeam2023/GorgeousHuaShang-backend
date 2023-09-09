@@ -16,7 +16,7 @@
 
         public string PropertyValue { get; set; } = null!;
 
-        public decimal Stock { get; set; } = 0;
+        public decimal Stock { get; set; } = 10;
 
 
     }
