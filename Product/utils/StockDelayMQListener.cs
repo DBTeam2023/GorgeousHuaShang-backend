@@ -28,8 +28,8 @@ namespace Product.utils
                 {
                     var args = new Dictionary<string, object>
                     {
-                        //{ "x-message-ttl", 50*60*1000 },
-                        { "x-message-ttl", 10 },
+                        { "x-message-ttl", 50*60*1000 },
+                        // { "x-message-ttl", 10 },
                         { "x-dead-letter-exchange", "stock_event_exchange" }, // 空字符串表示使用默认交换机
                         { "x-dead-letter-routing-key", "stock.release" } // 延迟消息过期后将被重新发布的路由键
                      };

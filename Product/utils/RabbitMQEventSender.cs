@@ -37,7 +37,7 @@ namespace Product.utils
             }
         }
 
-        public void sendDelayedEvent(object eventData, string key, int delayMilliseconds=10)
+        public void sendDelayedEvent(object eventData, string key, int delayMilliseconds = 50 * 60 * 1000)
         {
 
             using (var connection = _factory.CreateConnection())
