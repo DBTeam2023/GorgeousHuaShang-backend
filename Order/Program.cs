@@ -24,6 +24,12 @@ builder.Services.AddScoped<OrderService, OrderServiceImpl>();
 //application services
 builder.Services.AddScoped<OrderApplicationService, OrderApplicationServiceImpl>();
 
+//hosted services
+builder.Services.AddHostedService<StockReleaseMQListener>();
+builder.Services.AddHostedService<StockReduceMQListener>();
+builder.Services.AddHostedService<OrderDelayMQListener>();
+builder.Services.AddHostedService<OrderReleaseMQListener>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
