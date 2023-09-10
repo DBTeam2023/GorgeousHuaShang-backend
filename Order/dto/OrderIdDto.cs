@@ -4,7 +4,7 @@ namespace Order.dto
 {
     public class OrderIdDto
     {
-        public string OrderId { get; set; } = null!;
+        public string OrderId { get; set; }
 
     }
 }

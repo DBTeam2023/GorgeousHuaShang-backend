@@ -45,7 +45,7 @@ namespace Order.resource.remote
         {
             var user_info = new BuyerInfoDto();
 
-            string url = "http://47.115.231.142:1025/UserIdentification/getUserInfo";
+            string url = "http://47.115.231.142:8081/api/UserSystem/getUserInfo/";
 
             HttpClient client = new HttpClient();
             try
