@@ -65,6 +65,13 @@ namespace Order.application.impl
             var orderAggregate = await OrderAggregate.Create(buyerInfo,orderInfo);
             await _orderRepository.add(orderAggregate);
 
+            List<string> orderids = new List<string>();
+            foreach (var toDel in orderInfo)
+            {
+                orderids.Add(toDel.PickId);
+            }
+            await CartRemote.deleteItemsAsync(token, orderids);
+
             return orderAggregate;
         }
 
@@ -104,13 +111,19 @@ namespace Order.application.impl
                 pickIds.Add(dPick.PickId);
                 Console.WriteLine(dPick.PickId);
             }
-            RabbitMQEventSender sender = new RabbitMQEventSender("stock_release_queue");
-            var orderMessage = new OrderMessage
+            //RabbitMQEventSender sender = new RabbitMQEventSender("stock_release_queue");
+            //var orderMessage = new OrderMessage
+            //{
+            //    orderId = orderId,
+            //    pickIds = pickIds,
+            //};
+            //sender.sendEvent(orderMessage, "order.cancel");
+
+            foreach(var dPick in dPicks)
             {
-                orderId = orderId,
-                pickIds = pickIds,
-            };
-            sender.sendEvent(orderMessage, "order.cancel");
+                await CartRemote.addItemAsync(token,dPick.PickId,dPick.Number);
+            }
+
             return 1;
         }
     }
